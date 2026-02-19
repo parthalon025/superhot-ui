@@ -1,0 +1,47 @@
+/* superhot-ui design tokens
+ * Override any --sh-* variable in your own CSS to customize.
+ */
+
+:root {
+  /* Threat (crystalline red) */
+  --sh-threat: #DC2626;
+  --sh-threat-glow: rgba(220, 38, 38, 0.12);
+
+  /* Frozen (slate) */
+  --sh-frozen: #94A3B8;
+
+  /* Glass (crystalline overlay) */
+  --sh-glass: rgba(255, 255, 255, 0.85);
+
+  /* Void (deep background for watermarks) */
+  --sh-void: #0F172A;
+
+  /* Timing */
+  --sh-shatter-duration: 600ms;
+  --sh-glitch-duration: 300ms;
+  --sh-threat-pulse-duration: 1.5s;
+  --sh-frost-shimmer-duration: 3s;
+
+  /* Freshness transition */
+  --sh-state-transition: filter 1s ease, opacity 1s ease;
+}
+
+/* Dark mode via data attribute */
+[data-theme="dark"] {
+  --sh-threat: #EF4444;
+  --sh-threat-glow: rgba(239, 68, 68, 0.15);
+  --sh-frozen: #475569;
+  --sh-glass: rgba(255, 255, 255, 0.06);
+  --sh-void: #020617;
+}
+
+/* Dark mode via OS preference (fallback) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --sh-threat: #EF4444;
+    --sh-threat-glow: rgba(239, 68, 68, 0.15);
+    --sh-frozen: #475569;
+    --sh-glass: rgba(255, 255, 255, 0.06);
+    --sh-void: #020617;
+  }
+}
