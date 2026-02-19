@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>superhot-ui Demo</title>
+  <link rel="stylesheet" href="../css/superhot.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: #fafafa;
+      color: #212121;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    [data-theme="dark"] body {
+      background: #111318;
+      color: #e8eaed;
+    }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+    h2 { font-size: 1.25rem; margin: 2rem 0 0.75rem; color: #727272; }
+    .card {
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      background: white;
+      position: relative;
+    }
+    [data-theme="dark"] .card {
+      border-color: #333;
+      background: #1c1c1e;
+    }
+    .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .row > * { flex: 1; min-width: 180px; }
+    button {
+      font-family: inherit;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    button:hover { background: #f0f0f0; }
+    .controls { margin-bottom: 2rem; }
+    .value { font-size: 2rem; font-weight: bold; }
+    .label { font-size: 0.75rem; color: #727272; text-transform: uppercase; letter-spacing: 0.1em; }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <h1>SUPERHOT UI</h1>
+    <p style="color: #727272; margin-bottom: 1rem;">Visual effects demo — no build step required.</p>
+    <button onclick="document.documentElement.toggleAttribute('data-theme') || document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') ? '' : 'dark')">
+      Toggle Dark Mode
+    </button>
+  </div>
+
+  <!-- FRESHNESS STATES -->
+  <h2>[ FRESHNESS STATES ]</h2>
+  <div class="row">
+    <div class="card" data-sh-state="fresh">
+      <div class="label">Fresh (just now)</div>
+      <div class="value">847 W</div>
+    </div>
+    <div class="card" data-sh-state="cooling">
+      <div class="label">Cooling (5+ min)</div>
+      <div class="value">847 W</div>
+    </div>
+    <div class="card" data-sh-state="frozen">
+      <div class="label">Frozen (30+ min)</div>
+      <div class="value">847 W</div>
+    </div>
+    <div class="card" data-sh-state="stale">
+      <div class="label">Stale (60+ min)</div>
+      <div class="value">847 W</div>
+    </div>
+  </div>
+
+  <!-- LIVE FRESHNESS -->
+  <h2>[ LIVE FRESHNESS ]</h2>
+  <div class="row">
+    <div class="card" id="live-card">
+      <div class="label">Auto-updating (thresholds: 5s / 15s / 30s)</div>
+      <div class="value" id="live-value">Fresh</div>
+      <button onclick="resetLive()">Reset Timestamp</button>
+    </div>
+  </div>
+
+  <!-- THREAT PULSE -->
+  <h2>[ THREAT PULSE ]</h2>
+  <div class="row">
+    <div class="card" id="threat-card">
+      <div class="label">Anomaly Detected</div>
+      <div class="value">+47% deviation</div>
+      <button onclick="triggerThreat()">Trigger Pulse</button>
+    </div>
+  </div>
+
+  <!-- GLITCH -->
+  <h2>[ GLITCH ]</h2>
+  <div class="row">
+    <div class="card">
+      <div class="label">Error State</div>
+      <div class="value" id="glitch-target">Parse Failure</div>
+      <button onclick="triggerGlitch('low')">Low</button>
+      <button onclick="triggerGlitch('medium')">Medium</button>
+      <button onclick="triggerGlitch('high')">High</button>
+    </div>
+  </div>
+
+  <!-- MANTRA -->
+  <h2>[ MANTRA WATERMARK ]</h2>
+  <div class="row">
+    <!-- applyMantra sets data-sh-mantra="TEXT" on the element -->
+    <div class="card" id="mantra-card" style="min-height: 100px;">
+      <div class="label">System Status</div>
+      <div class="value">Disconnected</div>
+      <button onclick="toggleMantra()">Toggle OFFLINE Mantra</button>
+    </div>
+  </div>
+
+  <!-- SHATTER -->
+  <h2>[ SHATTER ]</h2>
+  <div id="shatter-container" style="position: relative;">
+    <div class="card" id="shatter-card">
+      <div class="label">Resolved Alert</div>
+      <div class="value">Motion detected in garage</div>
+      <button onclick="triggerShatter()">Dismiss (Shatter)</button>
+    </div>
+  </div>
+  <button onclick="resetShatter()" style="margin-top: 0.5rem;">Reset Shatter Card</button>
+
+  <script type="module">
+    import { applyFreshness } from '../js/freshness.js';
+    import { shatterElement } from '../js/shatter.js';
+    import { glitchText } from '../js/glitch.js';
+    import { applyMantra, removeMantra } from '../js/mantra.js';
+
+    window.applyFreshness = applyFreshness;
+    window.shatterElement = shatterElement;
+    window.glitchText = glitchText;
+    window.applyMantra = applyMantra;
+    window.removeMantra = removeMantra;
+
+    let liveTimestamp = Date.now();
+    const liveCard = document.getElementById('live-card');
+    const liveValue = document.getElementById('live-value');
+
+    function updateLive() {
+      const state = applyFreshness(liveCard, liveTimestamp, { cooling: 5, frozen: 15, stale: 30 });
+      const age = Math.round((Date.now() - liveTimestamp) / 1000);
+      liveValue.textContent = `${state} (${age}s ago)`;
+    }
+
+    window.resetLive = () => { liveTimestamp = Date.now(); updateLive(); };
+    setInterval(updateLive, 1000);
+    updateLive();
+
+    window.triggerThreat = () => {
+      const card = document.getElementById('threat-card');
+      card.setAttribute('data-sh-effect', 'threat-pulse');
+      setTimeout(() => card.removeAttribute('data-sh-effect'), 3000);
+    };
+
+    window.triggerGlitch = (intensity) => {
+      glitchText(document.getElementById('glitch-target'), { intensity, duration: 600 });
+    };
+
+    let mantraOn = false;
+    window.toggleMantra = () => {
+      const card = document.getElementById('mantra-card');
+      mantraOn = !mantraOn;
+      if (mantraOn) applyMantra(card, 'OFFLINE');
+      else removeMantra(card);
+    };
+
+    const shatterHTML = document.getElementById('shatter-card').outerHTML;
+    window.triggerShatter = () => {
+      const card = document.getElementById('shatter-card');
+      if (card) shatterElement(card, { fragments: 6 });
+    };
+    window.resetShatter = () => {
+      const container = document.getElementById('shatter-container');
+      container.innerHTML = shatterHTML;
+    };
+  </script>
+</body>
+</html>
