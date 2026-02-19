@@ -1,0 +1,6 @@
+# superhot-ui progress log
+# Append-only. One entry per batch.
+
+## Session Start: 2026-02-19
+Design: docs/plans/2026-02-19-superhot-ui-design.md
+PRD: tasks/prd.json (14 tasks)

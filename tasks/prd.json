@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "title": "Bootstrap project repo with package.json and build tooling",
+    "description": "Initialize superhot-ui as a Node.js project with esbuild, package.json exports map, directory structure (css/, js/, preact/, dist/, examples/, tests/), and .gitignore. Use claude-init or manual setup.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/package.json",
+      "node -e \"const p = require('/home/justin/Documents/projects/superhot-ui/package.json'); process.exit(p.name === 'superhot-ui' ? 0 : 1)\"",
+      "test -d /home/justin/Documents/projects/superhot-ui/css",
+      "test -d /home/justin/Documents/projects/superhot-ui/js",
+      "test -d /home/justin/Documents/projects/superhot-ui/preact",
+      "test -d /home/justin/Documents/projects/superhot-ui/examples",
+      "test -d /home/justin/Documents/projects/superhot-ui/tests",
+      "test -f /home/justin/Documents/projects/superhot-ui/.gitignore",
+      "grep -q 'dist/' /home/justin/Documents/projects/superhot-ui/.gitignore"
+    ],
+    "passes": false,
+    "blocked_by": []
+  },
+  {
+    "id": 2,
+    "title": "Create CSS tokens file with custom properties",
+    "description": "Write css/tokens.css with all --sh-* custom properties (threat, threat-glow, frozen, glass, void, timing tokens) including light defaults and [data-theme=dark] / prefers-color-scheme overrides.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-threat' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-threat-glow' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-frozen' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-glass' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-void' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-shatter-duration' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q '\\-\\-sh-glitch-duration' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q 'data-theme.*dark' /home/justin/Documents/projects/superhot-ui/css/tokens.css",
+      "grep -q 'prefers-color-scheme.*dark' /home/justin/Documents/projects/superhot-ui/css/tokens.css"
+    ],
+    "passes": false,
+    "blocked_by": [1]
+  },
+  {
+    "id": 3,
+    "title": "Create CSS freshness state selectors",
+    "description": "In css/superhot.css, import tokens.css and implement data-sh-state selectors: fresh (no-op), cooling (saturate 0.7), frozen (grayscale + 60% opacity + frost border), stale (frozen + STALE watermark via ::after).",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-state.*fresh' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-state.*cooling' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-state.*frozen' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-state.*stale' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'saturate' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'grayscale' /home/justin/Documents/projects/superhot-ui/css/superhot.css"
+    ],
+    "passes": false,
+    "blocked_by": [2]
+  },
+  {
+    "id": 4,
+    "title": "Create CSS effect keyframes and selectors",
+    "description": "Add keyframes (sh-glitch-jitter, sh-shatter-fragment, sh-threat-glow, sh-frost-shimmer) and effect selectors (data-sh-effect=glitch, shatter, threat-pulse) plus data-sh-mantra watermark to superhot.css.",
+    "acceptance_criteria": [
+      "grep -q 'sh-glitch-jitter' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'sh-shatter-fragment' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'sh-threat-glow' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'sh-frost-shimmer' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-effect.*glitch' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-effect.*threat-pulse' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'data-sh-mantra' /home/justin/Documents/projects/superhot-ui/css/superhot.css"
+    ],
+    "passes": false,
+    "blocked_by": [3]
+  },
+  {
+    "id": 5,
+    "title": "Add responsive degradation and reduced-motion rules",
+    "description": "Add media queries to superhot.css: phone (<640px) disables mantra and simplifies shatter to fade, tablet (640-1023px) simplifies glitch to color-only, prefers-reduced-motion disables all animation.",
+    "acceptance_criteria": [
+      "grep -q 'max-width.*640px' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'min-width.*640px' /home/justin/Documents/projects/superhot-ui/css/superhot.css",
+      "grep -q 'prefers-reduced-motion' /home/justin/Documents/projects/superhot-ui/css/superhot.css"
+    ],
+    "passes": false,
+    "blocked_by": [4]
+  },
+  {
+    "id": 6,
+    "title": "Implement freshness.js utility",
+    "description": "Write js/freshness.js exporting applyFreshness(element, timestamp, thresholds?). Calculates age from timestamp, sets data-sh-state attribute. Default thresholds: cooling=300s, frozen=1800s, stale=3600s. Returns state string.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/js/freshness.js",
+      "grep -q 'export.*applyFreshness' /home/justin/Documents/projects/superhot-ui/js/freshness.js",
+      "node -e \"import('/home/justin/Documents/projects/superhot-ui/js/freshness.js').then(m => process.exit(typeof m.applyFreshness === 'function' ? 0 : 1))\""
+    ],
+    "passes": false,
+    "blocked_by": [1]
+  },
+  {
+    "id": 7,
+    "title": "Implement shatter.js utility",
+    "description": "Write js/shatter.js exporting shatterElement(element, opts). Creates clip-path triangle fragments from element bounding box, animates drift+fade, calls onComplete, cleans up DOM. Returns cancel function.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/js/shatter.js",
+      "grep -q 'export.*shatterElement' /home/justin/Documents/projects/superhot-ui/js/shatter.js",
+      "grep -q 'clip-path' /home/justin/Documents/projects/superhot-ui/js/shatter.js",
+      "node -e \"import('/home/justin/Documents/projects/superhot-ui/js/shatter.js').then(m => process.exit(typeof m.shatterElement === 'function' ? 0 : 1))\""
+    ],
+    "passes": false,
+    "blocked_by": [1]
+  },
+  {
+    "id": 8,
+    "title": "Implement glitch.js and mantra.js utilities",
+    "description": "Write js/glitch.js (glitchText with duration and intensity) and js/mantra.js (applyMantra, removeMantra). Both set/remove data-sh-* attributes.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/js/glitch.js",
+      "test -f /home/justin/Documents/projects/superhot-ui/js/mantra.js",
+      "grep -q 'export.*glitchText' /home/justin/Documents/projects/superhot-ui/js/glitch.js",
+      "grep -q 'export.*applyMantra' /home/justin/Documents/projects/superhot-ui/js/mantra.js",
+      "grep -q 'export.*removeMantra' /home/justin/Documents/projects/superhot-ui/js/mantra.js",
+      "node -e \"import('/home/justin/Documents/projects/superhot-ui/js/glitch.js').then(m => process.exit(typeof m.glitchText === 'function' ? 0 : 1))\"",
+      "node -e \"import('/home/justin/Documents/projects/superhot-ui/js/mantra.js').then(m => process.exit(typeof m.applyMantra === 'function' ? 0 : 1))\""
+    ],
+    "passes": false,
+    "blocked_by": [1]
+  },
+  {
+    "id": 9,
+    "title": "Write unit tests for JS utilities",
+    "description": "Write tests/freshness.test.js testing applyFreshness with mock elements and various timestamps. Use a lightweight test runner (node --test or vitest). Test edge cases: future timestamps, missing thresholds, null element.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/tests/freshness.test.js",
+      "cd /home/justin/Documents/projects/superhot-ui && node --test tests/freshness.test.js"
+    ],
+    "passes": false,
+    "blocked_by": [6]
+  },
+  {
+    "id": 10,
+    "title": "Create Preact components (ShFrozen, ShShatter, ShGlitch, ShMantra, ShThreatPulse)",
+    "description": "Write all 5 Preact components as thin wrappers. ShFrozen uses applyFreshness on interval. ShShatter calls shatterElement on dismiss. ShGlitch/ShMantra/ShThreatPulse toggle data-sh-* attributes via active prop.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/preact/ShFrozen.jsx",
+      "test -f /home/justin/Documents/projects/superhot-ui/preact/ShShatter.jsx",
+      "test -f /home/justin/Documents/projects/superhot-ui/preact/ShGlitch.jsx",
+      "test -f /home/justin/Documents/projects/superhot-ui/preact/ShMantra.jsx",
+      "test -f /home/justin/Documents/projects/superhot-ui/preact/ShThreatPulse.jsx",
+      "grep -q 'applyFreshness' /home/justin/Documents/projects/superhot-ui/preact/ShFrozen.jsx",
+      "grep -q 'shatterElement' /home/justin/Documents/projects/superhot-ui/preact/ShShatter.jsx",
+      "grep -q 'data-sh-effect' /home/justin/Documents/projects/superhot-ui/preact/ShGlitch.jsx",
+      "grep -q 'data-sh-mantra' /home/justin/Documents/projects/superhot-ui/preact/ShMantra.jsx",
+      "grep -q 'threat-pulse' /home/justin/Documents/projects/superhot-ui/preact/ShThreatPulse.jsx"
+    ],
+    "passes": false,
+    "blocked_by": [6, 7, 8]
+  },
+  {
+    "id": 11,
+    "title": "Configure esbuild and build scripts",
+    "description": "Create esbuild.config.mjs that builds three outputs: dist/superhot.css (copy from css/superhot.css), dist/superhot.js (ESM bundle of js/*), dist/superhot.preact.js (ESM bundle of preact/*). Add build/dev scripts to package.json.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/esbuild.config.mjs",
+      "cd /home/justin/Documents/projects/superhot-ui && npm run build",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.css",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.js",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.preact.js"
+    ],
+    "passes": false,
+    "blocked_by": [5, 10]
+  },
+  {
+    "id": 12,
+    "title": "Create standalone demo.html",
+    "description": "Write examples/demo.html that demonstrates all 5 effects using only CSS + vanilla JS (no build step). Include cards with freshness states, a shatterable alert, glitch text, mantra watermark, and threat pulse. Must work by opening the file directly in a browser.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "grep -q 'data-sh-state' /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "grep -q 'data-sh-effect' /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "grep -q 'data-sh-mantra' /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "grep -q 'applyFreshness' /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "grep -q 'shatterElement' /home/justin/Documents/projects/superhot-ui/examples/demo.html"
+    ],
+    "passes": false,
+    "blocked_by": [5, 8]
+  },
+  {
+    "id": 13,
+    "title": "Write CLAUDE.md for the project",
+    "description": "Create CLAUDE.md with project overview, build commands, testing instructions, file layout, consumer integration examples, and gotchas.",
+    "acceptance_criteria": [
+      "test -f /home/justin/Documents/projects/superhot-ui/CLAUDE.md",
+      "grep -q 'npm run build' /home/justin/Documents/projects/superhot-ui/CLAUDE.md",
+      "grep -q 'node --test' /home/justin/Documents/projects/superhot-ui/CLAUDE.md"
+    ],
+    "passes": false,
+    "blocked_by": [11]
+  },
+  {
+    "id": 14,
+    "title": "Run full quality gate — all tests, build, and demo",
+    "description": "Run entire quality gate: unit tests pass, build produces all 3 dist files, demo.html contains all effect references, all exports resolve correctly.",
+    "acceptance_criteria": [
+      "cd /home/justin/Documents/projects/superhot-ui && node --test tests/freshness.test.js",
+      "cd /home/justin/Documents/projects/superhot-ui && npm run build",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.css",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.js",
+      "test -f /home/justin/Documents/projects/superhot-ui/dist/superhot.preact.js",
+      "node -e \"import('/home/justin/Documents/projects/superhot-ui/dist/superhot.js').then(m => { const fns = ['applyFreshness','shatterElement','glitchText','applyMantra','removeMantra']; const ok = fns.every(f => typeof m[f] === 'function'); process.exit(ok ? 0 : 1) })\"",
+      "test -f /home/justin/Documents/projects/superhot-ui/examples/demo.html",
+      "test -f /home/justin/Documents/projects/superhot-ui/CLAUDE.md"
+    ],
+    "passes": false,
+    "blocked_by": [9, 11, 12, 13]
+  }
+]
