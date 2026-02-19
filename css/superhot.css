@@ -166,3 +166,57 @@
   background: var(--sh-glass);
   pointer-events: none;
 }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE DEGRADATION
+   ═══════════════════════════════════════ */
+
+/* Phone: simplify shatter, disable mantra */
+@media (max-width: 639px) {
+  .sh-fragment {
+    animation: none;
+    transition: opacity 200ms ease-out;
+    opacity: 0;
+  }
+
+  [data-sh-mantra]::before {
+    display: none;
+  }
+
+  [data-sh-state="stale"]::after {
+    display: none;
+  }
+}
+
+/* Tablet: simplify glitch to color-only (no jitter) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  [data-sh-effect="glitch"] {
+    animation: none;
+    color: var(--sh-threat);
+    transition: color var(--sh-glitch-duration) ease;
+  }
+}
+
+/* Reduced motion: disable all animation */
+@media (prefers-reduced-motion: reduce) {
+  [data-sh-effect="glitch"],
+  [data-sh-effect="threat-pulse"],
+  .sh-fragment {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  [data-sh-state] {
+    transition: none !important;
+  }
+
+  /* Keep static visual indicators — just no motion */
+  [data-sh-effect="threat-pulse"] {
+    border-color: var(--sh-threat);
+    box-shadow: 0 0 4px 1px var(--sh-threat-glow);
+  }
+
+  [data-sh-effect="glitch"] {
+    color: var(--sh-threat);
+  }
+}
