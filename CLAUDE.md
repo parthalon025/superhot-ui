@@ -61,6 +61,10 @@ Override any `--sh-*` token in your CSS:
 
 ## Gotchas
 
+## Scope Tags
+language:javascript, framework:preact
+
+## Gotchas
 - `dist/` is gitignored — run `npm run build` after cloning
 - Preact components require `preact` as peer dependency
 - Shatter creates absolutely-positioned fragments — parent needs `position: relative`
