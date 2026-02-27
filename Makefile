@@ -3,8 +3,8 @@
 all: lint
 
 lint:
-	@echo "No lint targets configured"
+	npm run lint
 
 format:
-	@echo "No format targets configured"
+	npx prettier --write "js/**/*.js" "preact/**/*.js"
 

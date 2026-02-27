@@ -14,7 +14,8 @@
     "build:css": "cp css/superhot.css dist/superhot.css",
     "test": "node --test tests/**/*.test.js",
     "dev": "node esbuild.config.mjs --watch",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint": "eslint ."
   },
   "peerDependencies": {
     "preact": ">=10.0.0"
@@ -22,8 +23,12 @@
   "devDependencies": {
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
+    "@eslint/js": "^10.0.1",
     "cspell": "^9.7.0",
     "esbuild": "^0.25.0",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.3.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "preact": "^10.25.0",

@@ -1,6 +1,6 @@
 npm test
 npx lint-staged --allow-empty
-GITLEAKS="$(command -v gitleaks 2>/dev/null)"
+GITLEAKS="$(command -v gitleaks 2>/dev/null)" || true
 if [ -x "$GITLEAKS" ]; then $GITLEAKS protect --staged --redact --config gitleaks.toml 2>/dev/null || true; fi
-LESSONS_DB="$(command -v lessons-db 2>/dev/null)"
+LESSONS_DB="$(command -v lessons-db 2>/dev/null)" || true
 if [ -x "$LESSONS_DB" ]; then $LESSONS_DB scan --target . --baseline HEAD 2>/dev/null || true; fi
