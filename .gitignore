@@ -8,3 +8,15 @@ logs/
 progress.txt
 .run-plan-state.json
 .worktrees/
+
+# Secrets
+.env
+.env.*
+!.env.example
+client_secret*.json
+
+# Claude local notes
+.claude/*.local.md
+
+# Embeddings
+.embeddings/

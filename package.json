@@ -13,14 +13,21 @@
     "build": "node esbuild.config.mjs",
     "build:css": "cp css/superhot.css dist/superhot.css",
     "test": "node --test tests/**/*.test.js",
-    "dev": "node esbuild.config.mjs --watch"
+    "dev": "node esbuild.config.mjs --watch",
+    "prepare": "husky"
   },
   "peerDependencies": {
     "preact": ">=10.0.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "cspell": "^9.7.0",
     "esbuild": "^0.25.0",
-    "preact": "^10.25.0"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "preact": "^10.25.0",
+    "prettier": "^3.8.1"
   },
   "files": [
     "css/",
@@ -28,5 +35,8 @@
     "preact/",
     "dist/"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "lint-staged": {
+    "*.{js,jsx,mjs,css,json,md}": "prettier --write"
+  }
 }
