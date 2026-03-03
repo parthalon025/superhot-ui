@@ -60,8 +60,6 @@ Override any `--sh-*` token in your CSS:
 }
 ```
 
-## Gotchas
-
 ## Scope Tags
 
 language:javascript, framework:preact
