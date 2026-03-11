@@ -68,13 +68,13 @@
   initial-value: 300ms;
 }
 
-@property --sh-pulse-duration {
+@property --sh-threat-pulse-duration {
   syntax: '<time>';
   inherits: true;
   initial-value: 1.5s;
 }
 
-@property --sh-freeze-duration {
+@property --sh-frost-shimmer-duration {
   syntax: '<time>';
   inherits: true;
   initial-value: 3s;
@@ -106,10 +106,10 @@
   --sh-glass: color-mix(in oklch, var(--sh-threat) 25%, white);
 
   /* Void (pure black for watermark backgrounds) */
-  --sh-void: light-dark(#000000, #000000);
+  --sh-void: #000000;
 
   /* piOS text hierarchy */
-  --sh-bright: light-dark(#ffffff, #ffffff);
+  --sh-bright: #ffffff;
   --sh-middle: light-dark(#696969, #d3d3d3);
   --sh-dim:    light-dark(#a9a9a9, #808080);
 
@@ -119,8 +119,8 @@
   /* Timing */
   --sh-shatter-duration: 600ms;
   --sh-glitch-duration: 300ms;
-  --sh-pulse-duration: 1.5s;
-  --sh-freeze-duration: 3s;
+  --sh-threat-pulse-duration: 1.5s;
+  --sh-frost-shimmer-duration: 3s;
 
   /* CRT toggles — set to 'block' to enable each layer */
   --sh-crt-stripe: block;   /* static scanline stripes (cheap) */

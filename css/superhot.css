@@ -122,7 +122,7 @@
    ═══════════════════════════════════════ */
 
 [data-sh-effect="threat-pulse"] {
-  animation: sh-threat-glow var(--sh-pulse-duration) ease-in-out 2;
+  animation: sh-threat-glow var(--sh-threat-pulse-duration) ease-in-out 2;
   border: 2px solid var(--sh-threat);
 }
 
