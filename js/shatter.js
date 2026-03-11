@@ -3,12 +3,12 @@
  *
  * @param {Element} element - DOM element to shatter
  * @param {object} [opts]
- * @param {number} [opts.fragments=5] - Number of fragments
+ * @param {number} [opts.fragments=12] - Number of fragments
  * @param {Function} [opts.onComplete] - Called after animation completes
  * @returns {Function} Cancel function — removes fragments immediately
  */
 export function shatterElement(element, opts = {}) {
-  const { fragments: count = 5, onComplete } = opts;
+  const { fragments: count = 12, onComplete } = opts;
 
   if (!element || !element.parentNode) {
     onComplete?.();
@@ -22,7 +22,9 @@ export function shatterElement(element, opts = {}) {
   const offsetX = rect.left - parentRect.left;
   const offsetY = rect.top - parentRect.top;
 
-  const parentPos = getComputedStyle(parent).position;
+  const _getComputedStyle = typeof getComputedStyle === 'function' ? getComputedStyle : () => ({ position: '', getPropertyValue: () => '' });
+
+  const parentPos = _getComputedStyle(parent).position;
   if (parentPos === 'static') {
     parent.style.position = 'relative';
   }
@@ -30,13 +32,17 @@ export function shatterElement(element, opts = {}) {
   element.style.visibility = 'hidden';
 
   const fragmentEls = [];
-  const duration = getComputedStyle(element).getPropertyValue('--sh-shatter-duration')?.trim() || '600ms';
+  const duration = _getComputedStyle(element).getPropertyValue('--sh-shatter-duration')?.trim() || '600ms';
   const durationMs = parseFloat(duration) * (duration.endsWith('s') && !duration.endsWith('ms') ? 1000 : 1);
 
   const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
 
+  const _createElement = typeof document !== 'undefined'
+    ? (tag) => document.createElement(tag)
+    : (tag) => ({ tagName: tag.toUpperCase(), className: '', style: { setProperty() {} }, remove: () => {} });
+
   for (let i = 0; i < count; i++) {
-    const frag = document.createElement('div');
+    const frag = _createElement('div');
     frag.className = 'sh-fragment';
 
     const points = Array.from({ length: 3 }, () =>
