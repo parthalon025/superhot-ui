@@ -1,6 +1,7 @@
 {
   "name": "superhot-ui",
   "version": "0.1.0",
+  "style": "css/superhot.css",
   "description": "SUPERHOT-inspired visual effects for dashboards — CSS-first with JS utilities and Preact components",
   "type": "module",
   "exports": {
