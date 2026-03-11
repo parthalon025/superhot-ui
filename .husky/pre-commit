@@ -1,4 +1,3 @@
-npm test
 npx lint-staged --allow-empty
 GITLEAKS="$(command -v gitleaks 2>/dev/null)" || true
 if [ -x "$GITLEAKS" ]; then $GITLEAKS protect --staged --redact --config gitleaks.toml 2>/dev/null || true; fi

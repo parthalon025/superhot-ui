@@ -20,3 +20,5 @@ client_secret*.json
 
 # Embeddings
 .embeddings/
+coverage/
+megalinter-reports/
