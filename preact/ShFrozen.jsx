@@ -1,6 +1,5 @@
-import { h } from 'preact';
-import { useEffect, useRef } from 'preact/hooks';
-import { applyFreshness } from '../js/freshness.js';
+import { useEffect, useRef } from "preact/hooks";
+import { applyFreshness } from "../js/freshness.js";
 
 export function ShFrozen({ timestamp, thresholds, class: className, children, ...rest }) {
   const ref = useRef(null);
@@ -14,5 +13,9 @@ export function ShFrozen({ timestamp, thresholds, class: className, children, ..
     return () => clearInterval(interval);
   }, [timestamp, thresholds]);
 
-  return h('div', { ref, class: className, ...rest }, children);
+  return (
+    <div ref={ref} class={className} {...rest}>
+      {children}
+    </div>
+  );
 }

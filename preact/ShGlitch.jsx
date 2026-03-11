@@ -1,5 +1,3 @@
-import { h } from 'preact';
-
 export function ShGlitch({ active, intensity = 'medium', class: className, children, ...rest }) {
   const attrs = {};
   if (active) {
@@ -9,5 +7,9 @@ export function ShGlitch({ active, intensity = 'medium', class: className, child
     }
   }
 
-  return h('div', { class: className, ...attrs, ...rest }, children);
+  return (
+    <div class={className} {...attrs} {...rest}>
+      {children}
+    </div>
+  );
 }

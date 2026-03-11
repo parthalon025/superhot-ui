@@ -1,4 +1,3 @@
-import { h } from 'preact';
 import { useEffect, useRef } from 'preact/hooks';
 
 export function ShThreatPulse({ active, persistent = false, class: className, children, ...rest }) {
@@ -21,5 +20,9 @@ export function ShThreatPulse({ active, persistent = false, class: className, ch
     attrs['data-sh-effect'] = 'threat-pulse';
   }
 
-  return h('div', { ref, class: className, ...attrs, ...rest }, children);
+  return (
+    <div ref={ref} class={className} {...attrs} {...rest}>
+      {children}
+    </div>
+  );
 }
