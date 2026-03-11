@@ -1,4 +1,4 @@
-import { describe, it, mock } from "node:test";
+import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
 // Minimal DOM stubs for Node environment
@@ -8,7 +8,7 @@ function makeElement(overrides = {}) {
     style: {},
     className: "",
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 100, height: 50 }),
-    remove: mock.fn(),
+    remove: () => {},
     ...overrides,
   };
   return el;
@@ -31,7 +31,7 @@ describe("shatterElement", () => {
     const children = [];
     const parent = {
       getBoundingClientRect: () => ({ left: 0, top: 0 }),
-      style: {},
+      style: { setProperty() {} },
       appendChild: (el) => children.push(el),
     };
     const el = makeElement({ parentNode: parent });
@@ -44,7 +44,7 @@ describe("shatterElement", () => {
     const children = [];
     const parent = {
       getBoundingClientRect: () => ({ left: 0, top: 0 }),
-      style: {},
+      style: { setProperty() {} },
       appendChild: (el) => children.push(el),
     };
     const el = makeElement({ parentNode: parent });
