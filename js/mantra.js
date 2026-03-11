@@ -6,7 +6,7 @@
  */
 export function applyMantra(element, text) {
   if (!element || !text) return;
-  element.setAttribute('data-sh-mantra', text);
+  element.setAttribute("data-sh-mantra", text);
 }
 
 /**
@@ -16,5 +16,5 @@ export function applyMantra(element, text) {
  */
 export function removeMantra(element) {
   if (!element) return;
-  element.removeAttribute('data-sh-mantra');
+  element.removeAttribute("data-sh-mantra");
 }

@@ -22,32 +22,44 @@ export function shatterElement(element, opts = {}) {
   const offsetX = rect.left - parentRect.left;
   const offsetY = rect.top - parentRect.top;
 
-  const _getComputedStyle = typeof getComputedStyle === 'function' ? getComputedStyle : () => ({ position: '', getPropertyValue: () => '' });
+  const _getComputedStyle =
+    typeof getComputedStyle === "function"
+      ? getComputedStyle
+      : () => ({ position: "", getPropertyValue: () => "" });
 
   const parentPos = _getComputedStyle(parent).position;
-  if (parentPos === 'static') {
-    parent.style.position = 'relative';
+  if (parentPos === "static") {
+    parent.style.position = "relative";
   }
 
-  element.style.visibility = 'hidden';
+  element.style.visibility = "hidden";
 
   const fragmentEls = [];
-  const duration = _getComputedStyle(element).getPropertyValue('--sh-shatter-duration')?.trim() || '600ms';
-  const durationMs = parseFloat(duration) * (duration.endsWith('s') && !duration.endsWith('ms') ? 1000 : 1);
+  const duration =
+    _getComputedStyle(element).getPropertyValue("--sh-shatter-duration")?.trim() || "600ms";
+  const durationMs =
+    parseFloat(duration) * (duration.endsWith("s") && !duration.endsWith("ms") ? 1000 : 1);
 
-  const reducedMotion = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  const reducedMotion = globalThis.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
-  const _createElement = typeof document !== 'undefined'
-    ? (tag) => document.createElement(tag)
-    : (tag) => ({ tagName: tag.toUpperCase(), className: '', style: { setProperty() {} }, remove: () => {} });
+  const _createElement =
+    typeof document !== "undefined"
+      ? (tag) => document.createElement(tag)
+      : (tag) => ({
+          tagName: tag.toUpperCase(),
+          className: "",
+          style: { setProperty() {} },
+          remove: () => {},
+        });
 
   for (let i = 0; i < count; i++) {
-    const frag = _createElement('div');
-    frag.className = 'sh-fragment';
+    const frag = _createElement("div");
+    frag.className = "sh-fragment";
 
-    const points = Array.from({ length: 3 }, () =>
-      `${Math.random() * 100}% ${Math.random() * 100}%`
-    ).join(', ');
+    const points = Array.from(
+      { length: 3 },
+      () => `${Math.random() * 100}% ${Math.random() * 100}%`,
+    ).join(", ");
     frag.style.clipPath = `polygon(${points})`;
 
     frag.style.left = `${offsetX}px`;
@@ -57,17 +69,17 @@ export function shatterElement(element, opts = {}) {
 
     const angle = (i / count) * 360 + (Math.random() * 60 - 30);
     const dist = 20 + Math.random() * 40;
-    const dx = Math.cos(angle * Math.PI / 180) * dist;
-    const dy = Math.sin(angle * Math.PI / 180) * dist;
+    const dx = Math.cos((angle * Math.PI) / 180) * dist;
+    const dy = Math.sin((angle * Math.PI) / 180) * dist;
     const rot = (Math.random() - 0.5) * 30;
 
-    frag.style.setProperty('--sh-frag-x', `${dx}px`);
-    frag.style.setProperty('--sh-frag-y', `${dy}px`);
-    frag.style.setProperty('--sh-frag-r', `${rot}deg`);
+    frag.style.setProperty("--sh-frag-x", `${dx}px`);
+    frag.style.setProperty("--sh-frag-y", `${dy}px`);
+    frag.style.setProperty("--sh-frag-r", `${rot}deg`);
 
     if (reducedMotion) {
-      frag.style.animation = 'none';
-      frag.style.opacity = '0';
+      frag.style.animation = "none";
+      frag.style.opacity = "0";
     }
 
     parent.appendChild(frag);
@@ -82,7 +94,7 @@ export function shatterElement(element, opts = {}) {
 
   function cleanup() {
     clearTimeout(timer);
-    fragmentEls.forEach(f => f.remove());
+    fragmentEls.forEach((f) => f.remove());
     element.remove();
   }
 

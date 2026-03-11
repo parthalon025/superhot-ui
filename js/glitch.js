@@ -8,21 +8,21 @@
  * @returns {Promise<void>} Resolves when effect completes
  */
 export function glitchText(element, opts = {}) {
-  const { duration = 300, intensity = 'medium' } = opts;
+  const { duration = 300, intensity = "medium" } = opts;
 
   if (!element) return Promise.resolve();
 
-  element.setAttribute('data-sh-glitch-text', element.textContent || '');
-  element.setAttribute('data-sh-effect', 'glitch');
-  if (intensity !== 'medium') {
-    element.setAttribute('data-sh-glitch-intensity', intensity);
+  element.setAttribute("data-sh-glitch-text", element.textContent || "");
+  element.setAttribute("data-sh-effect", "glitch");
+  if (intensity !== "medium") {
+    element.setAttribute("data-sh-glitch-intensity", intensity);
   }
 
   return new Promise((resolve) => {
     setTimeout(() => {
-      element.removeAttribute('data-sh-effect');
-      element.removeAttribute('data-sh-glitch-text');
-      element.removeAttribute('data-sh-glitch-intensity');
+      element.removeAttribute("data-sh-effect");
+      element.removeAttribute("data-sh-glitch-text");
+      element.removeAttribute("data-sh-glitch-intensity");
       resolve();
     }, duration);
   });

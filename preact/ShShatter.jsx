@@ -1,5 +1,5 @@
-import { useRef, useCallback } from 'preact/hooks';
-import { shatterElement } from '../js/shatter.js';
+import { useRef, useCallback } from "preact/hooks";
+import { shatterElement } from "../js/shatter.js";
 
 export function ShShatter({ onDismiss, class: className, children, ...rest }) {
   const ref = useRef(null);
@@ -13,13 +13,7 @@ export function ShShatter({ onDismiss, class: className, children, ...rest }) {
   }, [onDismiss]);
 
   return (
-    <div
-      ref={ref}
-      class={className}
-      data-sh-dismiss=""
-      onClick={dismiss}
-      {...rest}
-    >
+    <div ref={ref} class={className} data-sh-dismiss="" onClick={dismiss} {...rest}>
       {children}
     </div>
   );

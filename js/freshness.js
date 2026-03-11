@@ -10,17 +10,17 @@
  * @returns {'fresh'|'cooling'|'frozen'|'stale'} The state applied
  */
 export function applyFreshness(element, timestamp, thresholds = {}) {
-  if (!element || !timestamp) return 'fresh';
+  if (!element || !timestamp) return "fresh";
 
   const { cooling = 300, frozen = 1800, stale = 3600 } = thresholds;
   const epochMs = timestamp instanceof Date ? timestamp.getTime() : Number(timestamp);
   const ageSeconds = Math.max(0, (Date.now() - epochMs) / 1000);
 
-  let state = 'fresh';
-  if (ageSeconds >= stale) state = 'stale';
-  else if (ageSeconds >= frozen) state = 'frozen';
-  else if (ageSeconds >= cooling) state = 'cooling';
+  let state = "fresh";
+  if (ageSeconds >= stale) state = "stale";
+  else if (ageSeconds >= frozen) state = "frozen";
+  else if (ageSeconds >= cooling) state = "cooling";
 
-  element.setAttribute('data-sh-state', state);
+  element.setAttribute("data-sh-state", state);
   return state;
 }
