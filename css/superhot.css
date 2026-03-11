@@ -114,11 +114,6 @@
   [data-sh-state="fresh"] {
     filter: none;
     opacity: 1;
-
-    @starting-style {
-      filter: none;
-      opacity: 1;
-    }
   }
 
   [data-sh-state="cooling"] {
@@ -327,6 +322,7 @@
     background: var(--sh-glass);
     pointer-events: none;
 
+    /* NOTE: Container queries require container-type: inline-size on the card wrapper element */
     /* Phone: simple fade */
     @container (max-width: 320px) {
       animation: none;
@@ -341,6 +337,7 @@
     }
   }
 
+  /* NOTE: Container queries require container-type: inline-size on the card wrapper element */
   /* Phone: disable mantra and stale watermark */
   @container (max-width: 320px) {
     [data-sh-mantra]::before {
