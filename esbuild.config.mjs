@@ -49,9 +49,9 @@ const preactConfig = {
     loader: 'jsx',
   },
   outfile: 'dist/superhot.preact.js',
-  external: ['preact', 'preact/hooks'],
-  jsxFactory: 'h',
-  jsxFragment: 'Fragment',
+  external: ['preact', 'preact/hooks', 'preact/jsx-runtime'],
+  jsx: 'automatic',
+  jsxImportSource: 'preact',
 };
 
 if (isWatch) {
