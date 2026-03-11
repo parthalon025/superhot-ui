@@ -18,6 +18,7 @@
     "lint": "eslint ."
   },
   "peerDependencies": {
+    "@preact/signals": "^2.0.0",
     "preact": ">=10.0.0"
   },
   "devDependencies": {
@@ -47,5 +48,8 @@
   "license": "MIT",
   "lint-staged": {
     "*.{js,jsx,mjs,css,json,md}": "prettier --write"
+  },
+  "dependencies": {
+    "@preact/signals": "^2.0.0"
   }
 }
