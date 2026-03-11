@@ -10,7 +10,7 @@
    ═══════════════════════════════════════ */
 
 [data-sh-state] {
-  transition: var(--sh-state-transition);
+  transition: filter 1s ease, opacity 1s ease;
 }
 
 [data-sh-state="fresh"] {
