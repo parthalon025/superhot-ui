@@ -6,6 +6,7 @@
  * Consumers override by placing rules OUTSIDE any layer (unlayered wins).
  */
 @import "./tokens.css";
+@import "./semantic.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
@@ -107,7 +108,9 @@
 
 @layer superhot.base {
   [data-sh-state] {
-    transition: filter 1s ease, opacity 1s ease;
+    transition:
+      filter 1s ease,
+      opacity 1s ease;
     animation-composition: accumulate;
   }
 

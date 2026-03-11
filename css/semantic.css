@@ -1,0 +1,260 @@
+/* superhot-ui semantic tokens
+ * Standard CSS custom property names mapped to SUPERHOT aesthetic values.
+ * Consumers import this and use --bg-*, --color-*, --text-*, etc.
+ * All color values reference --sh-* primitives from tokens.css where possible.
+ *
+ * Aesthetic: void black surfaces · threat red accent · phosphor cyan health ·
+ *            terminal mono typography · 0px radius · deep black + red-glow shadows.
+ */
+
+:root {
+  /* ─────────────────────────────────────────
+     SURFACES
+     ───────────────────────────────────────── */
+
+  --bg-base: oklch(0.06 0 0); /* near-black void — page background */
+  --bg-surface: oklch(0.1 0 0); /* cards, panels */
+  --bg-surface-raised: oklch(0.14 0 0); /* elevated cards, dropdowns */
+  --bg-inset: oklch(0.04 0 0); /* inset wells, code blocks */
+  --bg-overlay: oklch(0.08 0 0 / 0.92); /* modal backdrop */
+  --bg-elevated: oklch(0.16 0 0); /* highest surface layer */
+
+  /* ─────────────────────────────────────────
+     PRIMARY COLOR (threat red)
+     ───────────────────────────────────────── */
+
+  --color-primary: oklch(0.58 0.25 25);
+  --color-primary-hover: oklch(0.63 0.25 25);
+  --color-primary-active: oklch(0.52 0.25 25);
+  --color-primary-subtle: oklch(0.58 0.25 25 / 0.12);
+
+  /* ─────────────────────────────────────────
+     SECONDARY COLOR (phosphor cyan)
+     ───────────────────────────────────────── */
+
+  --color-secondary: var(--sh-phosphor);
+  --color-secondary-hover: oklch(0.9 0.18 195);
+  --color-secondary-active: oklch(0.75 0.18 195);
+  --color-secondary-subtle: oklch(0.85 0.18 195 / 0.12);
+
+  /* ─────────────────────────────────────────
+     TEXT
+     ───────────────────────────────────────── */
+
+  --text-primary: oklch(0.95 0 0);
+  --text-secondary: oklch(0.72 0 0);
+  --text-tertiary: oklch(0.52 0 0);
+  --text-accent: var(--color-primary);
+  --text-inverse: oklch(0.06 0 0); /* dark text on light surfaces */
+  --text-muted: oklch(0.4 0 0);
+  --text-disabled: oklch(0.3 0 0);
+
+  /* ─────────────────────────────────────────
+     BORDERS
+     ───────────────────────────────────────── */
+
+  --border-subtle: oklch(0.15 0.02 25); /* very faint red tint */
+  --border-primary: oklch(0.22 0.04 25); /* standard border */
+  --border-accent: var(--color-primary);
+  --border-focus: var(--color-primary);
+  --border-default: oklch(0.18 0.02 25);
+  --border-hover: oklch(0.28 0.06 25);
+  --border-error: var(--color-primary);
+
+  /* Shorthand alias */
+  --border: 1px solid var(--border-default);
+
+  /* ─────────────────────────────────────────
+     STATUS
+     ───────────────────────────────────────── */
+
+  --status-error: var(--sh-threat);
+  --status-healthy: var(--sh-phosphor);
+  --status-success: var(--sh-phosphor);
+  --status-warning: oklch(0.72 0.18 55); /* amber */
+  --status-waiting: oklch(0.35 0 0); /* dim grey */
+  --status-active: var(--sh-phosphor);
+  --status-ok: var(--sh-phosphor);
+
+  /* Glow variants */
+  --status-error-glow: var(--sh-threat-glow);
+  --status-healthy-glow: var(--sh-phosphor-glow);
+  --status-success-glow: var(--sh-phosphor-glow);
+  --status-warning-glow: oklch(0.72 0.18 55 / 0.2);
+  --status-active-glow: var(--sh-phosphor-glow);
+
+  /* Shorthand aliases for common patterns */
+  --status-warn: oklch(0.72 0.18 55);
+  --status-warn-text: oklch(0.8 0.18 55);
+
+  /* ─────────────────────────────────────────
+     ACCENT ALIASES
+     ───────────────────────────────────────── */
+
+  --accent: var(--color-primary);
+  --accent-glow: var(--sh-threat-glow);
+  --accent-text: var(--text-primary);
+
+  /* Chroma aliases (phosphor data channel) */
+  --chroma-primary: var(--sh-phosphor);
+  --chroma-glow: var(--sh-phosphor-glow);
+
+  /* ─────────────────────────────────────────
+     TYPOGRAPHY
+     ───────────────────────────────────────── */
+
+  /* Font stacks — terminal mono everywhere */
+  --font-mono: var(--sh-font);
+  --font-display: var(--sh-font);
+  --font-body: var(--sh-font);
+  --font-ui: var(--sh-font);
+  --font-data: var(--sh-font);
+
+  /* Type scale */
+  --type-display: 2rem;
+  --type-headline: 1.25rem;
+  --type-title: 1.125rem;
+  --type-body: 1rem;
+  --type-label: 0.875rem;
+  --type-small: 0.75rem;
+  --type-micro: 0.6875rem;
+  --type-nano: 0.625rem;
+
+  /* Line heights */
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+
+  /* Letter spacing */
+  --tracking-tight: -0.02em;
+  --tracking-normal: 0em;
+  --tracking-wide: 0.06em;
+  --tracking-widest: 0.12em;
+
+  /* ─────────────────────────────────────────
+     RADII — sharp, angular (no rounding)
+     ───────────────────────────────────────── */
+
+  --radius: 0;
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-full: 9999px; /* pills only — e.g. badge counts */
+
+  /* ─────────────────────────────────────────
+     SPACING
+     ───────────────────────────────────────── */
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Shorthand aliases */
+  --spacing: 1rem;
+  --spacing-3: 0.75rem;
+
+  /* ─────────────────────────────────────────
+     SHADOWS — deep black + faint threat red glow
+     ───────────────────────────────────────── */
+
+  --shadow-sm: 0 1px 4px oklch(0 0 0 / 0.7);
+  --shadow-md: 0 2px 8px oklch(0 0 0 / 0.8);
+  --shadow-lg: 0 4px 20px oklch(0 0 0 / 0.9);
+  --shadow-glow: 0 0 16px oklch(0.58 0.25 25 / 0.5);
+
+  --card-shadow: 0 2px 8px oklch(0 0 0 / 0.8), 0 0 1px oklch(0.58 0.25 25 / 0.2);
+  --card-shadow-hover: 0 4px 16px oklch(0 0 0 / 0.9), 0 0 8px oklch(0.58 0.25 25 / 0.25);
+
+  /* ─────────────────────────────────────────
+     MOTION
+     ───────────────────────────────────────── */
+
+  --duration-instant: 0ms;
+  --duration-fast: 100ms;
+  --duration-normal: 200ms;
+  --duration-slow: 400ms;
+  --duration-slower: 600ms;
+
+  --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-linear: linear;
+
+  --transition-default: all var(--duration-normal) var(--ease-default);
+  --transition-fast: all var(--duration-fast) var(--ease-default);
+
+  /* ─────────────────────────────────────────
+     Z-INDEX
+     ───────────────────────────────────────── */
+
+  --z-dropdown: 1000;
+  --z-overlay: 1100;
+  --z-modal: 1200;
+  --z-toast: 1300;
+
+  /* ─────────────────────────────────────────
+     LAYOUT
+     ───────────────────────────────────────── */
+
+  --sidebar-width: 220px;
+  --sidebar-width-collapsed: 48px;
+  --header-height: 48px;
+  --content-max-width: 1280px;
+
+  /* ─────────────────────────────────────────
+     DISABLED STATES
+     ───────────────────────────────────────── */
+
+  --disabled-bg: oklch(0.12 0 0);
+  --disabled-text: var(--text-disabled);
+  --disabled-border: oklch(0.15 0 0);
+  --disabled-opacity: 0.4;
+
+  /* ─────────────────────────────────────────
+     MISC SPA TOKENS
+     ───────────────────────────────────────── */
+
+  /* Scrollbar */
+  --scrollbar-width: 6px;
+  --scrollbar-track: var(--bg-inset);
+  --scrollbar-thumb: var(--border-primary);
+  --scrollbar-thumb-hover: var(--color-primary);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 2px var(--color-primary);
+  --focus-ring-offset: 0 0 0 4px var(--bg-base);
+
+  /* Selection */
+  --selection-bg: oklch(0.58 0.25 25 / 0.3);
+  --selection-text: var(--text-primary);
+
+  /* Input / form tokens */
+  --input-bg: var(--bg-inset);
+  --input-border: var(--border-default);
+  --input-border-focus: var(--border-focus);
+  --input-text: var(--text-primary);
+  --input-placeholder: var(--text-muted);
+  --input-height: 2rem;
+
+  /* Badge / pill */
+  --badge-height: 1.25rem;
+  --badge-padding: 0 var(--space-2);
+
+  /* Table */
+  --table-row-hover-bg: oklch(0.12 0.01 25);
+  --table-row-stripe-bg: oklch(0.08 0 0);
+  --table-border: var(--border-subtle);
+
+  /* Code blocks */
+  --code-bg: var(--bg-inset);
+  --code-text: var(--sh-phosphor);
+}
