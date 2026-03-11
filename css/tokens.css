@@ -1,20 +1,120 @@
 /* superhot-ui design tokens
  * Override any --sh-* variable in your own CSS to customize.
+ * All color tokens registered via @property — overrides transition smoothly.
  */
 
+/* ═══════════════════════════════════════
+   @PROPERTY REGISTRATIONS
+   Typed tokens: color overrides animate, timing overrides inherit.
+   ═══════════════════════════════════════ */
+
+@property --sh-threat {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: oklch(52% 0.22 25);
+}
+
+@property --sh-phosphor {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: oklch(85% 0.18 195);
+}
+
+@property --sh-frozen {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: oklch(55% 0.04 240);
+}
+
+@property --sh-glass {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: oklch(95% 0.04 25);
+}
+
+@property --sh-void {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #000000;
+}
+
+@property --sh-bright {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+@property --sh-middle {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #d3d3d3;
+}
+
+@property --sh-dim {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #808080;
+}
+
+@property --sh-shatter-duration {
+  syntax: '<time>';
+  inherits: true;
+  initial-value: 600ms;
+}
+
+@property --sh-glitch-duration {
+  syntax: '<time>';
+  inherits: true;
+  initial-value: 300ms;
+}
+
+@property --sh-threat-pulse-duration {
+  syntax: '<time>';
+  inherits: true;
+  initial-value: 1.5s;
+}
+
+@property --sh-frost-shimmer-duration {
+  syntax: '<time>';
+  inherits: true;
+  initial-value: 3s;
+}
+
+/* ═══════════════════════════════════════
+   TOKEN VALUES
+   light-dark() declares both modes inline — no duplication.
+   Requires: color-scheme declared on :root.
+   ═══════════════════════════════════════ */
+
 :root {
-  /* Threat (crystalline red) */
-  --sh-threat: #DC2626;
-  --sh-threat-glow: rgba(220, 38, 38, 0.12);
+  color-scheme: light dark;
 
-  /* Frozen (slate) */
-  --sh-frozen: #94A3B8;
+  /* Threat (crystalline red — pure hue, no orange drift) */
+  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(62% 0.22 25));
 
-  /* Glass (crystalline overlay) */
-  --sh-glass: rgba(255, 255, 255, 0.85);
+  /* Threat glow — derived, stays in sync when --sh-threat overridden */
+  --sh-threat-glow: color-mix(in oklch, var(--sh-threat) 15%, transparent);
 
-  /* Void (deep background for watermarks) */
-  --sh-void: #0F172A;
+  /* Phosphor (CRT cyan — glow color, distinct from threat red) */
+  --sh-phosphor: light-dark(oklch(55% 0.18 195), oklch(85% 0.18 195));
+  --sh-phosphor-glow: color-mix(in oklch, var(--sh-phosphor) 20%, transparent);
+
+  /* Frozen (desaturated slate) */
+  --sh-frozen: light-dark(oklch(55% 0.04 240), oklch(40% 0.04 240));
+
+  /* Glass (red-tinted crystalline fragments — not white) */
+  --sh-glass: color-mix(in oklch, var(--sh-threat) 25%, white);
+
+  /* Void (pure black for watermark backgrounds) */
+  --sh-void: light-dark(#000000, #000000);
+
+  /* piOS text hierarchy */
+  --sh-bright: light-dark(#ffffff, #ffffff);
+  --sh-middle: light-dark(#696969, #d3d3d3);
+  --sh-dim:    light-dark(#a9a9a9, #808080);
+
+  /* piOS terminal font stack */
+  --sh-font: 'Perfect DOS VGA 437', 'Fixedsys Excelsior', monospace;
 
   /* Timing */
   --sh-shatter-duration: 600ms;
@@ -24,24 +124,9 @@
 
   /* Freshness transition */
   --sh-state-transition: filter 1s ease, opacity 1s ease;
-}
 
-/* Dark mode via data attribute */
-[data-theme="dark"] {
-  --sh-threat: #EF4444;
-  --sh-threat-glow: rgba(239, 68, 68, 0.15);
-  --sh-frozen: #475569;
-  --sh-glass: rgba(255, 255, 255, 0.06);
-  --sh-void: #020617;
-}
-
-/* Dark mode via OS preference (fallback) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) {
-    --sh-threat: #EF4444;
-    --sh-threat-glow: rgba(239, 68, 68, 0.15);
-    --sh-frozen: #475569;
-    --sh-glass: rgba(255, 255, 255, 0.06);
-    --sh-void: #020617;
-  }
+  /* CRT toggles — set to 'block' to enable each layer */
+  --sh-crt-stripe: none;    /* static scanline stripes (cheap) */
+  --sh-crt-scanline: none;  /* moving scan beam (performance-intensive) */
+  --sh-crt-flicker: none;   /* phosphor flicker (a11y: photosensitivity risk) */
 }
