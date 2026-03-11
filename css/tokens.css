@@ -68,13 +68,13 @@
   initial-value: 300ms;
 }
 
-@property --sh-threat-pulse-duration {
+@property --sh-pulse-duration {
   syntax: '<time>';
   inherits: true;
   initial-value: 1.5s;
 }
 
-@property --sh-frost-shimmer-duration {
+@property --sh-freeze-duration {
   syntax: '<time>';
   inherits: true;
   initial-value: 3s;
@@ -119,14 +119,11 @@
   /* Timing */
   --sh-shatter-duration: 600ms;
   --sh-glitch-duration: 300ms;
-  --sh-threat-pulse-duration: 1.5s;
-  --sh-frost-shimmer-duration: 3s;
-
-  /* Freshness transition */
-  --sh-state-transition: filter 1s ease, opacity 1s ease;
+  --sh-pulse-duration: 1.5s;
+  --sh-freeze-duration: 3s;
 
   /* CRT toggles — set to 'block' to enable each layer */
-  --sh-crt-stripe: none;    /* static scanline stripes (cheap) */
+  --sh-crt-stripe: block;   /* static scanline stripes (cheap) */
   --sh-crt-scanline: none;  /* moving scan beam (performance-intensive) */
   --sh-crt-flicker: none;   /* phosphor flicker (a11y: photosensitivity risk) */
 }

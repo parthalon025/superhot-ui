@@ -8,7 +8,7 @@ export function ShThreatPulse({ active, persistent = false, class: className, ch
     if (!active || !ref.current || persistent) return;
 
     const style = getComputedStyle(ref.current);
-    const duration = parseFloat(style.getPropertyValue('--sh-threat-pulse-duration') || '1.5') * 1000;
+    const duration = parseFloat(style.getPropertyValue('--sh-pulse-duration') || '1.5') * 1000;
     const timer = setTimeout(() => {
       ref.current?.removeAttribute('data-sh-effect');
     }, duration * 2 + 100);
