@@ -1,0 +1,158 @@
+/* ShCommandPalette — terminal command line / piOS input mode
+ * Signal: command mode active
+ * Emotional loop: plan
+ * Diegetic metaphor: terminal command line / piOS input mode
+ */
+
+@layer superhot.effects {
+  /* Full-screen overlay */
+  .sh-command-palette-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    background: var(--bg-overlay);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 15vh;
+
+    @supports (backdrop-filter: blur(4px)) {
+      backdrop-filter: blur(4px);
+    }
+
+    /* Fade-in */
+    transition: opacity var(--duration-normal) var(--ease-out);
+
+    @starting-style {
+      opacity: 0;
+    }
+
+    /* Reduced motion: no fade */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      @starting-style {
+        opacity: 1;
+      }
+    }
+  }
+
+  /* Centered panel */
+  .sh-command-palette-panel {
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--sh-phosphor);
+    box-shadow:
+      0 0 20px var(--sh-phosphor-glow),
+      var(--shadow-lg);
+    width: min(600px, 90vw);
+    max-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  /* Search input */
+  .sh-command-palette-input {
+    font-family: var(--sh-font);
+    font-size: var(--type-body);
+    color: var(--input-text);
+    background: var(--input-bg);
+    border: none;
+    border-bottom: 1px solid var(--border-default);
+    height: var(--input-height);
+    padding: 0 var(--space-4);
+    width: 100%;
+    outline: none;
+
+    /* Override height for comfortable command input */
+    height: 2.5rem;
+
+    &::placeholder {
+      color: var(--input-placeholder);
+      letter-spacing: var(--tracking-wide);
+    }
+
+    &:focus {
+      border-bottom-color: var(--sh-phosphor);
+      box-shadow: 0 2px 0 var(--sh-phosphor-glow);
+    }
+  }
+
+  /* Item list */
+  .sh-command-palette-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: var(--space-1) 0;
+    list-style: none;
+    margin: 0;
+
+    /* Thin phosphor scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--sh-phosphor-glow) transparent;
+  }
+
+  /* Individual item */
+  .sh-command-palette-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--sh-font);
+    font-size: var(--type-small);
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-left: 2px solid transparent;
+    transition: background var(--duration-fast) var(--ease-default);
+
+    &:hover {
+      background: color-mix(in oklch, var(--sh-phosphor) 6%, transparent);
+      color: var(--text-primary);
+      border-left-color: var(--sh-phosphor);
+    }
+
+    /* Keyboard-highlighted state */
+    &[aria-selected="true"],
+    &.sh-command-palette-item--selected {
+      background: color-mix(in oklch, var(--sh-phosphor) 10%, transparent);
+      color: var(--sh-phosphor);
+      border-left-color: var(--sh-phosphor);
+    }
+
+    /* Reduced motion: no hover transition */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+  }
+
+  .sh-command-palette-item-label {
+    flex: 1;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .sh-command-palette-item-desc {
+    color: var(--text-muted);
+    font-size: var(--type-micro);
+  }
+
+  /* Empty state */
+  .sh-command-palette-empty {
+    padding: var(--space-4);
+    font-family: var(--sh-font);
+    font-size: var(--type-small);
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* High contrast */
+  @media (forced-colors: active) {
+    .sh-command-palette-panel {
+      border: 2px solid ButtonText;
+    }
+    .sh-command-palette-item[aria-selected="true"],
+    .sh-command-palette-item.sh-command-palette-item--selected {
+      background: Highlight;
+      color: HighlightText;
+    }
+  }
+}

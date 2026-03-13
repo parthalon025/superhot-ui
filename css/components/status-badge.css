@@ -1,0 +1,73 @@
+/* ShStatusBadge — terminal status indicator
+ * Signal: entity health state
+ * Emotional loop: all nodes (status is always visible)
+ * Diegetic metaphor: terminal status code
+ */
+
+@layer superhot.effects {
+  .sh-status-badge {
+    display: inline-flex;
+    align-items: center;
+    height: var(--badge-height);
+    padding: var(--badge-padding);
+    font-family: var(--sh-font);
+    font-size: var(--type-small);
+    line-height: 1;
+    border-radius: var(--radius);
+    border: 1px solid currentColor;
+    letter-spacing: var(--tracking-wide);
+    white-space: nowrap;
+
+    /* No animation — static indicator, motion reserved for ShThreatPulse */
+  }
+
+  /* Status variants */
+  .sh-status-badge[data-sh-status="healthy"] {
+    color: var(--status-healthy);
+    box-shadow: 0 0 6px var(--status-healthy-glow);
+  }
+
+  .sh-status-badge[data-sh-status="ok"] {
+    color: var(--status-ok);
+    box-shadow: 0 0 6px var(--status-active-glow);
+  }
+
+  .sh-status-badge[data-sh-status="active"] {
+    color: var(--status-active);
+    box-shadow: 0 0 6px var(--status-active-glow);
+  }
+
+  .sh-status-badge[data-sh-status="error"] {
+    color: var(--status-error);
+    box-shadow: 0 0 6px var(--status-error-glow);
+  }
+
+  .sh-status-badge[data-sh-status="warning"] {
+    color: var(--status-warning);
+    box-shadow: 0 0 6px var(--status-warning-glow);
+  }
+
+  .sh-status-badge[data-sh-status="waiting"] {
+    color: var(--status-waiting);
+    /* No glow for inactive/waiting state */
+    box-shadow: none;
+  }
+
+  /* Suppress glow when data-sh-glow="false" */
+  .sh-status-badge[data-sh-glow="false"] {
+    box-shadow: none;
+  }
+
+  /* High contrast */
+  @media (forced-colors: active) {
+    .sh-status-badge {
+      border: 2px solid ButtonText;
+      color: ButtonText;
+      box-shadow: none;
+    }
+    .sh-status-badge[data-sh-status="error"] {
+      border-color: Highlight;
+      color: Highlight;
+    }
+  }
+}

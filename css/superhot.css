@@ -7,6 +7,12 @@
  */
 @import "./tokens.css";
 @import "./semantic.css";
+@import "./components/skeleton.css";
+@import "./components/toast.css";
+@import "./components/status-badge.css";
+@import "./components/command-palette.css";
+@import "./components/vram-bar.css";
+@import "./components/crt-toggle.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 

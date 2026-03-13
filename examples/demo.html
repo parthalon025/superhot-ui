@@ -134,6 +134,73 @@
   </div>
   <button onclick="resetShatter()" style="margin-top: 0.5rem;">Reset Shatter Card</button>
 
+  <!-- SKELETON -->
+  <h2>[ SKELETON — loading states ]</h2>
+  <div class="row">
+    <div class="card">
+      <div class="label">3 rows (default)</div>
+      <div class="sh-skeleton" style="width: 100%; height: 1em; margin-bottom: 0.5em;"></div>
+      <div class="sh-skeleton" style="width: 75%; height: 1em; margin-bottom: 0.5em;"></div>
+      <div class="sh-skeleton" style="width: 90%; height: 1em;"></div>
+    </div>
+    <div class="card">
+      <div class="label">Mixed widths</div>
+      <div class="sh-skeleton" style="width: 60%; height: 2rem; margin-bottom: 0.5em;"></div>
+      <div class="sh-skeleton" style="width: 40%; height: 1em; margin-bottom: 0.5em;"></div>
+      <div class="sh-skeleton" style="width: 80%; height: 1em;"></div>
+    </div>
+  </div>
+
+  <!-- VRAM BAR -->
+  <h2>[ VRAM BAR — memory pressure ]</h2>
+  <div class="card">
+    <div class="label" style="margin-bottom: 0.5rem;">0% (phosphor)</div>
+    <div class="sh-vram-bar" style="--sh-fill: 0; margin-bottom: 1rem;"></div>
+
+    <div class="label" style="margin-bottom: 0.5rem;">50%</div>
+    <div class="sh-vram-bar" style="--sh-fill: 50; margin-bottom: 1rem;"></div>
+
+    <div class="label" style="margin-bottom: 0.5rem;">80% (past first threshold)</div>
+    <div class="sh-vram-bar" style="--sh-fill: 80; margin-bottom: 1rem;"></div>
+
+    <div class="label" style="margin-bottom: 0.5rem;">100% (threat)</div>
+    <div class="sh-vram-bar" style="--sh-fill: 100; margin-bottom: 1rem;"></div>
+
+    <div class="label" style="margin-bottom: 0.5rem;">Live — drag slider</div>
+    <input type="range" min="0" max="100" value="0" id="vram-slider" style="width:100%; margin-bottom: 0.5rem;">
+    <div class="sh-vram-bar" id="vram-live" style="--sh-fill: 0;"></div>
+    <div class="label" id="vram-pct" style="margin-top: 0.5rem;">0%</div>
+  </div>
+
+  <!-- STATUS BADGE -->
+  <h2>[ STATUS BADGE — entity health ]</h2>
+  <div class="card">
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center;">
+      <span class="sh-status-badge" data-sh-status="healthy" data-sh-glow="true">healthy</span>
+      <span class="sh-status-badge" data-sh-status="ok" data-sh-glow="true">ok</span>
+      <span class="sh-status-badge" data-sh-status="active" data-sh-glow="true">active</span>
+      <span class="sh-status-badge" data-sh-status="error" data-sh-glow="true">error</span>
+      <span class="sh-status-badge" data-sh-status="warning" data-sh-glow="true">warning</span>
+      <span class="sh-status-badge" data-sh-status="waiting" data-sh-glow="true">waiting</span>
+    </div>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem;">
+      <div class="label">Glow suppressed (data-sh-glow="false"):</div>
+      <span class="sh-status-badge" data-sh-status="healthy" data-sh-glow="false">healthy</span>
+      <span class="sh-status-badge" data-sh-status="error" data-sh-glow="false">error</span>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <h2>[ TOAST — system event notifications ]</h2>
+  <div class="card">
+    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+      <button onclick="showToast('info', '[JOB 1234] COMPLETE')">Info toast</button>
+      <button onclick="showToast('warn', '[QUEUE] DLQ: 3 ENTRIES')">Warn toast</button>
+      <button onclick="showToast('error', '[BACKEND] UNREACHABLE')">Error toast</button>
+    </div>
+    <div id="toast-container" class="sh-toast-container" style="position: static; margin-top: 1rem; max-width: 100%;"></div>
+  </div>
+
   <script type="module">
     import { applyFreshness } from '../js/freshness.js';
     import { shatterElement } from '../js/shatter.js';
@@ -185,7 +252,56 @@
     };
     window.resetShatter = () => {
       const container = document.getElementById('shatter-container');
+      // shatter-card is a static demo element — safe to restore via outerHTML
       container.innerHTML = shatterHTML;
+    };
+
+    // VRAM slider live demo
+    const vramSlider = document.getElementById('vram-slider');
+    const vramLive = document.getElementById('vram-live');
+    const vramPct = document.getElementById('vram-pct');
+    if (vramSlider) {
+      vramSlider.addEventListener('input', () => {
+        const val = vramSlider.value;
+        vramLive.style.setProperty('--sh-fill', val);
+        vramPct.textContent = `${val}%`;
+      });
+    }
+
+    // Toast demo — uses safe DOM methods (no innerHTML)
+    window.showToast = (type, message) => {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+
+      const el = document.createElement('div');
+      el.className = 'sh-toast';
+      el.setAttribute('data-sh-toast-type', type);
+      el.setAttribute('aria-live', type === 'error' ? 'assertive' : 'polite');
+      el.setAttribute('role', 'alert');
+
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+
+      const timeSpan = document.createElement('span');
+      timeSpan.className = 'sh-toast-time';
+      timeSpan.textContent = `[${hh}:${mm}:${ss}]`;
+
+      const msgSpan = document.createElement('span');
+      msgSpan.className = 'sh-toast-msg';
+      msgSpan.textContent = message;
+
+      el.appendChild(timeSpan);
+      el.appendChild(msgSpan);
+      container.appendChild(el);
+
+      // Auto-dismiss info/warn after 3s; error toasts require click to dismiss
+      if (type !== 'error') {
+        setTimeout(() => shatterElement(el, { onComplete: () => el.remove() }), 3000);
+      } else {
+        el.addEventListener('click', () => shatterElement(el, { onComplete: () => el.remove() }));
+      }
     };
   </script>
 </body>
