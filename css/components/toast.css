@@ -1,0 +1,93 @@
+/* ShToast — terminal-style system event notification
+ * Signal: system event occurred (info / warning / error)
+ * Emotional loop: execute → catharsis
+ * Diegetic metaphor: piOS terminal output line with timestamp
+ */
+
+@layer superhot.effects {
+  /* Container: fixed bottom-right stack */
+  .sh-toast-container {
+    position: fixed;
+    bottom: var(--space-4);
+    right: var(--space-4);
+    z-index: var(--z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    pointer-events: none;
+    max-width: 420px;
+    width: 100%;
+  }
+
+  /* Individual toast */
+  .sh-toast {
+    font-family: var(--sh-font);
+    font-size: var(--type-small);
+    color: var(--text-primary);
+    background: var(--bg-surface-raised);
+    border: 1px solid var(--border-default);
+    border-left: 3px solid var(--sh-phosphor);
+    padding: var(--space-2) var(--space-3);
+    pointer-events: auto;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    line-height: var(--leading-normal);
+    border-radius: var(--radius);
+
+    /* Slide-in from right */
+    transition:
+      transform var(--duration-normal) var(--ease-out),
+      opacity var(--duration-normal) var(--ease-out);
+
+    @starting-style {
+      transform: translateX(110%);
+      opacity: 0;
+    }
+
+    /* Reduced motion: no slide */
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+      @starting-style {
+        transform: none;
+        opacity: 0;
+      }
+    }
+  }
+
+  /* Type variants — left border signals severity */
+  .sh-toast[data-sh-toast-type="info"] {
+    border-left-color: var(--sh-phosphor);
+  }
+
+  .sh-toast[data-sh-toast-type="warn"] {
+    border-left-color: var(--status-warning);
+    background: color-mix(in oklch, var(--status-warning) 5%, var(--bg-surface-raised));
+  }
+
+  .sh-toast[data-sh-toast-type="error"] {
+    border-left-color: var(--sh-threat);
+    background: color-mix(in oklch, var(--sh-threat) 5%, var(--bg-surface-raised));
+  }
+
+  /* Timestamp prefix */
+  .sh-toast-time {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* Message body */
+  .sh-toast-msg {
+    flex: 1;
+    word-break: break-word;
+  }
+
+  /* High contrast */
+  @media (forced-colors: active) {
+    .sh-toast {
+      border: 2px solid ButtonText;
+    }
+  }
+}

@@ -1,0 +1,62 @@
+/* ShCrtToggle — CRT monitor hardware controls
+ * Signal: display intensity setting
+ * Diegetic metaphor: CRT monitor hardware controls
+ */
+
+@layer superhot.effects {
+  .sh-crt-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-family: var(--sh-font);
+    font-size: var(--type-small);
+  }
+
+  .sh-crt-toggle-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  .sh-crt-toggle-row input[type="checkbox"] {
+    accent-color: var(--sh-phosphor);
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .sh-crt-toggle-label {
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    font-size: var(--type-micro);
+  }
+
+  /* Accessibility warning for flicker row */
+  .sh-crt-toggle-warning {
+    display: block;
+    font-size: var(--type-nano);
+    color: var(--status-warning);
+    letter-spacing: var(--tracking-normal);
+    text-transform: none;
+    margin-top: var(--space-1);
+    padding-left: calc(14px + var(--space-2)); /* indent under checkbox */
+  }
+
+  /* High contrast */
+  @media (forced-colors: active) {
+    .sh-crt-toggle-row input[type="checkbox"] {
+      accent-color: Highlight;
+    }
+    .sh-crt-toggle-warning {
+      color: Highlight;
+    }
+  }
+}

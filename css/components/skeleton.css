@@ -1,0 +1,35 @@
+/* ShSkeleton — phosphor shimmer sweep
+ * Signal: data loading / not yet materialized
+ * Emotional loop: tension → pause
+ * Diegetic metaphor: terminal buffer filling line by line
+ */
+
+@keyframes sh-skeleton-sweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@layer superhot.effects {
+  .sh-skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bg-inset) 0%,
+      var(--sh-phosphor-glow) 50%,
+      var(--bg-inset) 100%
+    );
+    background-size: 200% 100%;
+    animation: sh-skeleton-sweep var(--sh-frost-shimmer-duration) linear infinite;
+    border-radius: var(--radius);
+    display: block;
+
+    /* Reduced motion: static phosphor tint instead of animation */
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+      background: color-mix(in oklch, var(--sh-phosphor) 8%, var(--bg-inset));
+    }
+  }
+}

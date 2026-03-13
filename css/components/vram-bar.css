@@ -1,0 +1,82 @@
+/* .sh-vram-bar — VRAM memory pressure meter
+ * Signal: memory pressure (0-100%)
+ * Emotional loop: tension
+ * Diegetic metaphor: VRAM meter filling red as danger approaches
+ *
+ * Usage: <div class="sh-vram-bar" style="--sh-fill: 72"></div>
+ *
+ * NOTE: @property must be at top level (not inside @layer).
+ */
+
+@property --sh-fill {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@layer superhot.effects {
+  .sh-vram-bar {
+    display: block;
+    width: 100%;
+    height: 4px;
+    position: relative;
+    overflow: visible;
+
+    /* Background track */
+    background: var(--bg-inset);
+
+    /* Fill: interpolate phosphor→threat based on --sh-fill (0=phosphor, 100=threat) */
+    &::before {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-start: 0;
+      width: calc(var(--sh-fill) * 1%);
+      background: color-mix(
+        in oklch,
+        var(--sh-threat) calc(var(--sh-fill) * 1%),
+        var(--sh-phosphor)
+      );
+      transition: width 1s ease-out, background 1s ease-out;
+
+      /* Reduced motion: no transition */
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
+      }
+    }
+
+    /* Threshold markers via ::after — thin vertical lines at 80% and 95% */
+    &::after {
+      content: "";
+      position: absolute;
+      inset-block: -1px;
+      inset-inline-start: 0;
+      width: 100%;
+      pointer-events: none;
+
+      /* 80% marker (phosphor warning line) */
+      background:
+        linear-gradient(
+          to right,
+          transparent calc(80% - 0.5px),
+          color-mix(in oklch, var(--sh-phosphor) 40%, transparent) calc(80% - 0.5px),
+          color-mix(in oklch, var(--sh-phosphor) 40%, transparent) calc(80% + 0.5px),
+          transparent calc(80% + 0.5px),
+          transparent calc(95% - 0.5px),
+          color-mix(in oklch, var(--sh-threat) 60%, transparent) calc(95% - 0.5px),
+          color-mix(in oklch, var(--sh-threat) 60%, transparent) calc(95% + 0.5px),
+          transparent calc(95% + 0.5px)
+        );
+    }
+
+    /* Smooth --sh-fill interpolation */
+    transition: --sh-fill 1s ease-out;
+
+    /* High contrast */
+    @media (forced-colors: active) {
+      &::before {
+        background: Highlight;
+      }
+    }
+  }
+}
