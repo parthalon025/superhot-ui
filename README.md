@@ -481,6 +481,15 @@ import {
   ShStatusBadge,
   ShCommandPalette,
   ShCrtToggle,
+  ShPageBanner,
+  ShHeroCard,
+  ShCollapsible,
+  ShErrorState,
+  ShStatsGrid,
+  ShDataTable,
+  ShNav,
+  ShTimeChart,
+  ShPipeline,
 } from "superhot-ui/preact";
 
 function Dashboard() {
@@ -502,6 +511,122 @@ function Dashboard() {
     </div>
   );
 }
+```
+
+### Dashboard Primitives
+
+Nine components for building ARIA-style dashboard pages:
+
+| Component         | Description                                                                                                                                                    |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<ShPageBanner>`  | Pixel-art SVG terminal page header. Props: `namespace`, `page`, `separator`, `subtitle`                                                                        |
+| `<ShHeroCard>`    | KPI stat card with freshness cursor + optional sparkline. Props: `label`, `value`, `unit`, `status`, `timestamp`, `sparkData`, `sparkColor`, `href`, `loading` |
+| `<ShCollapsible>` | Collapsible section; cursor acts as toggle. Props: `title`, `open`, `children`                                                                                 |
+| `<ShErrorState>`  | Error frame with optional retry. Props: `message`, `onRetry`                                                                                                   |
+| `<ShStatsGrid>`   | Responsive label/value grid. Props: `items [{label,value,unit}]`, `cols`                                                                                       |
+| `<ShDataTable>`   | Searchable + sortable table. Props: `columns [{key,label,sortable}]`, `rows`, `searchable`                                                                     |
+| `<ShNav>`         | 3-mode responsive nav (phone/rail/sidebar). Props: `items [{id,label,icon,active,href,onClick}]`, `activeId`, `onNavigate`                                     |
+| `<ShTimeChart>`   | uPlot time-series chart with CSS token theming. Props: `data [{t,v}]`, `compact`, `color`, `label`, `height`. Peer dep: `uplot >=1.6.0`                        |
+| `<ShPipeline>`    | SVG DAG with topological layout. Props: `nodes [{id,label,status,detail}]`, `edges [{from,to}]`, `compact`, `ariaLabel`                                        |
+
+**Example — dashboard page:**
+
+```jsx
+import { ShPageBanner, ShHeroCard, ShStatsGrid, ShTimeChart, ShPipeline } from "superhot-ui/preact";
+
+function AriaPage() {
+  return (
+    <div>
+      <ShPageBanner namespace="aria" page="overview" subtitle="Home intelligence" />
+      <ShHeroCard label="Entities" value={3050} status="ok" timestamp={lastSync} />
+      <ShStatsGrid
+        items={[
+          { label: "Active jobs", value: 12 },
+          { label: "Queue depth", value: 4 },
+        ]}
+      />
+      <ShTimeChart data={cpuHistory} label="CPU %" color="var(--sh-fresh)" height={120} />
+      <ShPipeline nodes={dagNodes} edges={dagEdges} ariaLabel="Job pipeline" />
+    </div>
+  );
+}
+```
+
+> `ShTimeChart` requires `uplot` as an optional peer dependency — `npm install uplot`. Other primitives have no additional deps.
+
+### CSS utility classes
+
+CSS-only, no Preact required. Import via `@import "superhot-ui/css"`.
+
+**Layout:**
+
+```html
+<!-- Terminal panel with optional header/footer labels -->
+<div class="sh-frame" data-label="sensor.kitchen" data-footer="updated 2s ago">...</div>
+
+<div class="sh-card">...</div>
+<div class="sh-callout">...</div>
+<div class="sh-bracket">...</div>
+<h2 class="sh-section-header">SYSTEM STATUS</h2>
+<button class="sh-clickable">Action</button>
+```
+
+**Status:**
+
+```html
+<!-- Modifiers: ok | warn | error | idle | running -->
+<span class="sh-status-pill sh-status-pill--ok">online</span>
+<span class="sh-status-pill sh-status-pill--error">fault</span>
+
+<!-- Cursor state on a container element -->
+<div class="sh-cursor-active">...</div>
+<!-- active/live data -->
+<div class="sh-cursor-working">...</div>
+<!-- processing -->
+<div class="sh-cursor-idle">...</div>
+<!-- stale/paused -->
+```
+
+**Background / overlay:**
+
+```html
+<div class="sh-terminal-bg">...</div>
+<!-- CRT stripe pattern -->
+<div class="sh-crt-overlay"></div>
+<!-- Full-page fixed scanline overlay -->
+```
+
+**Animation tiers:**
+
+```html
+<div class="sh-animate-page-enter">...</div>
+<!-- T2 one-shot entry on mount -->
+<div class="sh-animate-data-refresh">...</div>
+<!-- T2 data tick on value change -->
+<ul class="sh-stagger-children">
+  ...
+</ul>
+<!-- Staggered entry for child elements -->
+```
+
+**Page banner modifiers** (on `.sh-page-banner`):
+
+```html
+<header class="sh-page-banner sh-banner-scan sh-banner-glow sh-banner-flicker">...</header>
+```
+
+**Chart + pipeline classes:**
+
+```html
+<div class="sh-chart">...</div>
+<div class="sh-chart sh-chart--compact">...</div>
+<div class="sh-chart sh-chart--empty">No data</div>
+
+<div class="sh-pipeline">
+  <div class="sh-pipeline-node--ok">step-1</div>
+  <div class="sh-pipeline-node--running">step-2</div>
+  <div class="sh-pipeline-node--error">step-3</div>
+</div>
 ```
 
 ---
@@ -530,6 +655,7 @@ Dark mode is handled automatically via `[data-theme="dark"]` attribute or `prefe
 - **CSS** — attribute-selector-driven, zero runtime for pure CSS usage
 - **JS** — vanilla ESM, no dependencies
 - **Preact** — thin wrappers, peer dependency (`preact >= 10`)
+- **uPlot** — optional peer dependency (`uplot >= 1.6.0`), required only for `<ShTimeChart>`
 - **Build** — esbuild, three outputs: CSS, JS, Preact bundle
 
 ---
