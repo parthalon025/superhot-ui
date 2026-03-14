@@ -12,7 +12,6 @@
   },
   "scripts": {
     "build": "node esbuild.config.mjs",
-    "build:css": "cp css/superhot.css dist/superhot.css",
     "test": "node --test tests/**/*.test.js",
     "dev": "node esbuild.config.mjs --watch",
     "prepare": "husky",
