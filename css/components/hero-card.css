@@ -2,6 +2,10 @@
  * Built on sh-frame — inherits all frame styles
  */
 @layer superhot.effects {
+  .sh-frame {
+    --sh-hero-sparkline-width: 80px;
+  }
+
   .sh-hero-value {
     font-family: var(--font-mono);
     font-size: var(--type-hero);

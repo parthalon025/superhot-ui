@@ -117,7 +117,7 @@
     justify-content: center;
     color: var(--text-tertiary);
     font-family: var(--font-mono);
-    font-size: var(--type-sm, var(--type-small));
+    font-size: var(--type-small);
     letter-spacing: var(--tracking-wide);
   }
 

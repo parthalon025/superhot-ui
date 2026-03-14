@@ -55,12 +55,12 @@ export function ShHeroCard({
       data-label={label}
       style={warning ? "border-left: 3px solid var(--status-warning);" : ""}
     >
-      <div style="display: flex; align-items: baseline; gap: 8px; justify-content: space-between;">
-        <div style="display: flex; align-items: baseline; gap: 8px;">
+      <div style="display: flex; align-items: baseline; gap: var(--space-2); justify-content: space-between;">
+        <div style="display: flex; align-items: baseline; gap: var(--space-2);">
           <span class="sh-hero-value">{value ?? "\u2014"}</span>
           {unit && <span class="sh-hero-unit">{unit}</span>}
         </div>
-        <div style="width: 80px; flex-shrink: 0;">
+        <div style="width: var(--sh-hero-sparkline-width); flex-shrink: 0;">
           <ShTimeChart data={sparkData} compact height={32} color={sparkColor || "var(--accent)"} />
         </div>
       </div>

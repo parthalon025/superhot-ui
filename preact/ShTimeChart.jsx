@@ -56,9 +56,22 @@ export function ShTimeChart({
   // Callback ref — initializes uPlot when the DOM node is first attached.
   // Using a callback ref (not useRef) so this component is safe to call
   // as a plain function in tests without a render cycle.
+  // _lastCleanup is captured per-instance via closure so the null call on
+  // unmount can disconnect the ResizeObserver and destroy the uPlot instance.
+  let _lastCleanup = null;
+
   function attachChart(el) {
-    if (!el || el._chartInit) return;
+    if (!el) {
+      // Preact calls with null on unmount — run cleanup
+      if (_lastCleanup) {
+        _lastCleanup();
+        _lastCleanup = null;
+      }
+      return;
+    }
+    if (el._chartInit) return;
     el._chartInit = true;
+    let chart, ro;
     try {
       // uPlot is not available in Node (test env) — bail out gracefully
       if (!uPlot || typeof window === "undefined") return;
@@ -66,9 +79,10 @@ export function ShTimeChart({
       // Resolve CSS custom properties before passing to uPlot
       const computedStyle = getComputedStyle(el);
       const resolvedColor = color.startsWith("var(")
-        ? computedStyle.getPropertyValue(color.slice(4, -1).trim()).trim() || "#ff2020"
+        ? computedStyle.getPropertyValue(color.slice(4, -1).trim()).trim() || "currentColor"
         : color;
-      const textTertiary = computedStyle.getPropertyValue("--text-tertiary").trim() || "#808080";
+      const textTertiary =
+        computedStyle.getPropertyValue("--text-tertiary").trim() || "transparent";
 
       // Convert {t, v} array to uPlot's [timestamps, values] format
       const xs = data.map((d) => d.t);
@@ -106,20 +120,23 @@ export function ShTimeChart({
         padding: compact ? [2, 2, 2, 2] : undefined,
       };
 
-      const chart = new uPlot(opts, uData, el);
+      chart = new uPlot(opts, uData, el);
 
       // Resize observer re-fits chart when container dimensions change
       if (typeof ResizeObserver !== "undefined") {
-        const ro = new ResizeObserver(() => {
+        ro = new ResizeObserver(() => {
           if (chart && el.offsetWidth > 0) {
             chart.setSize({ width: el.offsetWidth, height: el.offsetHeight });
           }
         });
         ro.observe(el);
-        // Store references so external code can clean up if needed
-        el._chartInstance = chart;
-        el._chartResizeObserver = ro;
       }
+
+      // Register cleanup — called when Preact invokes the ref with null on unmount
+      _lastCleanup = () => {
+        if (ro) ro.disconnect();
+        if (chart && typeof chart.destroy === "function") chart.destroy();
+      };
     } catch (err) {
       // silent — chart unavailable in this environment (e.g., Node/JSDOM)
       if (typeof console !== "undefined")
