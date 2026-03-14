@@ -72,6 +72,24 @@ describe('fixSymlink', () => {
 
     assert.equal(result.status, 'already-absolute');
   });
+
+  test('rewrites absolute symlink pointing to wrong target', () => {
+    tmpDir = mkdtempSync(join(tmpdir(), 'superhot-fixsym-'));
+    const nodeModules = join(tmpDir, 'node_modules');
+    mkdirSync(nodeModules, { recursive: true });
+    const wrongTarget = join(tmpDir, 'wrong-target');
+    mkdirSync(wrongTarget);
+    const correctTarget = join(tmpDir, 'correct-target');
+    mkdirSync(correctTarget);
+    symlinkSync(wrongTarget, join(nodeModules, 'superhot-ui'));
+
+    const result = fixSymlink(tmpDir, correctTarget);
+
+    assert.equal(result.status, 'fixed');
+    assert.equal(result.target, correctTarget);
+    assert.ok(lstatSync(join(nodeModules, 'superhot-ui')).isSymbolicLink());
+    assert.equal(readlinkSync(join(nodeModules, 'superhot-ui')), correctTarget);
+  });
 });
 
 // ─── injectClaudeBlock ────────────────────────────────────────────────────────
@@ -144,16 +162,16 @@ describe('injectClaudeBlock', () => {
     const claudePath = join(tmpDir, 'CLAUDE.md');
     writeFileSync(
       claudePath,
-      '# My Project\n\nOther section content.\n\n<!-- superhot-ui:0.0.1 -->\n## superhot-ui\nOld usage notes.\n<!-- /superhot-ui -->\n'
+      '# My Project\n\nOther section content.\n\n<!-- superhot-ui:0.0.1 -->\n## superhot-ui Design System\nOld usage notes.\n\n## Another Section\n\nStuff here.\n'
     );
 
-    const result = injectClaudeBlock(tmpDir, '## superhot-ui\nNew usage notes.', '0.2.0');
+    const result = injectClaudeBlock(tmpDir, '## superhot-ui Design System\nNew usage notes.', '0.1.0');
 
     assert.equal(result.status, 'updated');
     const content = readFileSync(claudePath, 'utf8');
     assert.ok(!content.includes('0.0.1'));
-    assert.ok(content.includes('0.2.0'));
-    assert.ok(content.includes('Other section content.'));
+    assert.ok(content.includes('<!-- superhot-ui:0.1.0 -->'));
+    assert.ok(content.includes('## Another Section'));
   });
 });
 
