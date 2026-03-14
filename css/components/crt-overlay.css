@@ -1,0 +1,27 @@
+/* sh-crt-overlay — full-page CRT scanline overlay
+ * Signal: global terminal aesthetic context
+ * Usage: add <div class="sh-crt-overlay"></div> as first child of body
+ * Source: ARIA .crt-overlay
+ */
+
+@layer superhot.crt {
+  .sh-crt-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      var(--scan-line) 2px,
+      var(--scan-line) 4px
+    );
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-crt-overlay {
+      display: none;
+    }
+  }
+}

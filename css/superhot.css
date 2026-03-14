@@ -16,6 +16,7 @@
 @import "./components/stat-card.css";
 @import "./components/frame.css";
 @import "./components/banner.css";
+@import "./components/crt-overlay.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
