@@ -381,26 +381,12 @@ playSfx("pause"); // queue paused
 
 ```bash
 npm install file:../superhot-ui
+node node_modules/superhot-ui/scripts/setup.js
 ```
 
-This is the pattern used by `ollama-queue` and `ha-aria`. Two gotchas for `file:` dependencies:
-
-**Worktree symlink break:** `npm install` creates a relative symlink. It works from the main repo depth but silently breaks inside `.worktrees/<branch>/`. Fix:
-
-```bash
-rm node_modules/superhot-ui
-ln -s /home/justin/Documents/projects/superhot-ui node_modules/superhot-ui
-```
-
-**esbuild dual-Preact crash:** If `superhot-ui` ships its own `node_modules/preact`, esbuild will bundle two Preact instances, causing silent render failures. Pin all Preact imports in your `esbuild.config.mjs`:
-
-```js
-alias: {
-  'preact': path.resolve('./node_modules/preact'),
-  'preact/hooks': path.resolve('./node_modules/preact/hooks'),
-  'preact/jsx-runtime': path.resolve('./node_modules/preact/jsx-runtime'),
-}
-```
+The setup script handles: symlink fix for worktrees, CLAUDE.md design rules injection, postinstall
+wiring, and esbuild Preact alias detection. Run it once — after that `npm install` keeps it updated
+automatically.
 
 **CSS only (no build step):**
 
