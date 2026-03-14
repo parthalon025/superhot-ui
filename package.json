@@ -48,7 +48,9 @@
     "css/",
     "js/",
     "preact/",
-    "dist/"
+    "dist/",
+    "scripts/",
+    "docs/"
   ],
   "license": "MIT",
   "lint-staged": {
