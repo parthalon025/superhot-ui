@@ -17,22 +17,18 @@ import { ShThreatPulse } from "./ShThreatPulse.jsx";
 export function ShStatCard({ label, value, status, detail, href, class: className, ...rest }) {
   const isError = status === "error";
 
-  if (href) {
-    return (
-      <a
-        href={href}
-        class={["sh-stat-card", className].filter(Boolean).join(" ")}
-        data-sh-status={status}
-        {...rest}
-      >
-        <span class="sh-stat-card-label">{label}</span>
-        <span class="sh-stat-card-value">{value}</span>
-        {detail && <span class="sh-stat-card-detail">{detail}</span>}
-      </a>
-    );
-  }
-
-  const card = (
+  const inner = href ? (
+    <a
+      href={href}
+      class={["sh-stat-card", className].filter(Boolean).join(" ")}
+      data-sh-status={status}
+      {...rest}
+    >
+      <span class="sh-stat-card-label">{label}</span>
+      <span class="sh-stat-card-value">{value}</span>
+      {detail && <span class="sh-stat-card-detail">{detail}</span>}
+    </a>
+  ) : (
     <div
       class={["sh-stat-card", className].filter(Boolean).join(" ")}
       data-sh-status={status}
@@ -47,10 +43,10 @@ export function ShStatCard({ label, value, status, detail, href, class: classNam
   if (isError) {
     return (
       <ShThreatPulse active persistent>
-        {card}
+        {inner}
       </ShThreatPulse>
     );
   }
 
-  return card;
+  return inner;
 }
