@@ -96,8 +96,9 @@ export function injectClaudeBlock(consumerRoot, blockTemplate, version) {
   // Different version — replace the block
   // Match from the marker through the block content, stopping before the next top-level section
   const replaceRegex = /<!-- superhot-ui:[\d.]+ -->[\s\S]*?(?=\n## |\n# |$)/;
-  const newContent = content.replace(replaceRegex, fullBlock);
-  writeFileSync(claudePath, newContent, 'utf8');
+  const updated = content.replace(replaceRegex, fullBlock);
+  const finalContent = updated.endsWith('\n') ? updated : updated + '\n';
+  writeFileSync(claudePath, finalContent, 'utf8');
   return { status: 'updated' };
 }
 
@@ -116,10 +117,19 @@ export function patchPackageJson(consumerRoot) {
     return { status: 'skip', reason: 'no package.json' };
   }
 
-  const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+  let pkg;
+  try {
+    pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
+  } catch {
+    return { status: 'skip', reason: 'package.json is malformed' };
+  }
 
   if (pkg.scripts && pkg.scripts.postinstall && pkg.scripts.postinstall.includes('superhot-ui')) {
     return { status: 'already-configured' };
+  }
+
+  if (pkg.scripts && pkg.scripts.postinstall && !pkg.scripts.postinstall.includes('superhot-ui')) {
+    return { status: 'skip', reason: 'postinstall exists — add manually: node node_modules/superhot-ui/scripts/setup.js' };
   }
 
   if (!pkg.scripts) {
@@ -156,7 +166,7 @@ export function detectEsbuild(consumerRoot) {
 
   const content = readFileSync(esbuildPath, 'utf8');
 
-  if (content.includes("'preact': path.resolve")) {
+  if (content.includes('preact') && content.includes('path.resolve')) {
     return { status: 'already-configured' };
   }
 
@@ -175,12 +185,16 @@ function main() {
     return;
   }
 
-  // Read version from this package's package.json
-  const pkgPath = join(superhotAbsPath, 'package.json');
-  const { version } = JSON.parse(readFileSync(pkgPath, 'utf8'));
-
-  // Read block template
-  const blockTemplate = readFileSync(join(superhotAbsPath, 'docs', 'consumer-claude-md.md'), 'utf8');
+  // Read version from this package's package.json and block template
+  let version, blockTemplate;
+  try {
+    version = JSON.parse(readFileSync(resolve(__dirname, '../package.json'), 'utf8')).version;
+    blockTemplate = readFileSync(resolve(__dirname, '../docs/consumer-claude-md.md'), 'utf8');
+  } catch (err) {
+    console.error(`[superhot-ui setup] Failed to read package files: ${err.message}`);
+    console.error('Ensure superhot-ui is properly installed with npm run build.');
+    process.exit(1);
+  }
 
   // Run all steps and print results
   const symResult = fixSymlink(consumerRoot, superhotAbsPath);
@@ -196,7 +210,7 @@ function main() {
   console.log(`${pkgIcon} package.json: ${pkgResult.status}${pkgResult.reason ? ` (${pkgResult.reason})` : ''}`);
 
   const esbuildResult = detectEsbuild(consumerRoot);
-  const esbuildIcon = esbuildResult.status === 'needs-config' ? '✓' : '·';
+  const esbuildIcon = esbuildResult.status === 'needs-config' ? '⚠' : '·';
   console.log(`${esbuildIcon} esbuild: ${esbuildResult.status}`);
 
   if (esbuildResult.status === 'needs-config') {
