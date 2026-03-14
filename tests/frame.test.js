@@ -15,8 +15,8 @@ describe("frame.css", () => {
   });
   it("defines .sh-bracket with pseudo brackets", () => {
     assert.ok(css.includes(".sh-bracket"), "missing .sh-bracket");
-    assert.ok(css.includes("'['"), "missing [ bracket");
-    assert.ok(css.includes("']'"), "missing ] bracket");
+    assert.ok(css.includes('"["'), "missing [ bracket");
+    assert.ok(css.includes('"]"'), "missing ] bracket");
   });
   it("defines .sh-status-pill with variants", () => {
     assert.ok(css.includes(".sh-status-pill"), "missing .sh-status-pill");
