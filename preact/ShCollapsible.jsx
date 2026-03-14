@@ -18,6 +18,8 @@
  * @param {preact.ComponentChildren} [props.children]
  * @param {string} [props.class]
  */
+import { useState } from "preact/hooks";
+
 export function ShCollapsible({
   title,
   defaultOpen = true,
@@ -28,29 +30,41 @@ export function ShCollapsible({
   class: className,
   ...rest
 }) {
-  // Render using defaultOpen as initial open state.
-  // In a full Preact render cycle this would be backed by useState; here we use
-  // the prop value directly so plain-function calls (tests, SSR) get a stable vnode.
-  const isOpen = defaultOpen;
+  let open, setOpen;
+  try {
+    [open, setOpen] = useState(defaultOpen);
+  } catch {
+    // Called as plain function outside Preact render (tests, SSR) — use defaultOpen as static value
+    open = defaultOpen;
+    setOpen = () => {};
+  }
 
-  const cursorClass = loading
-    ? "sh-cursor-working"
-    : isOpen
-      ? "sh-cursor-active"
-      : "sh-cursor-idle";
+  const cursorClass = loading ? "sh-cursor-working" : open ? "sh-cursor-active" : "sh-cursor-idle";
+
+  function toggle() {
+    if (!loading) setOpen(!open);
+  }
 
   return (
     <div
       class={["sh-collapsible", cursorClass, className].filter(Boolean).join(" ")}
-      data-sh-open={isOpen ? "true" : "false"}
+      data-sh-open={open ? "true" : "false"}
       {...rest}
     >
-      <button class="sh-collapsible-toggle" aria-expanded={isOpen} disabled={loading} type="button">
+      <button
+        class="sh-collapsible-toggle"
+        aria-expanded={open}
+        disabled={loading}
+        type="button"
+        onClick={toggle}
+      >
         <span class="sh-collapsible-title">{title}</span>
-        {!isOpen && summary && <span class="sh-bracket">{summary}</span>}
+        {!open && summary && <span class="sh-bracket">{summary}</span>}
       </button>
-      {isOpen && subtitle && <div class="sh-collapsible-subtitle">{subtitle}</div>}
-      {isOpen && children && <div class="sh-collapsible-body">{children}</div>}
+      {open && subtitle && <div class="sh-collapsible-subtitle">{subtitle}</div>}
+      {open && children && <div class="sh-collapsible-body">{children}</div>}
     </div>
   );
 }
+
+export default ShCollapsible;
