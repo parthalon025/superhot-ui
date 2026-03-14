@@ -19,6 +19,7 @@
 @import "./components/crt-overlay.css";
 @import "./components/animations.css";
 @import "./components/hero-card.css";
+@import "./components/data-table.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
