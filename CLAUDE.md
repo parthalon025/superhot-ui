@@ -27,28 +27,36 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 
 ## Effects Reference
 
-| Effect       | CSS Attribute                                   | JS Function                     | Preact Component  |
-| ------------ | ----------------------------------------------- | ------------------------------- | ----------------- |
-| Freshness    | `data-sh-state="fresh\|cooling\|frozen\|stale"` | `applyFreshness(el, timestamp)` | `<ShFrozen>`      |
-| Shatter      | `.sh-fragment` (JS-created)                     | `shatterElement(el, opts)`      | `<ShShatter>`     |
-| Glitch       | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`          | `<ShGlitch>`      |
-| Mantra       | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`         | `<ShMantra>`      |
-| Threat Pulse | `data-sh-effect="threat-pulse"`                 | —                               | `<ShThreatPulse>` |
-| CRT Toggle   | —                                               | —                               | `<ShCrtToggle>`   |
+| Effect          | CSS Attribute                                   | JS Function                              | Preact Component     |
+| --------------- | ----------------------------------------------- | ---------------------------------------- | -------------------- |
+| Freshness       | `data-sh-state="fresh\|cooling\|frozen\|stale"` | `applyFreshness(el, timestamp)`          | `<ShFrozen>`         |
+| Shatter         | `.sh-fragment` (JS-created)                     | `shatterElement(el, opts)`               | `<ShShatter>`        |
+| Glitch          | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`                   | `<ShGlitch>`         |
+| Mantra          | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`                  | `<ShMantra>`         |
+| Threat Pulse    | `data-sh-effect="threat-pulse"`                 | —                                        | `<ShThreatPulse>`    |
+| CRT Toggle      | —                                               | `setCrtMode({stripe,scanline,flicker})`  | `<ShCrtToggle>`      |
+| Skeleton        | `.sh-skeleton`                                  | —                                        | `<ShSkeleton>`       |
+| Toast           | `.sh-toast` + `data-sh-toast-type`              | —                                        | `<ShToast>`          |
+| Status Badge    | `.sh-status-badge` + `data-sh-status`           | —                                        | `<ShStatusBadge>`    |
+| VRAM Bar        | `.sh-vram-bar` + `--sh-fill: <0-100>`           | —                                        | —                    |
+| Command Palette | `.sh-command-palette-overlay`                   | —                                        | `<ShCommandPalette>` |
+| Audio           | —                                               | `playSfx('complete\|error\|dlq\|pause')` | —                    |
 
 ## File Layout
 
-| Path                 | Purpose                                         |
-| -------------------- | ----------------------------------------------- |
-| `css/tokens.css`     | CSS custom properties (`--sh-*`) with dark mode |
-| `css/superhot.css`   | All effects (imports tokens.css)                |
-| `js/freshness.js`    | Timestamp to freshness state                    |
-| `js/shatter.js`      | Fragment + drift + fade animation               |
-| `js/glitch.js`       | Chromatic aberration burst                      |
-| `js/mantra.js`       | Repeating text watermark                        |
-| `preact/Sh*.jsx`     | Preact wrapper components                       |
-| `dist/`              | Built outputs (gitignored)                      |
-| `examples/demo.html` | Standalone demo (no build step)                 |
+| Path                 | Purpose                                                 |
+| -------------------- | ------------------------------------------------------- |
+| `css/tokens.css`     | CSS custom properties (`--sh-*`) with dark mode         |
+| `css/superhot.css`   | All effects (imports tokens.css)                        |
+| `js/freshness.js`    | Timestamp to freshness state                            |
+| `js/shatter.js`      | Fragment + drift + fade animation                       |
+| `js/glitch.js`       | Chromatic aberration burst                              |
+| `js/mantra.js`       | Repeating text watermark                                |
+| `js/audio.js`        | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`) |
+| `js/crt.js`          | CRT CSS property writer (`setCrtMode`)                  |
+| `preact/Sh*.jsx`     | Preact wrapper components                               |
+| `dist/`              | Built outputs (gitignored)                              |
+| `examples/demo.html` | Standalone demo (no build step)                         |
 
 ## Customization
 

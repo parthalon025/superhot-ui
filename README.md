@@ -237,6 +237,144 @@ function applyCrtIntensity(intensity) {
 
 ---
 
+### Skeleton — _Waiting for the world to materialize_
+
+Data that hasn't arrived yet. `ShSkeleton` renders phosphor-shimmer placeholder rows — a sweep of glow light across grey bars, frozen in place until content loads.
+
+**CSS:**
+
+```html
+<div class="sh-skeleton" style="width: 100%; height: 1em"></div>
+```
+
+**Preact:**
+
+```jsx
+import { ShSkeleton } from "superhot-ui/preact";
+
+<ShSkeleton rows={3} width="100%" height="1em" />;
+```
+
+Props: `rows` (default `3`), `width` (default `"100%"`), `height` (default `"1em"`), `class`.
+
+---
+
+### Toast — _The terminal speaks_
+
+System events rendered as timestamped terminal output lines. Three severity levels: `info`, `warn`, `error`. Slides in from the right, shatters on dismiss. Persistent `error` toasts automatically get a `threat-pulse`.
+
+**Preact:**
+
+```jsx
+import { ShToast } from "superhot-ui/preact";
+
+// Auto-dismisses after 3s (default), shatters on click
+<ShToast type="info" message="Queue job complete." onDismiss={() => remove(id)} />
+
+// Persistent error — stays until clicked, pulses threat
+<ShToast type="error" message="Connection lost." duration={0} onDismiss={() => setError(null)} />
+```
+
+Props: `type` (`'info'|'warn'|'error'`, default `'info'`), `message`, `duration` (ms, default `3000`, `0` = persistent), `onDismiss`, `class`.
+
+Wrap multiple toasts in `.sh-toast-container` for stacked positioning.
+
+---
+
+### Status Badge — _All nodes visible_
+
+Inline health state indicator for entities. A bordered, monospace badge that glows the status color — green for healthy, red for error, amber for warning, dim for waiting.
+
+**CSS attribute:**
+
+```html
+<span class="sh-status-badge" data-sh-status="healthy">healthy</span>
+<span class="sh-status-badge" data-sh-status="error" data-sh-glow="false">error</span>
+```
+
+Valid `data-sh-status` values: `healthy`, `ok`, `active`, `error`, `warning`, `waiting`.
+
+**Preact:**
+
+```jsx
+import { ShStatusBadge } from "superhot-ui/preact";
+
+<ShStatusBadge status="healthy" />
+<ShStatusBadge status="warning" label="DEGRADED" glow={false} />
+```
+
+Props: `status` (required), `label` (defaults to `status` value), `glow` (default `true`), `class`.
+
+---
+
+### VRAM Bar — _Memory pressure made visible_
+
+A 4px progress bar that interpolates from phosphor green to threat red as fill pressure rises. Threshold markers appear at 80% and 95%. CSS-only — no JS required.
+
+**CSS:**
+
+```html
+<div class="sh-vram-bar" style="--sh-fill: 72"></div>
+```
+
+Set `--sh-fill` to a number from `0` to `100`. The bar fill, color, and transition update automatically. Threshold marker lines are rendered via `::after`.
+
+---
+
+### Command Palette — _Enter command mode_
+
+A full-screen overlay with a fuzzy-filtered command list. Glitches in on open. Keyboard-navigable (↑/↓, Enter, Escape). Closes on backdrop click.
+
+**Preact:**
+
+```jsx
+import { ShCommandPalette } from "superhot-ui/preact";
+
+const commands = [
+  { id: "refresh", label: "Refresh data", description: "Pull latest from API" },
+  { id: "settings", label: "Open settings" },
+];
+
+<ShCommandPalette
+  open={paletteOpen}
+  items={commands}
+  onSelect={(item) => {
+    item.action?.();
+    setPaletteOpen(false);
+  }}
+  onClose={() => setPaletteOpen(false)}
+  placeholder="Type a command..."
+/>;
+```
+
+Props: `open` (required boolean), `items` (array of `{id, label, description?, action?}`), `onSelect` (called with selected item object), `onClose`, `placeholder` (default `"Type a command..."`), `class`.
+
+---
+
+### Audio — _The system has a voice_
+
+Procedural sound effects via Web Audio API. Opt-in — silent by default. Respects `prefers-reduced-motion`.
+
+Four sound types: `complete` (two ascending sine tones), `error` (distorted sawtooth), `dlq` (low sine), `pause` (brief high tone).
+
+**JS:**
+
+```js
+import { ShAudio, playSfx } from "superhot-ui";
+
+// Enable once from user preference
+ShAudio.enabled = true;
+
+playSfx("complete"); // job finished
+playSfx("error"); // system fault
+playSfx("dlq"); // dead-letter / unrecoverable
+playSfx("pause"); // queue paused
+```
+
+`ShAudio.enabled` defaults to `false`. Set it from a user preference toggle — never enable automatically.
+
+---
+
 ## Installation
 
 **As a local package (sibling repo):**
