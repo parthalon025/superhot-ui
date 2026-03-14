@@ -58,6 +58,7 @@ const preactConfig = {
       "export { ShErrorState } from './preact/ShErrorState.jsx';",
       "export { ShStatsGrid } from './preact/ShStatsGrid.jsx';",
       "export { ShDataTable } from './preact/ShDataTable.jsx';",
+      "export { ShNav } from './preact/ShNav.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
