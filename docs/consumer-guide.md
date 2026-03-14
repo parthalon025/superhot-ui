@@ -16,24 +16,24 @@ Or if the project is nested deeper:
 npm install file:../../superhot-ui
 ```
 
-**Worktree gotcha:** `npm install` creates a relative symlink for `file:` deps. The path is valid from the main repo depth but silently broken from `.worktrees/<branch>/`. Fix:
+**First-time setup** — run once after installing:
 
 ```bash
-rm node_modules/superhot-ui
-ln -s /home/justin/Documents/projects/superhot-ui node_modules/superhot-ui
+node node_modules/superhot-ui/scripts/setup.js
 ```
 
-Permanent fix: add a `postinstall` script that rewrites the symlink.
+This script:
 
-**esbuild dual-Preact crash:** `file:` deps with their own `node_modules/preact` cause two Preact instances. Pin all Preact imports in `esbuild.config.mjs`:
+- Fixes the `node_modules/superhot-ui` symlink to an absolute path (worktree compatibility)
+- Injects the superhot-ui design rules block into your `CLAUDE.md`
+- Adds a `postinstall` entry to your `package.json` so setup re-runs automatically on `npm install`
+- Prints the esbuild Preact alias snippet if your config needs it
 
-```js
-alias: {
-  'preact': path.resolve('./node_modules/preact'),
-  'preact/hooks': path.resolve('./node_modules/preact/hooks'),
-  'preact/jsx-runtime': path.resolve('./node_modules/preact/jsx-runtime'),
-}
-```
+**After that**, every `npm install` runs setup automatically via the patched postinstall.
+
+**esbuild dual-Preact crash:** If setup prints an alias snippet, add it to your `esbuild.config.mjs`
+bundle options. `file:` deps with their own `node_modules/preact` cause two Preact instances —
+silent render failures.
 
 ---
 
