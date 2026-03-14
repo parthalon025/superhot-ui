@@ -15,6 +15,9 @@
     overflow: hidden;
     background: transparent;
     font-family: var(--font-mono);
+    --sh-chart-marker-size: 8px; /* legend color swatch width */
+    --sh-chart-marker-h: 2px; /* legend color swatch height */
+    --sh-chart-cursor-pt: 5px; /* cursor crosshair dot size */
   }
 
   /* uPlot root wrapper fills container */
@@ -76,8 +79,8 @@
 
   /* Legend color marker */
   .sh-chart .u-legend .u-marker {
-    width: 8px;
-    height: 2px;
+    width: var(--sh-chart-marker-size);
+    height: var(--sh-chart-marker-h);
     border-radius: 0;
     margin-right: var(--space-1);
     vertical-align: middle;
@@ -100,8 +103,8 @@
   /* Cursor crosshair dot */
   .sh-chart .u-cursor-pt {
     border-radius: 0;
-    width: 5px !important;
-    height: 5px !important;
+    width: var(--sh-chart-cursor-pt) !important;
+    height: var(--sh-chart-cursor-pt) !important;
   }
 
   /* ─────────────────────────────────────────

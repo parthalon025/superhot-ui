@@ -48,9 +48,6 @@ export function ShHeroCard({
     node._shFreshnessCleanup = () => clearInterval(id);
   }
 
-  // sparkData accepts {t,v}[] (ShTimeChart format) or legacy uPlot [[ts],[vs]] format
-  const hasSparkline = sparkData && Array.isArray(sparkData) && sparkData.length > 1;
-
   const cardContent = (
     <div
       ref={attachFreshness}
@@ -63,16 +60,9 @@ export function ShHeroCard({
           <span class="sh-hero-value">{value ?? "\u2014"}</span>
           {unit && <span class="sh-hero-unit">{unit}</span>}
         </div>
-        {hasSparkline && (
-          <div style="width: 80px; flex-shrink: 0;">
-            <ShTimeChart
-              data={sparkData}
-              compact
-              height={32}
-              color={sparkColor || "var(--accent)"}
-            />
-          </div>
-        )}
+        <div style="width: 80px; flex-shrink: 0;">
+          <ShTimeChart data={sparkData} compact height={32} color={sparkColor || "var(--accent)"} />
+        </div>
       </div>
       {delta && <div class="sh-hero-delta">{delta}</div>}
     </div>

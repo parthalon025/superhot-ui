@@ -24,6 +24,8 @@ describe("ShTimeChart", () => {
     ];
     const result = ShTimeChart({ data });
     assert.ok(result, "renders without crashing");
+    const str = JSON.stringify(result);
+    assert.ok(!str.includes("sh-chart--empty"), "no empty state when data provided");
   });
 
   it("applies compact class", () => {
