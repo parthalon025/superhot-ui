@@ -18,6 +18,7 @@
  * @param {string}  [props.href]     Wraps card in <a> when provided
  */
 import { computeFreshness } from "../js/freshness.js";
+import ShTimeChart from "./ShTimeChart.jsx";
 
 export function ShHeroCard({
   value,
@@ -47,7 +48,8 @@ export function ShHeroCard({
     node._shFreshnessCleanup = () => clearInterval(id);
   }
 
-  const hasSparkline = sparkData && Array.isArray(sparkData[0]) && sparkData[0].length > 1;
+  // sparkData accepts {t,v}[] (ShTimeChart format) or legacy uPlot [[ts],[vs]] format
+  const hasSparkline = sparkData && Array.isArray(sparkData) && sparkData.length > 1;
 
   const cardContent = (
     <div
@@ -62,7 +64,14 @@ export function ShHeroCard({
           {unit && <span class="sh-hero-unit">{unit}</span>}
         </div>
         {hasSparkline && (
-          <div style="width: 80px; height: 32px; flex-shrink: 0;" aria-hidden="true" />
+          <div style="width: 80px; flex-shrink: 0;">
+            <ShTimeChart
+              data={sparkData}
+              compact
+              height={32}
+              color={sparkColor || "var(--accent)"}
+            />
+          </div>
         )}
       </div>
       {delta && <div class="sh-hero-delta">{delta}</div>}

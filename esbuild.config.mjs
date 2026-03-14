@@ -59,6 +59,7 @@ const preactConfig = {
       "export { ShStatsGrid } from './preact/ShStatsGrid.jsx';",
       "export { ShDataTable } from './preact/ShDataTable.jsx';",
       "export { ShNav } from './preact/ShNav.jsx';",
+      "export { ShTimeChart } from './preact/ShTimeChart.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",

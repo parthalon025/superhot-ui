@@ -21,6 +21,7 @@
 @import "./components/hero-card.css";
 @import "./components/nav.css";
 @import "./components/data-table.css";
+@import "./components/chart.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
