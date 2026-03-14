@@ -1,19 +1,19 @@
-import { build, context } from 'esbuild';
-import { copyFileSync, mkdirSync } from 'fs';
+import { build, context } from "esbuild";
+import { copyFileSync, mkdirSync } from "fs";
 
-const isWatch = process.argv.includes('--watch');
+const isWatch = process.argv.includes("--watch");
 
-mkdirSync('dist', { recursive: true });
+mkdirSync("dist", { recursive: true });
 
 // Copy CSS (no processing needed)
-copyFileSync('css/superhot.css', 'dist/superhot.css');
-console.log('  dist/superhot.css');
+copyFileSync("css/superhot.css", "dist/superhot.css");
+console.log("  dist/superhot.css");
 
 // Shared esbuild options
 const shared = {
   bundle: true,
-  format: 'esm',
-  target: 'es2020',
+  format: "esm",
+  target: "es2020",
   minify: !isWatch,
   sourcemap: isWatch,
 };
@@ -29,11 +29,11 @@ const jsConfig = {
       "export { applyMantra, removeMantra } from './js/mantra.js';",
       "export { ShAudio, playSfx } from './js/audio.js';",
       "export { setCrtMode } from './js/crt.js';",
-    ].join('\n'),
-    resolveDir: '.',
-    loader: 'js',
+    ].join("\n"),
+    resolveDir: ".",
+    loader: "js",
   },
-  outfile: 'dist/superhot.js',
+  outfile: "dist/superhot.js",
 };
 
 // Preact components bundle
@@ -51,29 +51,24 @@ const preactConfig = {
       "export { ShStatusBadge } from './preact/ShStatusBadge.jsx';",
       "export { ShCommandPalette } from './preact/ShCommandPalette.jsx';",
       "export { ShCrtToggle } from './preact/ShCrtToggle.jsx';",
-    ].join('\n'),
-    resolveDir: '.',
-    loader: 'jsx',
+      "export { ShStatCard } from './preact/ShStatCard.jsx';",
+    ].join("\n"),
+    resolveDir: ".",
+    loader: "jsx",
   },
-  outfile: 'dist/superhot.preact.js',
-  external: ['preact', 'preact/hooks', 'preact/jsx-runtime'],
-  jsx: 'automatic',
-  jsxImportSource: 'preact',
+  outfile: "dist/superhot.preact.js",
+  external: ["preact", "preact/hooks", "preact/jsx-runtime"],
+  jsx: "automatic",
+  jsxImportSource: "preact",
 };
 
 if (isWatch) {
-  const [jsCtx, preactCtx] = await Promise.all([
-    context(jsConfig),
-    context(preactConfig),
-  ]);
+  const [jsCtx, preactCtx] = await Promise.all([context(jsConfig), context(preactConfig)]);
   await Promise.all([jsCtx.watch(), preactCtx.watch()]);
-  console.log('Watching for changes...');
+  console.log("Watching for changes...");
 } else {
-  await Promise.all([
-    build(jsConfig),
-    build(preactConfig),
-  ]);
-  console.log('  dist/superhot.js');
-  console.log('  dist/superhot.preact.js');
-  console.log('Build complete.');
+  await Promise.all([build(jsConfig), build(preactConfig)]);
+  console.log("  dist/superhot.js");
+  console.log("  dist/superhot.preact.js");
+  console.log("Build complete.");
 }

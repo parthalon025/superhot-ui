@@ -13,6 +13,7 @@
 @import "./components/command-palette.css";
 @import "./components/vram-bar.css";
 @import "./components/crt-toggle.css";
+@import "./components/stat-card.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
