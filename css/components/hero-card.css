@@ -1,0 +1,29 @@
+/* sh-hero-card — KPI metric card with freshness and sparkline
+ * Built on sh-frame — inherits all frame styles
+ */
+@layer superhot.effects {
+  .sh-hero-value {
+    font-family: var(--font-mono);
+    font-size: var(--type-hero);
+    font-weight: 600;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .sh-hero-unit {
+    font-family: var(--font-mono);
+    font-size: var(--type-headline);
+    color: var(--text-tertiary);
+  }
+
+  .sh-hero-delta {
+    font-size: var(--type-label);
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-family: var(--font-mono);
+  }
+
+  .sh-hero-card--warning .sh-hero-value {
+    color: var(--status-warning);
+  }
+}

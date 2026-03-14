@@ -53,6 +53,7 @@ const preactConfig = {
       "export { ShCrtToggle } from './preact/ShCrtToggle.jsx';",
       "export { ShStatCard } from './preact/ShStatCard.jsx';",
       "export { ShPageBanner } from './preact/ShPageBanner.jsx';",
+      "export { ShHeroCard } from './preact/ShHeroCard.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
