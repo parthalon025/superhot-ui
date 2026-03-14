@@ -37,6 +37,7 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | CRT Toggle      | —                                               | `setCrtMode({stripe,scanline,flicker})`  | `<ShCrtToggle>`      |
 | Skeleton        | `.sh-skeleton`                                  | —                                        | `<ShSkeleton>`       |
 | Toast           | `.sh-toast` + `data-sh-toast-type`              | —                                        | `<ShToast>`          |
+| Stat Card       | `.sh-stat-card` + `data-sh-status`              | —                                        | `<ShStatCard>`       |
 | Status Badge    | `.sh-status-badge` + `data-sh-status`           | —                                        | `<ShStatusBadge>`    |
 | VRAM Bar        | `.sh-vram-bar` + `--sh-fill: <0-100>`           | —                                        | —                    |
 | Command Palette | `.sh-command-palette-overlay`                   | —                                        | `<ShCommandPalette>` |

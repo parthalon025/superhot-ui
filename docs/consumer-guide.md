@@ -51,7 +51,8 @@ import { applyFreshness, shatterElement, glitchText, applyMantra, removeMantra, 
 
 // Preact components
 import { ShFrozen, ShShatter, ShGlitch, ShMantra, ShThreatPulse,
-         ShSkeleton, ShToast, ShStatusBadge, ShCommandPalette, ShCrtToggle } from 'superhot-ui/preact';
+         ShSkeleton, ShToast, ShStatusBadge, ShStatCard,
+         ShCommandPalette, ShCrtToggle } from 'superhot-ui/preact';
 ```
 
 ---
