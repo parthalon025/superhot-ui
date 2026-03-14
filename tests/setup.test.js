@@ -8,6 +8,7 @@ import {
   readFileSync,
   symlinkSync,
   readlinkSync,
+  lstatSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -43,6 +44,7 @@ describe('fixSymlink', () => {
     assert.equal(result.status, 'fixed');
     // Must still be a symlink, now pointing to the absolute target
     assert.equal(readlinkSync(symlinkPath), targetDir);
+    assert.ok(lstatSync(join(nodeModules, 'superhot-ui')).isSymbolicLink(), 'should still be a symlink after fix');
   });
 
   test('no-ops if node_modules/superhot-ui does not exist', () => {
@@ -122,6 +124,21 @@ describe('injectClaudeBlock', () => {
     assert.equal(result.status, 'up-to-date');
   });
 
+  test('is idempotent — second call returns up-to-date', () => {
+    tmpDir = mkdtempSync(join(tmpdir(), 'superhot-claude-'));
+    const claudePath = join(tmpDir, 'CLAUDE.md');
+    writeFileSync(claudePath, '# My Project\n\nsome content\n');
+
+    injectClaudeBlock(tmpDir, '## superhot-ui\nSome usage notes.', '0.1.0'); // first call — injects
+    const result = injectClaudeBlock(tmpDir, '## superhot-ui\nSome usage notes.', '0.1.0'); // second call
+
+    assert.equal(result.status, 'up-to-date');
+    // verify no duplicate markers
+    const content = readFileSync(claudePath, 'utf8');
+    const markerCount = (content.match(/<!-- superhot-ui/g) || []).length;
+    assert.equal(markerCount, 1, 'should have exactly one marker');
+  });
+
   test('replaces block if version marker is outdated', () => {
     tmpDir = mkdtempSync(join(tmpdir(), 'superhot-claude-'));
     const claudePath = join(tmpDir, 'CLAUDE.md');
@@ -161,7 +178,7 @@ describe('patchPackageJson', () => {
 
     assert.equal(result.status, 'patched');
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
-    assert.ok(pkg.scripts.postinstall.includes('superhot-ui'));
+    assert.ok(pkg.scripts.postinstall.includes('node_modules/superhot-ui/scripts/setup.js'), 'postinstall should point to setup.js');
   });
 
   test('adds scripts object if absent', () => {
@@ -174,7 +191,7 @@ describe('patchPackageJson', () => {
     assert.equal(result.status, 'patched');
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8'));
     assert.ok(pkg.scripts);
-    assert.ok(pkg.scripts.postinstall.includes('superhot-ui'));
+    assert.ok(pkg.scripts.postinstall.includes('node_modules/superhot-ui/scripts/setup.js'), 'postinstall should point to setup.js');
   });
 
   test('skips if postinstall already references superhot-ui', () => {
