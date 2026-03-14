@@ -62,6 +62,10 @@
     animation: sh-pipeline-pulse 1.5s ease-in-out infinite;
   }
 
+  .sh-pipeline-node--running text {
+    fill: var(--accent);
+  }
+
   .sh-pipeline-node--idle rect {
     stroke: var(--border-subtle);
   }

@@ -44,9 +44,10 @@ function computeLevels(nodes, edges) {
     if (next.length) level++;
   }
 
-  // Assign level 0 to any nodes not reached (disconnected)
+  // Assign cycle nodes (never dequeued) to a separate column
+  const maxLevel = level;
   nodes.forEach((node) => {
-    if (levels[node.id] === undefined) levels[node.id] = 0;
+    if (levels[node.id] === undefined) levels[node.id] = maxLevel + 1;
   });
 
   return levels;
@@ -60,7 +61,13 @@ function edgePath(sx, sy, tx, ty) {
   return `M${sx},${sy} C${cx},${sy} ${cx},${ty} ${tx},${ty}`;
 }
 
-export function ShPipeline({ nodes = [], edges = [], compact = false, className = "" }) {
+export function ShPipeline({
+  nodes = [],
+  edges = [],
+  compact = false,
+  className = "",
+  ariaLabel = "Pipeline diagram",
+}) {
   const nodeH = compact ? NODE_H_COMPACT : NODE_H;
   const vGap = compact ? V_GAP_COMPACT : V_GAP;
 
@@ -108,7 +115,13 @@ export function ShPipeline({ nodes = [], edges = [], compact = false, className 
 
   return (
     <div class={`sh-pipeline${compactClass}${extraClass}`}>
-      <svg width={svgWidth} height={svgHeight} viewBox={`0 0 ${svgWidth} ${svgHeight}`}>
+      <svg
+        width={svgWidth}
+        height={svgHeight}
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        role="img"
+        aria-label={ariaLabel}
+      >
         {/* Edges rendered first (behind nodes) */}
         <g class="sh-pipeline-edges">
           {edges.map((edge, idx) => {

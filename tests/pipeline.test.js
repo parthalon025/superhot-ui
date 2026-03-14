@@ -46,4 +46,42 @@ describe("ShPipeline", () => {
     const str = JSON.stringify(result);
     assert.ok(str.includes("node--ok") || str.includes("node--running"), "has status class");
   });
+
+  it("assigns nodes to separate columns (linear chain)", () => {
+    const linearNodes = [
+      { id: "a", label: "A", status: "ok" },
+      { id: "b", label: "B", status: "ok" },
+      { id: "c", label: "C", status: "ok" },
+    ];
+    const linearEdges = [
+      { from: "a", to: "b" },
+      { from: "b", to: "c" },
+    ];
+    const result = ShPipeline({ nodes: linearNodes, edges: linearEdges });
+    const str = JSON.stringify(result);
+    // Should contain translate transforms with different x positions
+    const transforms = [...str.matchAll(/"translate\((\d+)/g)].map((m) => parseInt(m[1]));
+    const uniqueX = new Set(transforms);
+    assert.ok(uniqueX.size >= 2, "nodes in a chain should have different x positions");
+  });
+
+  it("renders cyclic edge without crashing", () => {
+    const cyclicNodes = [
+      { id: "a", label: "A", status: "ok" },
+      { id: "b", label: "B", status: "ok" },
+    ];
+    const cyclicEdges = [
+      { from: "a", to: "b" },
+      { from: "b", to: "a" },
+    ];
+    assert.doesNotThrow(() => ShPipeline({ nodes: cyclicNodes, edges: cyclicEdges }));
+  });
+
+  it("edges group rendered before nodes group", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    const edgesIdx = str.indexOf("pipeline-edges");
+    const nodesIdx = str.indexOf("pipeline-nodes");
+    assert.ok(edgesIdx < nodesIdx, "edges group should come before nodes group in SVG");
+  });
 });
