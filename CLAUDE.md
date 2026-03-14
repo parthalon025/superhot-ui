@@ -27,21 +27,43 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 
 ## Effects Reference
 
-| Effect          | CSS Attribute                                   | JS Function                              | Preact Component     |
-| --------------- | ----------------------------------------------- | ---------------------------------------- | -------------------- |
-| Freshness       | `data-sh-state="fresh\|cooling\|frozen\|stale"` | `applyFreshness(el, timestamp)`          | `<ShFrozen>`         |
-| Shatter         | `.sh-fragment` (JS-created)                     | `shatterElement(el, opts)`               | `<ShShatter>`        |
-| Glitch          | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`                   | `<ShGlitch>`         |
-| Mantra          | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`                  | `<ShMantra>`         |
-| Threat Pulse    | `data-sh-effect="threat-pulse"`                 | —                                        | `<ShThreatPulse>`    |
-| CRT Toggle      | —                                               | `setCrtMode({stripe,scanline,flicker})`  | `<ShCrtToggle>`      |
-| Skeleton        | `.sh-skeleton`                                  | —                                        | `<ShSkeleton>`       |
-| Toast           | `.sh-toast` + `data-sh-toast-type`              | —                                        | `<ShToast>`          |
-| Stat Card       | `.sh-stat-card` + `data-sh-status`              | —                                        | `<ShStatCard>`       |
-| Status Badge    | `.sh-status-badge` + `data-sh-status`           | —                                        | `<ShStatusBadge>`    |
-| VRAM Bar        | `.sh-vram-bar` + `--sh-fill: <0-100>`           | —                                        | —                    |
-| Command Palette | `.sh-command-palette-overlay`                   | —                                        | `<ShCommandPalette>` |
-| Audio           | —                                               | `playSfx('complete\|error\|dlq\|pause')` | —                    |
+| Effect           | CSS Attribute                                                | JS Function                              | Preact Component     |
+| ---------------- | ------------------------------------------------------------ | ---------------------------------------- | -------------------- |
+| Freshness        | `data-sh-state="fresh\|cooling\|frozen\|stale"`              | `applyFreshness(el, timestamp)`          | `<ShFrozen>`         |
+| Shatter          | `.sh-fragment` (JS-created)                                  | `shatterElement(el, opts)`               | `<ShShatter>`        |
+| Glitch           | `data-sh-effect="glitch"`                                    | `glitchText(el, opts)`                   | `<ShGlitch>`         |
+| Mantra           | `data-sh-mantra="TEXT"`                                      | `applyMantra(el, text)`                  | `<ShMantra>`         |
+| Threat Pulse     | `data-sh-effect="threat-pulse"`                              | —                                        | `<ShThreatPulse>`    |
+| CRT Toggle       | —                                                            | `setCrtMode({stripe,scanline,flicker})`  | `<ShCrtToggle>`      |
+| Skeleton         | `.sh-skeleton`                                               | —                                        | `<ShSkeleton>`       |
+| Toast            | `.sh-toast` + `data-sh-toast-type`                           | —                                        | `<ShToast>`          |
+| Stat Card        | `.sh-stat-card` + `data-sh-status`                           | —                                        | `<ShStatCard>`       |
+| Status Badge     | `.sh-status-badge` + `data-sh-status`                        | —                                        | `<ShStatusBadge>`    |
+| VRAM Bar         | `.sh-vram-bar` + `--sh-fill: <0-100>`                        | —                                        | —                    |
+| Command Palette  | `.sh-command-palette-overlay`                                | —                                        | `<ShCommandPalette>` |
+| Audio            | —                                                            | `playSfx('complete\|error\|dlq\|pause')` | —                    |
+| Page Banner      | `.sh-page-banner`                                            | —                                        | `<ShPageBanner>`     |
+| Hero Card        | `.sh-hero-card`, `.sh-frame`                                 | —                                        | `<ShHeroCard>`       |
+| Collapsible      | `.sh-frame` (section)                                        | —                                        | `<ShCollapsible>`    |
+| Error State      | `.sh-frame` (role=alert)                                     | —                                        | `<ShErrorState>`     |
+| Stats Grid       | `.sh-stats-grid`                                             | —                                        | `<ShStatsGrid>`      |
+| Data Table       | `.sh-data-table`                                             | —                                        | `<ShDataTable>`      |
+| Navigation       | `.sh-nav-phone`, `.sh-nav-rail`, `.sh-nav-sidebar`           | —                                        | `<ShNav>`            |
+| Time Chart       | `.sh-chart`, `.sh-chart--compact`                            | —                                        | `<ShTimeChart>`      |
+| Pipeline DAG     | `.sh-pipeline`                                               | —                                        | `<ShPipeline>`       |
+| Frame            | `.sh-frame`                                                  | —                                        | —                    |
+| Card             | `.sh-card`                                                   | —                                        | —                    |
+| Callout          | `.sh-callout`                                                | —                                        | —                    |
+| Bracket          | `.sh-bracket`                                                | —                                        | —                    |
+| Status Pill      | `.sh-status-pill`                                            | —                                        | —                    |
+| Cursor States    | `.sh-cursor-active`, `.sh-cursor-working`, `.sh-cursor-idle` | —                                        | —                    |
+| Terminal BG      | `.sh-terminal-bg`                                            | —                                        | —                    |
+| Section Header   | `.sh-section-header`                                         | —                                        | —                    |
+| Clickable        | `.sh-clickable`                                              | —                                        | —                    |
+| Page Enter Anim  | `.sh-animate-page-enter`                                     | —                                        | —                    |
+| Data Refresh     | `.sh-animate-data-refresh`                                   | —                                        | —                    |
+| Stagger Children | `.sh-stagger-children`                                       | —                                        | —                    |
+| CRT Overlay      | `.sh-crt-overlay`                                            | —                                        | —                    |
 
 ## File Layout
 

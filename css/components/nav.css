@@ -1,0 +1,200 @@
+/* sh-nav — responsive navigation shell
+ * Three modes: phone bottom bar | tablet icon rail | desktop sidebar
+ * Source: ARIA Sidebar.jsx
+ */
+
+@layer superhot.effects {
+  /* ── Phone bottom bar ── */
+  .sh-nav-phone {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-dropdown);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-subtle);
+    min-height: 56px;
+    padding-bottom: env(safe-area-inset-bottom);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  /* ── Tablet icon rail ── */
+  .sh-nav-rail {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 56px;
+    z-index: var(--z-dropdown);
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    box-shadow: 2px 0 8px oklch(0 0 0 / 0.06);
+    transition: width 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sh-nav-rail--expanded {
+    width: 240px;
+  }
+
+  /* ── Desktop sidebar ── */
+  .sh-nav-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 240px;
+    z-index: var(--z-dropdown);
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    box-shadow: 2px 0 8px oklch(0 0 0 / 0.06);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Nav items ── */
+  .sh-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    font-size: var(--type-label);
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text-tertiary);
+    border-left: 2px solid transparent;
+    transition:
+      background var(--duration-fast) ease,
+      color var(--duration-fast) ease;
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    width: 100%;
+    white-space: nowrap;
+  }
+
+  .sh-nav-item:hover {
+    background: var(--bg-surface-raised);
+    color: var(--text-primary);
+  }
+
+  .sh-nav-item--active {
+    background: var(--bg-surface-raised);
+    color: var(--text-primary);
+    border-left-color: var(--accent);
+  }
+
+  .sh-nav-item--icon {
+    width: 56px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 0;
+  }
+
+  .sh-nav-item--icon.sh-nav-item--active {
+    border-left-color: var(--accent);
+  }
+
+  /* ── Section label ── */
+  .sh-nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    padding: 14px 16px 4px;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  /* ── More sheet (phone) ── */
+  .sh-nav-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-dropdown) + 1);
+  }
+
+  .sh-nav-sheet-backdrop {
+    position: absolute;
+    inset: 0;
+    background: oklch(0 0 0 / 0.5);
+  }
+
+  .sh-nav-sheet-content {
+    position: absolute;
+    bottom: 56px;
+    left: 0;
+    right: 0;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-subtle);
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    box-shadow: 0 -4px 20px oklch(0 0 0 / 0.15);
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .sh-nav-sheet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  /* ── Content layout helpers — offset for nav ── */
+  .sh-nav-content-phone {
+    padding-bottom: 72px;
+  }
+  .sh-nav-content-tablet {
+    padding-left: 56px;
+  }
+  .sh-nav-content-desktop {
+    padding-left: 240px;
+  }
+
+  /* ── Breakpoint visibility wrappers for non-Tailwind consumers ── */
+  .sh-nav-phone-wrapper {
+    display: block;
+  }
+  .sh-nav-rail-wrapper {
+    display: none;
+  }
+  .sh-nav-sidebar-wrapper {
+    display: none;
+  }
+
+  @media (min-width: 640px) {
+    .sh-nav-phone-wrapper {
+      display: none;
+    }
+    .sh-nav-rail-wrapper {
+      display: block;
+    }
+  }
+  @media (min-width: 1024px) {
+    .sh-nav-rail-wrapper {
+      display: none;
+    }
+    .sh-nav-sidebar-wrapper {
+      display: block;
+    }
+  }
+}
