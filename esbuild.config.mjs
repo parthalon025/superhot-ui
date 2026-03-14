@@ -54,6 +54,7 @@ const preactConfig = {
       "export { ShStatCard } from './preact/ShStatCard.jsx';",
       "export { ShPageBanner } from './preact/ShPageBanner.jsx';",
       "export { ShHeroCard } from './preact/ShHeroCard.jsx';",
+      "export { ShCollapsible } from './preact/ShCollapsible.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
