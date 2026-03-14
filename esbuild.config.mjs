@@ -60,6 +60,7 @@ const preactConfig = {
       "export { ShDataTable } from './preact/ShDataTable.jsx';",
       "export { ShNav } from './preact/ShNav.jsx';",
       "export { ShTimeChart } from './preact/ShTimeChart.jsx';",
+      "export { ShPipeline } from './preact/ShPipeline.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
