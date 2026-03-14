@@ -189,6 +189,54 @@ import { ShThreatPulse } from 'superhot-ui/preact';
 
 ---
 
+### CRT Toggle — _The display breathes_
+
+User-configurable CRT scanline intensity. Four levels — off, low, medium, high — rendered as a segmented button selector. The consuming project applies the chosen intensity as a CSS custom property (`--crt-scanline-opacity`).
+
+Two modes:
+
+**Intensity mode** (recommended — single knob):
+
+```jsx
+import { ShCrtToggle } from "superhot-ui/preact";
+
+<ShCrtToggle
+  intensity={intensity} // 'off' | 'low' | 'medium' | 'high'
+  onIntensityChange={({ intensity }) => setIntensity(intensity)}
+/>;
+```
+
+Renders four segmented buttons. `onIntensityChange` is called with `{ intensity }` on selection.
+
+**Granular mode** (three booleans):
+
+```jsx
+<ShCrtToggle
+  stripe={stripe}
+  scanline={scanline}
+  flicker={flicker}
+  onChange={({ stripe, scanline, flicker }) => setState({ stripe, scanline, flicker })}
+/>
+```
+
+> **Accessibility:** The `flicker` option carries a photosensitivity warning. The component renders this warning automatically when in granular mode.
+
+**Stateless** — the consuming project handles localStorage persistence and CSS variable application:
+
+```js
+// Typical pattern
+function applyCrtIntensity(intensity) {
+  const opacityMap = { off: 0, low: 0.02, medium: 0.05, high: 0.1 };
+  document.documentElement.style.setProperty(
+    "--crt-scanline-opacity",
+    opacityMap[intensity] ?? opacityMap.medium,
+  );
+  localStorage.setItem("crt-prefs", JSON.stringify({ intensity }));
+}
+```
+
+---
+
 ## Installation
 
 **As a local package (sibling repo):**

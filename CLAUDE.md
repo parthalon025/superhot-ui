@@ -34,6 +34,7 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | Glitch       | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`          | `<ShGlitch>`      |
 | Mantra       | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`         | `<ShMantra>`      |
 | Threat Pulse | `data-sh-effect="threat-pulse"`                 | —                               | `<ShThreatPulse>` |
+| CRT Toggle   | —                                               | —                               | `<ShCrtToggle>`   |
 
 ## File Layout
 
