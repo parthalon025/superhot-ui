@@ -383,6 +383,25 @@ playSfx("pause"); // queue paused
 npm install file:../superhot-ui
 ```
 
+This is the pattern used by `ollama-queue` and `ha-aria`. Two gotchas for `file:` dependencies:
+
+**Worktree symlink break:** `npm install` creates a relative symlink. It works from the main repo depth but silently breaks inside `.worktrees/<branch>/`. Fix:
+
+```bash
+rm node_modules/superhot-ui
+ln -s /home/justin/Documents/projects/superhot-ui node_modules/superhot-ui
+```
+
+**esbuild dual-Preact crash:** If `superhot-ui` ships its own `node_modules/preact`, esbuild will bundle two Preact instances, causing silent render failures. Pin all Preact imports in your `esbuild.config.mjs`:
+
+```js
+alias: {
+  'preact': path.resolve('./node_modules/preact'),
+  'preact/hooks': path.resolve('./node_modules/preact/hooks'),
+  'preact/jsx-runtime': path.resolve('./node_modules/preact/jsx-runtime'),
+}
+```
+
 **CSS only (no build step):**
 
 ```html
@@ -418,10 +437,34 @@ npm run build   # produces dist/superhot.css, dist/superhot.js, dist/superhot.pr
 <div data-sh-mantra="SUPERHOT · SUPERHOT · SUPERHOT">Loading...</div>
 ```
 
+### Semantic token layer
+
+`@import 'superhot-ui/css'` is the recommended single-import path for consuming dashboards. It pulls in the full package: primitive effect CSS, semantic tokens (`--bg-*`, `--color-*`, `--text-*`, `--status-*`, etc.), and all DS component CSS.
+
+```css
+/* In your project's main CSS file */
+@import "superhot-ui/css";
+
+/* Tokens only (if you want to override before importing effects) */
+@import "superhot-ui/tokens";
+
+/* Override semantic tokens for project-specific needs */
+:root {
+  --bg-base: #0a0a0a;
+}
+```
+
 ### JS utilities
 
 ```js
-import { applyFreshness, glitchText, shatterElement, applyMantra } from "superhot-ui";
+import {
+  applyFreshness,
+  glitchText,
+  shatterElement,
+  applyMantra,
+  playSfx,
+  setCrtMode,
+} from "superhot-ui";
 
 // Freshness: auto-computes state from timestamp
 applyFreshness(document.querySelector("#sensor"), new Date(lastSeen));
@@ -441,7 +484,18 @@ applyMantra(document.querySelector("#panel"), "OFFLINE");
 ### Preact components
 
 ```jsx
-import { ShFrozen, ShShatter, ShGlitch, ShMantra, ShThreatPulse } from "superhot-ui/preact";
+import {
+  ShFrozen,
+  ShShatter,
+  ShGlitch,
+  ShMantra,
+  ShThreatPulse,
+  ShSkeleton,
+  ShToast,
+  ShStatusBadge,
+  ShCommandPalette,
+  ShCrtToggle,
+} from "superhot-ui/preact";
 
 function Dashboard() {
   return (
@@ -506,6 +560,9 @@ All animations respect `prefers-reduced-motion`. When motion is disabled, visual
 - Shatter requires `position: relative` on the parent element
 - Glitch uses a `::before` pseudo-element — the JS utility sets `data-sh-glitch-text` automatically, but if you're using the CSS attribute directly you must set it manually
 - Preact components require `preact` as a peer dependency (not bundled)
+- `file:` dependency creates a relative symlink — breaks silently inside worktrees (see Installation above)
+- `--sh-fill` in `.sh-vram-bar` is a unitless number 0–100, not a percentage string — `72` not `"72%"`
+- Never use `h` or `Fragment` as callback parameter names in JSX — esbuild injects `h` as JSX factory and shadowing it causes silent render crashes
 
 ---
 
