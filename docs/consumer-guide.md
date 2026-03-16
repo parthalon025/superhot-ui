@@ -109,6 +109,79 @@ Override semantic tokens for project-specific needs:
 
 ---
 
+## Atmosphere Utilities
+
+Read `docs/atmosphere-guide.md` for the full 20-rule guide. Key imports:
+
+### Glow Hierarchy
+
+```css
+/* Apply to any element for visual priority levels */
+.sh-glow-ambient    /* 4px phosphor — recedes */
+.sh-glow-standard   /* 8px phosphor — standard focus */
+.sh-glow-critical   /* 16px threat — demands attention */
+.sh-glow-none       /* explicitly remove glow */
+```
+
+### Empty States
+
+```jsx
+import { ShEmptyState } from "superhot-ui/preact";
+
+<ShEmptyState mantra="STANDBY" hint="Ctrl+K" />;
+```
+
+### CRT Presets
+
+```js
+import { setCrtPreset } from "superhot-ui";
+
+setCrtPreset("data"); // stripe only — for tables/charts
+setCrtPreset("status"); // stripe + scanline — for status dashboards
+setCrtPreset("immersive"); // all three — for ambient displays
+setCrtPreset("off"); // disable all CRT effects
+```
+
+### Effect Density
+
+```js
+import { trackEffect, isOverBudget } from "superhot-ui";
+
+// Register when an effect starts
+const cleanup = trackEffect("threat-pulse-card-3");
+
+// Check budget before adding more
+if (!isOverBudget()) {
+  // safe to add another effect
+}
+
+// Call cleanup when effect ends
+cleanup();
+```
+
+### Shatter Presets
+
+```js
+import { shatterElement } from "superhot-ui";
+
+shatterElement(el, "toast"); // 4 fragments — quick dismissal
+shatterElement(el, "cancel"); // 6 fragments — deliberate destruction
+shatterElement(el, "alert"); // 8 fragments — dramatic catharsis
+shatterElement(el, "purge"); // 12 fragments — overwhelming release
+```
+
+### Rest-Frame Tokens
+
+```css
+/* Use these between animations to let the interface breathe */
+animation-delay: var(--rest-after-shatter); /* 300ms */
+animation-delay: var(--rest-after-glitch); /* 200ms */
+animation-delay: var(--rest-after-state-change); /* 500ms */
+animation-delay: var(--rest-after-navigation); /* 200ms */
+```
+
+---
+
 ## Component Composition
 
 Effects compose via `animation-composition: accumulate` — stack as many as needed:
