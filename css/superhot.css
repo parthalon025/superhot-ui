@@ -23,6 +23,8 @@
 @import "./components/data-table.css";
 @import "./components/chart.css";
 @import "./components/pipeline.css";
+@import "./components/glow.css";
+@import "./components/empty-state.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
