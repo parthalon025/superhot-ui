@@ -192,6 +192,12 @@
   --transition-default: all var(--duration-normal) var(--ease-default);
   --transition-fast: all var(--duration-fast) var(--ease-default);
 
+  /* Rest-frame tokens — atmosphere-guide.md Rule 7 */
+  --rest-after-shatter: 300ms;
+  --rest-after-glitch: 200ms;
+  --rest-after-state-change: 500ms;
+  --rest-after-navigation: 200ms;
+
   /* ─────────────────────────────────────────
      Z-INDEX
      ───────────────────────────────────────── */

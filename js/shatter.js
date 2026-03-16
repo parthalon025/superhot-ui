@@ -1,13 +1,22 @@
+export const SHATTER_PRESETS = {
+  toast: { fragments: 4 },
+  cancel: { fragments: 6 },
+  alert: { fragments: 8 },
+  purge: { fragments: 12 },
+};
+
 /**
  * Shatter an element into triangular fragments that drift and fade.
  *
  * @param {Element} element - DOM element to shatter
- * @param {object} [opts]
- * @param {number} [opts.fragments=12] - Number of fragments
- * @param {Function} [opts.onComplete] - Called after animation completes
+ * @param {object|string} [optsOrPreset] - Options object or preset name
+ * @param {number} [optsOrPreset.fragments=12] - Number of fragments
+ * @param {Function} [optsOrPreset.onComplete] - Called after animation completes
  * @returns {Function} Cancel function — removes fragments immediately
  */
-export function shatterElement(element, opts = {}) {
+export function shatterElement(element, optsOrPreset = {}) {
+  const opts =
+    typeof optsOrPreset === "string" ? SHATTER_PRESETS[optsOrPreset] || {} : optsOrPreset;
   const { fragments: count = 12, onComplete } = opts;
 
   if (!element || !element.parentNode) {
