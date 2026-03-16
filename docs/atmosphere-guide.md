@@ -1,6 +1,9 @@
-# Atmosphere Guide — 20 Rules for Consumer Dashboards
+# Atmosphere Guide — 40 Rules for Consumer Dashboards
 
 How to maintain the SUPERHOT atmosphere when building on superhot-ui. These rules sit between the component API (`consumer-guide.md`) and the design constitution (`design-philosophy.md`). They govern the _feeling_ of the interface — the part that can't be enforced by tokens alone.
+
+**Part I (1–20):** Effects, color, animation, sound, and performance.
+**Part II (21–40):** Interaction, information design, spatial composition, and behavioral patterns.
 
 ---
 
@@ -411,3 +414,445 @@ If you can't complete it with _exactly one thing_ the user knows, the treatment 
 The SUPERHOT game works because every visual element carries exactly one meaning. No ambiguity. No decoration. No noise. The dashboard should work the same way.
 
 **The atmosphere is not what you add. It's what you don't.**
+
+---
+
+# Part II: Interaction, Information & Composition
+
+---
+
+## 21. Hover Is Interrogation
+
+In SUPERHOT, you observe before you act. Hover should not change backgrounds, swap colors, or scale elements. Hover _reveals_: a subtle phosphor left-border, an underline, or a status detail that was hidden at rest.
+
+Hover means "I'm looking at this" — not "I'm about to click this."
+
+**Allowed hover treatments:**
+
+- `border-left: 2px solid var(--sh-phosphor)` (attention indicator)
+- `color: var(--text-primary)` on text that was `--text-secondary` (reveal)
+- Tooltip-like detail text appearing inline (information on demand)
+
+**Forbidden hover treatments:**
+
+- Background color change (breaks the void)
+- Scale transform (decorative, not diegetic)
+- Opacity shift (conflicts with Rule 30's relevance encoding)
+- Box-shadow on hover (conflicts with glow hierarchy — Rule 6)
+
+```css
+/* Correct: subtle phosphor reveal */
+.sh-clickable:hover {
+  border-left: 2px solid var(--sh-phosphor);
+}
+
+/* Wrong: background swap */
+.row:hover {
+  background: var(--bg-surface-raised); /* NO */
+}
+```
+
+---
+
+## 22. Focus Is Targeting
+
+Keyboard focus is the crosshair. You are about to _act_ on this element. The focus ring is threat-red (`--sh-threat`) — not browser-default blue — because focus is the moment before execution.
+
+Focus moves sequentially through actionable elements like selecting targets. Tab order should follow visual priority: hero card → stat cards → table rows → sidebar actions.
+
+**Focus ring spec:**
+
+```css
+:focus-visible {
+  outline: 2px solid var(--sh-threat);
+  outline-offset: 2px;
+}
+```
+
+**Rule:** Never suppress focus indicators. Never use `outline: none` without a visible replacement. Keyboard users navigate by focus — hiding it is hiding the crosshair.
+
+---
+
+## 23. Numbers Are Absolute
+
+Never show "about 3 hours ago" or "~200." Show exact values: `3h 14m`, `197`. Precision communicates system confidence. Rounding communicates uncertainty — which should be explicit if intended.
+
+| Correct    | Wrong             |
+| ---------- | ----------------- |
+| `197`      | ~200              |
+| `3h 14m`   | about 3 hours ago |
+| `12.4ms`   | fast              |
+| `83%`      | most              |
+| `0`        | none              |
+| `197 ± 12` | approximately 200 |
+
+**Exception:** When the exact number is meaningless to the user (e.g., internal IDs), truncate with an explicit marker: `a3f2...c891`.
+
+**Rule:** If a value appears on screen, the user should be able to quote it exactly. No ambiguity.
+
+---
+
+## 24. Time Formats Are Military
+
+`14:23:07` not `2:23 PM`. `2026-03-16` not `March 16, 2026`. The piOS terminal doesn't localize — it reports.
+
+**Format reference:**
+
+| Context             | Format       | Example      |
+| ------------------- | ------------ | ------------ |
+| Timestamp (full)    | `HH:MM:SS`   | `14:23:07`   |
+| Timestamp (compact) | `HH:MM`      | `14:23`      |
+| Date                | `YYYY-MM-DD` | `2026-03-16` |
+| Duration (long)     | `Xh Ym`      | `3h 14m`     |
+| Duration (short)    | `Xm Ys`      | `14m 22s`    |
+| Duration (micro)    | `Xms`        | `850ms`      |
+| Relative age        | `Xm ago`     | `14m ago`    |
+| Uptime              | `Xd Xh`      | `2d 7h`      |
+
+**Never use:** "seconds," "minutes," "hours," "March," "Tuesday," AM/PM, or locale-specific formatting.
+
+---
+
+## 25. Borders Signal Containment
+
+Borders are structural, not decorative. They signal one thing: _this data is contained_.
+
+| Border                                     | Signal                          |
+| ------------------------------------------ | ------------------------------- |
+| `1px var(--border-subtle)`                 | Container boundary (default)    |
+| `2px var(--border-accent)`                 | Active/selected container       |
+| `2px var(--sh-threat)`                     | Error container (ShThreatPulse) |
+| `3px solid var(--sh-phosphor)` left-border | Active route indicator          |
+| No border                                  | Data flows freely into the void |
+
+**Never use borders for:**
+
+- Visual decoration (double borders, dashed for aesthetics)
+- Separation between sibling elements (use void/spacing instead)
+- Emphasis (use glow hierarchy instead — Rule 6)
+
+---
+
+## 26. Scrolling Is Descent
+
+When users scroll, they descend deeper into the system. Content at the top is immediate and urgent. Content below the fold is archival or historical.
+
+**Layout order (top to bottom):**
+
+1. System health / incident banner
+2. Hero card / primary KPI
+3. Active status (running jobs, live data)
+4. Historical data (completed jobs, logs)
+5. Configuration / settings
+
+**Never put urgent status below the fold.** The command palette (`Ctrl+K`) exists precisely so users never _need_ to scroll to act.
+
+**Rule:** If a user must scroll to discover an active error, the layout is wrong.
+
+---
+
+## 27. Loading Is Charging
+
+ShSkeleton isn't "loading" — the system is _charging_. Data is energy; skeletons show where energy will flow. Multiple skeletons = multiple energy paths charging simultaneously.
+
+When data arrives, the skeleton dissolves into content — energy completes its path. This is the `@starting-style` entrance: opacity 0 → 1, translateY -4px → 0. The content _materializes_ where the skeleton was.
+
+**Skeleton placement rule:** A skeleton must occupy the exact space its content will fill. If the content is a stat card (120×80px), the skeleton is 120×80px. If the content is a table row, the skeleton is row-height × full-width. Never use generic pill shapes — they break the illusion of charging.
+
+```jsx
+// Correct: skeleton matches content shape
+<ShSkeleton rows={1} width="120px" height="48px" />
+
+// Wrong: generic skeleton unrelated to content size
+<ShSkeleton rows={3} />  {/* what is this charging? */}
+```
+
+---
+
+## 28. Tables Are Logs
+
+Data tables read like terminal logs, not spreadsheets. The terminal logs events; it doesn't present business data in a grid.
+
+**Table rules:**
+
+- **Monospace alignment** — all values in `var(--sh-font)`
+- **Left-justified** — no centered columns (terminals don't center)
+- **Column headers** — UPPERCASE labels, `--text-muted`, `--tracking-widest`
+- **Row hover** — faint phosphor left-border, not a full-width background highlight
+- **No zebra striping** — the void between rows is sufficient visual separation
+- **Timestamps first** — if a row has a timestamp, it's the leftmost column (log convention)
+- **Status last** — status badge is the rightmost column (the conclusion)
+
+```
+TIMESTAMP    JOB          MODEL           STATUS
+14:23:07     job-1234     qwen3:14b       complete
+14:22:51     job-1233     llama3.1:70b    running
+14:20:03     job-1232     qwen3:14b       error
+```
+
+---
+
+## 29. Modals Are System Interrupts
+
+A modal is not a dialog box — it is a system interrupt. The entire world darkens (`--bg-overlay`), and the modal presents a piOS prompt.
+
+**Modal rules:**
+
+- **Overlay:** `--bg-overlay` (near-black, 92% opacity) — the world is paused
+- **Modal body:** sharp corners (`--radius: 0`), `1px var(--border-accent)`, monospace text
+- **Language:** imperative, terse, first-person system voice
+- **Actions:** `[CONFIRM]` and `[CANCEL]` — not "Yes" and "No", not "OK" and "Never mind"
+- **Z-index:** `var(--z-modal)` — above everything except ShShatter fragments
+
+**Voice examples:**
+
+| Web UI (wrong)                          | piOS (correct)                    |
+| --------------------------------------- | --------------------------------- |
+| "Are you sure you want to delete this?" | `CONFIRM: PURGE DLQ (3 ENTRIES)?` |
+| "Save changes before leaving?"          | `UNSAVED CHANGES. DISCARD?`       |
+| "This action cannot be undone."         | `IRREVERSIBLE.`                   |
+
+---
+
+## 30. Opacity Encodes Relevance
+
+Opacity is not a style choice — it is a data signal encoding how relevant content is to the current moment.
+
+| Opacity     | Meaning                  | Use Case                                           |
+| ----------- | ------------------------ | -------------------------------------------------- |
+| `1.0`       | Current, actionable      | Active jobs, live metrics, primary actions         |
+| `0.8`       | Related, secondary       | Supporting context, secondary stats                |
+| `0.6`       | Historical, context-only | Completed jobs, past data                          |
+| `0.4`       | Disabled, unavailable    | Disabled actions, unreachable services             |
+| Below `0.4` | Hidden / transitioning   | ShFrozen stale state, ShShatter fragments mid-exit |
+
+**Rule:** Never put actionable content below `0.8` opacity. If a user can click it, it must be prominent. This creates depth without z-index — high-opacity content _feels_ closer.
+
+---
+
+## 31. No Icons
+
+SUPERHOT has no icons. The piOS terminal communicates through text, color, and effects — not pictograms.
+
+| Icon (wrong) | Label (correct)                       |
+| ------------ | ------------------------------------- |
+| ⏸            | `[PAUSE]`                             |
+| ▶            | `[RESUME]`                            |
+| 🔴           | `ERROR` (in `--sh-threat` color)      |
+| ✅           | `COMPLETE` (in `--sh-phosphor` color) |
+| ⚙️           | `CONFIG`                              |
+| 📊           | `METRICS`                             |
+| 🔔 3         | `ALERTS: 3`                           |
+
+**Exception:** SVG system diagrams (topology graphs, pipeline DAGs) use geometric shapes (circles, lines) — these are the _world_, not UI chrome.
+
+**Rule:** If you reach for an icon, write a label instead. If the label is too long, the concept is too complex for an icon anyway.
+
+---
+
+## 32. The Dashboard Breathes (Polling Heartbeat)
+
+Every poll cycle, fire a micro-animation on the "last updated" timestamp — an `ShGlitch` micro-burst or a brief `applyFreshness` re-evaluation. The dashboard isn't static between polls. It's alive, waiting.
+
+**Heartbeat implementation:**
+
+```js
+// On each successful poll response:
+glitchText(lastUpdatedEl, { duration: 100, intensity: "low" });
+applyFreshness(lastUpdatedEl, Date.now());
+```
+
+**When polling stops** (network error, offline), the heartbeat stops. The user notices the _silence_ before they read the error. This is Rule 2 (Silence Is the Healthy Signal) applied to polling: regular heartbeat = alive, no heartbeat = frozen.
+
+**Rule:** If the dashboard looks identical at `t=0` and `t=30s`, something is wrong. Either the heartbeat is missing, or the freshness states aren't updating.
+
+---
+
+## 33. Whitespace Is Gestalt
+
+Every gap between elements communicates grouping (Gestalt law of proximity). Spacing is information, not empty pixels.
+
+| Spacing | Token       | Signal                               |
+| ------- | ----------- | ------------------------------------ |
+| 4px     | `--space-1` | Same entity (label + value)          |
+| 8px     | `--space-2` | Related items (stats in a row)       |
+| 16px    | `--space-4` | Same section (cards in a group)      |
+| 24px    | `--space-6` | Section boundary                     |
+| 32px+   | `--space-8` | Different concerns (separate panels) |
+
+**Rule:** Inconsistent spacing creates false groupings. If two cards are 16px apart and a third is 12px from one of them, the eye reads the 12px pair as a unit — regardless of semantic meaning. Use `--space-*` tokens exclusively. Never hardcode pixel values.
+
+---
+
+## 34. Progressive Disclosure Is Drilling
+
+Don't show everything at once. Surface-level shows summary; interaction reveals detail; further drill shows raw data. Each level descends deeper — like drilling through SUPERHOT's simulation layers.
+
+**Drill levels:**
+
+| Level       | Content                         | Component                                     |
+| ----------- | ------------------------------- | --------------------------------------------- |
+| 0 — Surface | Summary KPI, health status      | `ShHeroCard`, `ShStatsGrid`                   |
+| 1 — Detail  | Breakdowns, tables, charts      | `ShDataTable`, `ShTimeChart`, `ShCollapsible` |
+| 2 — Raw     | Log lines, raw JSON, trace data | `ShCollapsible` with monospace code block     |
+
+**Transitions between levels:**
+
+- Level 0 → 1: `ShCollapsible` expand or route navigation with `@starting-style`
+- Level 1 → 2: `ShCollapsible` nested expand or modal overlay
+- Any level back up: collapse animation or route back transition
+
+**Rule:** Never show Level 2 content (raw data) at Level 0 (surface). If raw JSON is on the main dashboard, the information hierarchy is broken.
+
+---
+
+## 35. Alerts: Binary Duration
+
+A toast either auto-dismisses or persists until acknowledged. No middle ground.
+
+| Type    | Duration         | Behavior                                     |
+| ------- | ---------------- | -------------------------------------------- |
+| Info    | 3000ms           | Auto-dismiss with `ShShatter` exit           |
+| Warning | 5000ms           | Auto-dismiss, slightly longer                |
+| Error   | `0` (persistent) | Stays until user dismisses or error resolves |
+
+**No intermediate states:**
+
+- No slow fade after 30 seconds
+- No auto-collapse-but-still-present
+- No countdown timer showing remaining display time
+- No "click to keep visible"
+
+**Rule:** If you're uncertain whether a toast should auto-dismiss, it shouldn't. Persistent is safer than lost.
+
+---
+
+## 36. Grids Are Crystalline
+
+Layout grids should feel like a crystal lattice — regular, geometric, no organic curves or irregular spacing.
+
+**Grid rules:**
+
+- Use CSS Grid with explicit column/row definitions, not flexbox wrapping
+- When items don't fill the grid, leave void cells — don't collapse the grid
+- Column widths are uniform or follow a clear ratio (1:1, 1:2, 1:3)
+- `gap` uses `--space-*` tokens — never mixed values
+- The grid IS the world geometry; breaking it breaks the world
+
+```css
+/* Correct: crystalline grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* Wrong: organic flexbox wrapping */
+.dashboard-flex {
+  display: flex;
+  flex-wrap: wrap; /* items flow unpredictably */
+  gap: 12px 16px; /* mixed spacing */
+}
+```
+
+**When a card spans multiple columns** (hero card, wide chart), use explicit `grid-column: span 2` — never `flex-grow`.
+
+---
+
+## 37. Error Recovery Is Visible
+
+When an error resolves, don't silently remove the error state. Show the recovery. The user should _see_ the system heal.
+
+**Recovery sequence:**
+
+1. `ShGlitch` burst on the recovering element (catharsis)
+2. Border color transitions from `--sh-threat` to `--sh-phosphor` (threat → life)
+3. `ShThreatPulse` stops
+4. `ShToast type="info"` confirms: `[14:23:07] RESTORED`
+5. Phosphor calm returns
+
+**Rule:** If an error state disappears without ceremony, users wonder "was that broken before?" Recovery is catharsis — the emotional payoff after tension. Skipping it is like ending a story mid-chapter.
+
+---
+
+## 38. The Interface Has Memory
+
+Collapsed sections stay collapsed. Scroll position persists. CRT preferences persist. Sort orders persist. The piOS terminal remembers your configuration.
+
+**What must persist (via `localStorage`):**
+
+- CRT mode preferences (stripe/scanline/flicker)
+- Audio enabled/disabled
+- Collapsed section states
+- Table sort column and direction
+- Active route / last visited tab
+- Command palette recent commands
+
+**What must NOT persist:**
+
+- Error states (errors are live data, not preferences)
+- Freshness states (calculated from timestamps, not cached)
+- Modal open/closed state (modals are interrupts, not persistent UI)
+
+**Rule:** If the interface resets on refresh, it feels like amnesia. The system forgot you. Every UI state that represents a _user preference_ should survive a page reload.
+
+---
+
+## 39. Thresholds Are Visible Before They Break
+
+When a metric approaches a danger zone, the _approach_ should be visible. Don't wait until the threshold is crossed to signal danger. Tension builds before the crisis.
+
+**Progressive signaling:**
+
+| Metric Range | Visual Treatment                                             |
+| ------------ | ------------------------------------------------------------ |
+| 0–60%        | Phosphor calm (normal)                                       |
+| 60–80%       | `sh-glow-ambient` phosphor border appears                    |
+| 80–90%       | `sh-glow-standard` + border shifts toward `--status-warning` |
+| 90–100%      | `sh-glow-critical` + `ShThreatPulse` activates               |
+| 100%+        | Full failure theater (Rule 12 escalation)                    |
+
+**Apply to:** VRAM usage, queue depth, error rate, response latency — any metric with a known danger threshold.
+
+```jsx
+// VRAM bar with progressive signaling
+<div
+  class={`sh-vram-bar ${pct > 90 ? "sh-glow-critical" : pct > 80 ? "sh-glow-standard" : pct > 60 ? "sh-glow-ambient" : ""}`}
+  style={`--sh-fill: ${pct}`}
+>
+  {pct}%
+</div>
+```
+
+---
+
+## 40. Skeleton Shapes Match Content
+
+Skeleton loaders must match the _shape_ of the content they will replace. The skeleton is the shadow of the incoming data — it forecasts the layout before content arrives.
+
+**Shape matching rules:**
+
+| Content Type               | Skeleton Shape                                        |
+| -------------------------- | ----------------------------------------------------- |
+| Stat card (number + label) | Rectangle with number-height line + label-height line |
+| Table (5 rows)             | 5 row-height lines at full width                      |
+| Hero card (large metric)   | Wide rectangle with hero-size number line             |
+| Graph / chart              | Rectangle at the graph's exact dimensions             |
+| Status badge               | Small pill-width rectangle                            |
+| Paragraph text             | 3 lines at 100%, 100%, 60% width                      |
+
+**Never use:**
+
+- Generic pill shapes unrelated to content size
+- A single skeleton for an entire page (skeletons are per-component)
+- Skeletons that are larger than their content (creates layout shift)
+
+```jsx
+// Correct: skeleton matches stat card anatomy
+<ShSkeleton rows={2} width="120px" height="20px" />
+
+// Wrong: generic skeleton with no relation to content
+<ShSkeleton rows={3} />
+```
+
+**Rule:** If you can't tell what content a skeleton represents by looking at its shape, the skeleton is too generic.

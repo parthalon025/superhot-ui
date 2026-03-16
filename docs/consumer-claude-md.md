@@ -80,6 +80,19 @@ Tension → Pause → Plan → Execute → Catharsis
 - Empty states show `ShEmptyState` with piOS mantra (`STANDBY`, `NO DATA`) — never apologetic text
 - CRT presets: `data` for tables, `status` for dashboards, `off` for mobile
 - Shatter presets by emotion: `toast` (4), `cancel` (6), `alert` (8), `purge` (12)
+- Hover reveals (phosphor left-border), never swaps background — hover is interrogation
+- Focus ring is threat-red (`2px solid var(--sh-threat)`) — focus is targeting
+- Numbers are absolute (`197` not "~200", `3h 14m` not "about 3 hours ago")
+- Time is military (`14:23:07`, `2026-03-16`) — no AM/PM, no month names
+- No icons — use text labels (`[PAUSE]` not ⏸, `ALERTS: 3` not 🔔)
+- Tables are logs — monospace, left-justified, timestamps first, status last
+- Modals are system interrupts — `CONFIRM: PURGE DLQ?` not "Are you sure?"
+- Alerts are binary: auto-dismiss (info) or persist until acknowledged (error) — nothing in between
+- Grids are crystalline — CSS Grid with uniform columns, void cells over collapsed layout
+- Error recovery is visible — glitch burst + border transition + toast confirmation
+- Interface has memory — `localStorage` for all UI preferences (CRT, sort, collapsed state)
+- Thresholds visible before they break — progressive glow as metrics approach danger zones
+- Skeleton shapes match content — stat card skeleton looks like a stat card, not a generic pill
 
 **Component rules**
 
