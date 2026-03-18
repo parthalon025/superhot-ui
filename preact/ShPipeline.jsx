@@ -10,6 +10,26 @@ const NODE_W_COMPACT = 120;
 const NODE_H_COMPACT = 28;
 const V_GAP_COMPACT = 16;
 
+/** ASCII health gauge: '███░░' from running/total ratio */
+function healthGauge(running, total, width = 5) {
+  if (!total) return "";
+  const filled = Math.round((running / total) * width);
+  return "\u2588".repeat(filled) + "\u2591".repeat(width - filled);
+}
+
+/** Role glyph: single char representing node status */
+function roleGlyph(status) {
+  if (status === "running" || status === "ok") return "\u25B8";
+  return "\u25AA";
+}
+
+/** True if prefers-reduced-motion is active */
+function isReducedMotion() {
+  return (
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
+  );
+}
+
 /**
  * Kahn's algorithm — assign a level (column index) to each node.
  * Returns a map of { nodeId -> level }.
@@ -67,9 +87,11 @@ export function ShPipeline({
   compact = false,
   className = "",
   ariaLabel = "Pipeline diagram",
+  selectedId = null,
 }) {
   const nodeH = compact ? NODE_H_COMPACT : NODE_H;
   const vGap = compact ? V_GAP_COMPACT : V_GAP;
+  const reducedMotion = isReducedMotion();
 
   // Build level map and group by level
   const levels = computeLevels(nodes, edges);
@@ -122,6 +144,85 @@ export function ShPipeline({
         role="img"
         aria-label={ariaLabel}
       >
+        <defs>
+          {/* Phosphor glow filter — standard */}
+          <filter id="sh-pipeline-glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+
+          {/* Phosphor glow filter — strong (threat nodes) */}
+          <filter id="sh-pipeline-glow-strong" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+
+          {/* Dither pattern — light (frozen nodes) */}
+          <pattern
+            id="sh-pipeline-dither-frozen"
+            width="8"
+            height="8"
+            patternUnits="userSpaceOnUse"
+          >
+            <rect width="8" height="8" fill="var(--bg-surface)" />
+            <text
+              x="0"
+              y="7"
+              font-size="8"
+              font-family="monospace"
+              fill="var(--sh-phosphor)"
+              opacity="0.12"
+            >
+              {"\u2591"}
+            </text>
+          </pattern>
+
+          {/* Dither pattern — heavy (failed nodes) */}
+          <pattern
+            id="sh-pipeline-dither-failed"
+            width="8"
+            height="8"
+            patternUnits="userSpaceOnUse"
+          >
+            <rect width="8" height="8" fill="var(--bg-surface)" />
+            <text
+              x="0"
+              y="7"
+              font-size="8"
+              font-family="monospace"
+              fill="var(--sh-threat)"
+              opacity="0.18"
+            >
+              {"\u2592"}
+            </text>
+          </pattern>
+
+          {/* Arrowhead marker — directional edge terminus */}
+          <marker
+            id="sh-pipeline-arrow"
+            markerWidth="6"
+            markerHeight="6"
+            refX="5"
+            refY="3"
+            orient="auto"
+            markerUnits="strokeWidth"
+          >
+            <path d="M0,0 L0,6 L6,3 z" fill="var(--sh-phosphor)" opacity="0.7" />
+          </marker>
+
+          {/* Dot-matrix background — terminal character-cell feel */}
+          <pattern id="sh-pipeline-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <circle cx="0" cy="0" r="0.5" fill="var(--border-subtle)" />
+            <circle cx="40" cy="0" r="0.5" fill="var(--border-subtle)" />
+            <circle cx="0" cy="40" r="0.5" fill="var(--border-subtle)" />
+            <circle cx="40" cy="40" r="0.5" fill="var(--border-subtle)" />
+            <circle cx="20" cy="20" r="0.5" fill="var(--border-subtle)" />
+          </pattern>
+        </defs>
+
+        {/* Dot-matrix background */}
+        <rect width={svgWidth} height={svgHeight} fill="url(#sh-pipeline-grid)" opacity="0.3" />
+
         {/* Edges rendered first (behind nodes) */}
         <g class="sh-pipeline-edges">
           {edges.map((edge, idx) => {
@@ -133,12 +234,41 @@ export function ShPipeline({
             const tx = tgt.x;
             const ty = tgt.y + nodeH / 2;
             const targetStatus = statusById[edge.to] || "idle";
+            const d = edgePath(sx, sy, tx, ty);
+            const dur = `${0.8 + idx * 0.15}s`;
+            const failed = targetStatus === "error" || targetStatus === "failed";
+            const edgeColor = failed ? "var(--sh-threat)" : "var(--sh-phosphor)";
             return (
-              <path
-                key={idx}
-                class={`sh-pipeline-edge sh-pipeline-edge--${targetStatus}`}
-                d={edgePath(sx, sy, tx, ty)}
-              />
+              <g key={idx}>
+                {/* Base path */}
+                <path
+                  class={`sh-pipeline-edge sh-pipeline-edge--${targetStatus}`}
+                  d={d}
+                  stroke={edgeColor}
+                  stroke-width={failed ? 1 : 1.5}
+                  opacity={failed ? 0.25 : 0.35}
+                  marker-end={failed ? undefined : "url(#sh-pipeline-arrow)"}
+                />
+                {/* Animated flow dashes — march toward target */}
+                {!reducedMotion && !failed && (
+                  <path
+                    d={d}
+                    fill="none"
+                    stroke={edgeColor}
+                    stroke-width={1.5}
+                    stroke-dasharray="6 12"
+                    opacity={0.65}
+                  >
+                    <animate
+                      attributeName="stroke-dashoffset"
+                      from="0"
+                      to="-18"
+                      dur={dur}
+                      repeatCount="indefinite"
+                    />
+                  </path>
+                )}
+              </g>
             );
           })}
         </g>
@@ -149,22 +279,148 @@ export function ShPipeline({
             const pos = positions[node.id];
             if (!pos) return null;
             const status = node.status || "idle";
+            const isRunning = status === "running" || status === "ok";
+            const isFailed = status === "error" || status === "failed";
+            const statusColor = isFailed
+              ? "var(--sh-threat)"
+              : isRunning
+                ? "var(--sh-phosphor)"
+                : "var(--text-tertiary)";
+
+            const bracketLabel = `[${node.label}]`;
+            const gauge =
+              node.running != null && node.total != null
+                ? healthGauge(node.running, node.total)
+                : null;
+
             return (
               <g
                 key={node.id}
                 class={`sh-pipeline-node sh-pipeline-node--${status}`}
                 transform={`translate(${pos.x},${pos.y})`}
+                role="button"
+                tabIndex={0}
+                aria-label={`${node.label} \u2014 ${status}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") e.currentTarget.click();
+                }}
               >
+                {/* Healthy heartbeat ring — running nodes only */}
+                {isRunning && !reducedMotion && (
+                  <circle
+                    cx={NODE_W / 2}
+                    cy={nodeH / 2}
+                    r={nodeH / 2 + 4}
+                    fill="none"
+                    stroke="var(--sh-phosphor)"
+                    stroke-width={0.5}
+                    opacity={0.1}
+                  >
+                    <animate
+                      attributeName="opacity"
+                      values="0.1;0.25;0.1"
+                      dur="3s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                )}
+
+                {/* Threat pulse ring — failed nodes only */}
+                {isFailed && !reducedMotion && (
+                  <circle
+                    cx={NODE_W / 2}
+                    cy={nodeH / 2}
+                    r={nodeH / 2 + 8}
+                    fill="none"
+                    stroke="var(--sh-threat)"
+                    stroke-width={1}
+                    opacity={0.25}
+                    filter="url(#sh-pipeline-glow)"
+                  >
+                    <animate
+                      attributeName="opacity"
+                      values="0.25;0.6;0.25"
+                      dur="1.8s"
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="r"
+                      values={`${nodeH / 2 + 8};${nodeH / 2 + 14};${nodeH / 2 + 8}`}
+                      dur="1.8s"
+                      repeatCount="indefinite"
+                    />
+                  </circle>
+                )}
+
+                {/* Node body */}
                 <rect width={NODE_W} height={nodeH} rx="2" />
-                <text x={NODE_W / 2} y={nodeH / 2} dominant-baseline="middle" text-anchor="middle">
-                  {node.label}
+
+                {/* Role glyph — top-left, replaces status dot */}
+                <text
+                  x={5}
+                  y={nodeH / 2 + 1}
+                  dominant-baseline="middle"
+                  font-family="var(--sh-font, monospace)"
+                  font-size="9"
+                  fill={statusColor}
+                  opacity={0.9}
+                >
+                  {roleGlyph(status)}
                 </text>
+
+                {/* [!] badge — failed nodes only (Rule 31: label not icon) */}
+                {isFailed && (
+                  <text
+                    x={NODE_W - 6}
+                    y={9}
+                    text-anchor="end"
+                    font-family="var(--sh-font, monospace)"
+                    font-size="8"
+                    fill="var(--sh-threat)"
+                    font-weight="bold"
+                  >
+                    [!]
+                  </text>
+                )}
+
+                {/* Primary label — bracketed */}
+                <text
+                  x={NODE_W / 2}
+                  y={gauge ? nodeH / 2 - 3 : nodeH / 2}
+                  dominant-baseline="middle"
+                  text-anchor="middle"
+                  font-family="var(--sh-font, monospace)"
+                  font-size="9"
+                  letter-spacing="0.5"
+                >
+                  {bracketLabel}
+                </text>
+
+                {/* ASCII health gauge */}
+                {gauge && !compact && (
+                  <text
+                    x={NODE_W / 2}
+                    y={nodeH / 2 + 9}
+                    dominant-baseline="middle"
+                    text-anchor="middle"
+                    font-family="var(--sh-font, monospace)"
+                    font-size="8"
+                    fill={statusColor}
+                    opacity={0.7}
+                  >
+                    {gauge}
+                  </text>
+                )}
+
+                {/* Detail text (existing compact logic) */}
                 {!compact && node.detail && (
                   <text
                     class="sh-pipeline-detail"
                     x={NODE_W / 2}
                     y={nodeH - 6}
                     text-anchor="middle"
+                    font-family="var(--sh-font, monospace)"
+                    font-size="8"
                   >
                     {node.detail}
                   </text>
@@ -173,6 +429,21 @@ export function ShPipeline({
             );
           })}
         </g>
+
+        {/* Targeting reticle — orthogonal lines from selected node center */}
+        {selectedId &&
+          positions[selectedId] &&
+          (() => {
+            const pos = positions[selectedId];
+            const cx = pos.x + NODE_W / 2;
+            const cy = pos.y + nodeH / 2;
+            return (
+              <g class="sh-pipeline-reticle" aria-hidden="true">
+                <line x1={0} y1={cy} x2={svgWidth} y2={cy} />
+                <line x1={cx} y1={0} x2={cx} y2={svgHeight} />
+              </g>
+            );
+          })()}
       </svg>
     </div>
   );

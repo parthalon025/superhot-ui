@@ -84,4 +84,74 @@ describe("ShPipeline", () => {
     const nodesIdx = str.indexOf("pipeline-nodes");
     assert.ok(edgesIdx < nodesIdx, "edges group should come before nodes group in SVG");
   });
+
+  it("wraps node labels in brackets", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("[Fetch]"), "label should be wrapped in brackets");
+  });
+
+  it("includes arrowhead marker definition", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("sh-pipeline-arrow"), "should define arrowhead marker");
+  });
+
+  it("includes glow filter defs", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("sh-pipeline-glow"), "should define glow filter");
+  });
+
+  it("applies role=button to node groups", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes('"role":"button"'), "node groups should have role=button");
+  });
+
+  it("applies tabIndex to node groups", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes('"tabIndex":0'), "node groups should have tabIndex=0");
+  });
+
+  it("includes animate element for running node", () => {
+    const runningNodes = [{ id: "a", label: "Run", status: "running" }];
+    const result = ShPipeline({ nodes: runningNodes, edges: [] });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("animate"), "running node should include animate element");
+  });
+
+  it("includes role glyph for running node", () => {
+    const runningNodes = [{ id: "a", label: "Run", status: "running" }];
+    const result = ShPipeline({ nodes: runningNodes, edges: [] });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("\u25B8"), "running node should include \u25B8 glyph");
+  });
+
+  it("includes [!] badge for error node", () => {
+    const failedNodes = [{ id: "a", label: "Fail", status: "error" }];
+    const result = ShPipeline({ nodes: failedNodes, edges: [] });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("[!]"), "error node should include [!] badge");
+  });
+
+  it("renders ASCII health gauge when stats provided", () => {
+    const nodesWithStats = [{ id: "a", label: "A", status: "running", running: 3, total: 5 }];
+    const result = ShPipeline({ nodes: nodesWithStats, edges: [] });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("\u2588") || str.includes("\u2591"), "should render health gauge chars");
+  });
+
+  it("edge paths include marker-end for arrowhead", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("marker-end"), "edge paths should reference arrowhead marker");
+  });
+
+  it("includes dot-matrix background pattern", () => {
+    const result = ShPipeline({ nodes, edges });
+    const str = JSON.stringify(result);
+    assert.ok(str.includes("sh-pipeline-grid"), "should include grid background pattern");
+  });
 });
