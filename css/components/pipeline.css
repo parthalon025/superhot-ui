@@ -8,6 +8,38 @@
   }
 }
 
+@keyframes sh-pipeline-edge-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes sh-pipeline-threat-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes sh-pipeline-heartbeat {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes sh-pipeline-ring-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @layer superhot.effects {
   .sh-pipeline {
     overflow: auto;
@@ -28,16 +60,16 @@
   .sh-pipeline-node text {
     fill: var(--text-primary);
     font-size: var(--type-small);
-    font-family: var(--font-mono);
+    font-family: var(--sh-font, monospace);
   }
 
   /* Node status variants */
   .sh-pipeline-node--ok rect {
-    stroke: var(--status-ok);
+    stroke: var(--sh-phosphor);
   }
 
   .sh-pipeline-node--ok text {
-    fill: var(--status-ok);
+    fill: var(--sh-phosphor);
   }
 
   .sh-pipeline-node--warn rect {
@@ -49,21 +81,21 @@
   }
 
   .sh-pipeline-node--error rect {
-    stroke: var(--status-error);
+    stroke: var(--sh-threat);
     fill: var(--bg-surface);
   }
 
   .sh-pipeline-node--error text {
-    fill: var(--status-error);
+    fill: var(--sh-threat);
   }
 
   .sh-pipeline-node--running rect {
-    stroke: var(--accent);
+    stroke: var(--sh-phosphor);
     animation: sh-pipeline-pulse 1.5s ease-in-out infinite;
   }
 
   .sh-pipeline-node--running text {
-    fill: var(--accent);
+    fill: var(--sh-phosphor);
   }
 
   .sh-pipeline-node--idle rect {
@@ -74,6 +106,15 @@
     fill: var(--text-tertiary);
   }
 
+  /* Dither fills for frozen/failed nodes — applied via SVG pattern */
+  .sh-pipeline-node--frozen rect {
+    fill: url(#sh-pipeline-dither-frozen);
+  }
+
+  .sh-pipeline-node--failed rect {
+    fill: url(#sh-pipeline-dither-failed);
+  }
+
   /* Edge base */
   .sh-pipeline-edge {
     fill: none;
@@ -82,7 +123,7 @@
   }
 
   .sh-pipeline-edge--ok {
-    stroke: var(--status-ok);
+    stroke: var(--sh-phosphor);
     opacity: 0.6;
   }
 
@@ -91,16 +132,37 @@
   }
 
   .sh-pipeline-edge--error {
-    stroke: var(--status-error);
+    stroke: var(--sh-threat);
   }
 
   .sh-pipeline-edge--running {
-    stroke: var(--accent);
+    stroke: var(--sh-phosphor);
   }
 
   .sh-pipeline-edge--idle {
     stroke: var(--border-subtle);
     opacity: 0.5;
+  }
+
+  /* Glow hierarchy (atmosphere rule 6) */
+  .sh-pipeline-glow-ambient {
+    filter: drop-shadow(0 0 4px var(--sh-phosphor-glow));
+  }
+
+  .sh-pipeline-glow-standard {
+    filter: drop-shadow(0 0 8px var(--sh-phosphor-glow));
+  }
+
+  .sh-pipeline-glow-critical {
+    filter: drop-shadow(0 0 16px var(--sh-threat-glow));
+  }
+
+  /* Targeting reticle — orthogonal lines on selected node */
+  .sh-pipeline-reticle {
+    stroke: var(--sh-phosphor);
+    stroke-width: 0.5;
+    opacity: 0.2;
+    pointer-events: none;
   }
 
   /* Detail text */
@@ -112,5 +174,26 @@
   /* Compact variant */
   .sh-pipeline--compact .sh-pipeline-detail {
     display: none;
+  }
+}
+
+/* Reduced-motion overrides — outside @layer to ensure precedence */
+@media (prefers-reduced-motion: reduce) {
+  .sh-pipeline-node--running rect {
+    animation: none;
+  }
+
+  .sh-pipeline-node--running circle,
+  .sh-pipeline-node--error circle {
+    animation: none;
+  }
+
+  .sh-pipeline-node--error rect {
+    stroke: var(--sh-threat);
+    stroke-width: 2;
+  }
+
+  .sh-pipeline-node--running rect {
+    stroke: var(--sh-phosphor);
   }
 }
