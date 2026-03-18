@@ -5,19 +5,20 @@
  * @param {Element|null} el - DOM element whose textContent to animate
  * @param {string} finalText - The text to resolve to
  * @param {number} [duration=300] - Total animation duration in ms
+ * @returns {() => void} Cancel function — clears interval and sets final text
  */
 export function revealLabel(el, finalText, duration = 300) {
-  if (!el) return;
+  if (!el) return () => {};
   if (
     typeof window !== "undefined" &&
     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches
   ) {
     el.textContent = finalText;
-    return;
+    return () => {};
   }
   if (duration <= 0) {
     el.textContent = finalText;
-    return;
+    return () => {};
   }
   const chars = "!@#$%^&*?><|/\\[]";
   const steps = 8;
@@ -34,4 +35,8 @@ export function revealLabel(el, finalText, duration = 300) {
       clearInterval(interval);
     }
   }, duration / steps);
+  return () => {
+    clearInterval(interval);
+    el.textContent = finalText;
+  };
 }
