@@ -41,6 +41,8 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | Status Badge     | `.sh-status-badge` + `data-sh-status`                        | —                                        | `<ShStatusBadge>`    |
 | VRAM Bar         | `.sh-vram-bar` + `--sh-fill: <0-100>`                        | —                                        | —                    |
 | Command Palette  | `.sh-command-palette-overlay`                                | —                                        | `<ShCommandPalette>` |
+| Reveal Label     | —                                                            | `revealLabel(el, text, dur?)`            | —                    |
+| Scramble Label   | —                                                            | `scrambleLabel(el, text)`                | —                    |
 | Audio            | —                                                            | `playSfx('complete\|error\|dlq\|pause')` | —                    |
 | Page Banner      | `.sh-page-banner`                                            | —                                        | `<ShPageBanner>`     |
 | Hero Card        | `.sh-hero-card`, `.sh-frame`                                 | —                                        | `<ShHeroCard>`       |
@@ -51,6 +53,7 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | Navigation       | `.sh-nav-phone`, `.sh-nav-rail`, `.sh-nav-sidebar`           | —                                        | `<ShNav>`            |
 | Time Chart       | `.sh-chart`, `.sh-chart--compact`                            | —                                        | `<ShTimeChart>`      |
 | Pipeline DAG     | `.sh-pipeline`                                               | —                                        | `<ShPipeline>`       |
+| Empty State      | `.sh-empty-state`                                            | —                                        | `<ShEmptyState>`     |
 | Frame            | `.sh-frame`                                                  | —                                        | —                    |
 | Card             | `.sh-card`                                                   | —                                        | —                    |
 | Callout          | `.sh-callout`                                                | —                                        | —                    |
@@ -67,19 +70,22 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 
 ## File Layout
 
-| Path                 | Purpose                                                 |
-| -------------------- | ------------------------------------------------------- |
-| `css/tokens.css`     | CSS custom properties (`--sh-*`) with dark mode         |
-| `css/superhot.css`   | All effects (imports tokens.css)                        |
-| `js/freshness.js`    | Timestamp to freshness state                            |
-| `js/shatter.js`      | Fragment + drift + fade animation                       |
-| `js/glitch.js`       | Chromatic aberration burst                              |
-| `js/mantra.js`       | Repeating text watermark                                |
-| `js/audio.js`        | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`) |
-| `js/crt.js`          | CRT CSS property writer (`setCrtMode`)                  |
-| `preact/Sh*.jsx`     | Preact wrapper components                               |
-| `dist/`              | Built outputs (gitignored)                              |
-| `examples/demo.html` | Standalone demo (no build step)                         |
+| Path                  | Purpose                                                 |
+| --------------------- | ------------------------------------------------------- |
+| `css/tokens.css`      | CSS custom properties (`--sh-*`) with dark mode         |
+| `css/superhot.css`    | All effects (imports tokens.css)                        |
+| `js/freshness.js`     | Timestamp to freshness state                            |
+| `js/shatter.js`       | Fragment + drift + fade animation                       |
+| `js/glitch.js`        | Chromatic aberration burst                              |
+| `js/mantra.js`        | Repeating text watermark                                |
+| `js/audio.js`         | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`) |
+| `js/crt.js`           | CRT CSS property writer (`setCrtMode`)                  |
+| `js/atmosphere.js`    | Effect density tracker (`trackEffect`, `isOverBudget`)  |
+| `js/revealLabel.js`   | Character-scramble entrance (`revealLabel`)             |
+| `js/scrambleLabel.js` | State-change label scramble (`scrambleLabel`)           |
+| `preact/Sh*.jsx`      | Preact wrapper components                               |
+| `dist/`               | Built outputs (gitignored)                              |
+| `examples/demo.html`  | Standalone demo (no build step)                         |
 
 ## Customization
 

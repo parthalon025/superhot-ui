@@ -351,6 +351,43 @@ Props: `open` (required boolean), `items` (array of `{id, label, description?, a
 
 ---
 
+### Reveal Label — _System identifying target_
+
+A character-scramble entrance effect for labels. Text resolves left-to-right through random ASCII characters — like the piOS terminal identifying a target node. Use on graph nodes, status labels, or anywhere a new element needs to announce itself.
+
+**JS:**
+
+```js
+import { revealLabel } from "superhot-ui";
+
+// Scramble → resolve over 300ms (default)
+const cancel = revealLabel(element, "[ARIA]");
+
+// Cancel mid-animation if needed
+cancel();
+```
+
+Returns a cancel function. Respects `prefers-reduced-motion` (sets text instantly when active).
+
+---
+
+### Scramble Label — _State changed_
+
+A quick 5-frame scramble when a label's meaning changes — shorter than `revealLabel`, communicates "this thing just changed status." Used when graph nodes transition between running/failed/idle.
+
+**JS:**
+
+```js
+import { scrambleLabel } from "superhot-ui";
+
+// 5 frames × 40ms = 200ms scramble, then resolves
+const cancel = scrambleLabel(element, "[QUEUE]");
+```
+
+Returns a cancel function. Same `prefers-reduced-motion` behavior as `revealLabel`.
+
+---
+
 ### Audio — _The system has a voice_
 
 Procedural sound effects via Web Audio API. Opt-in — silent by default. Respects `prefers-reduced-motion`.
@@ -450,6 +487,8 @@ import {
   applyMantra,
   playSfx,
   setCrtMode,
+  revealLabel,
+  scrambleLabel,
 } from "superhot-ui";
 
 // Freshness: auto-computes state from timestamp
@@ -465,6 +504,12 @@ shatterElement(document.querySelector("#card"), {
 
 // Mantra: tiled background watermark
 applyMantra(document.querySelector("#panel"), "OFFLINE");
+
+// Reveal: character-scramble entrance on a label
+const cancelReveal = revealLabel(document.querySelector("#node-label"), "[ARIA]");
+
+// Scramble: quick state-change flash
+const cancelScramble = scrambleLabel(document.querySelector("#status-label"), "[QUEUE]");
 ```
 
 ### Preact components
@@ -517,17 +562,18 @@ function Dashboard() {
 
 Nine components for building ARIA-style dashboard pages:
 
-| Component         | Description                                                                                                                                                    |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<ShPageBanner>`  | Pixel-art SVG terminal page header. Props: `namespace`, `page`, `separator`, `subtitle`                                                                        |
-| `<ShHeroCard>`    | KPI stat card with freshness cursor + optional sparkline. Props: `label`, `value`, `unit`, `status`, `timestamp`, `sparkData`, `sparkColor`, `href`, `loading` |
-| `<ShCollapsible>` | Collapsible section; cursor acts as toggle. Props: `title`, `open`, `children`                                                                                 |
-| `<ShErrorState>`  | Error frame with optional retry. Props: `message`, `onRetry`                                                                                                   |
-| `<ShStatsGrid>`   | Responsive label/value grid. Props: `items [{label,value,unit}]`, `cols`                                                                                       |
-| `<ShDataTable>`   | Searchable + sortable table. Props: `columns [{key,label,sortable}]`, `rows`, `searchable`                                                                     |
-| `<ShNav>`         | 3-mode responsive nav (phone/rail/sidebar). Props: `items [{id,label,icon,active,href,onClick}]`, `activeId`, `onNavigate`                                     |
-| `<ShTimeChart>`   | uPlot time-series chart with CSS token theming. Props: `data [{t,v}]`, `compact`, `color`, `label`, `height`. Peer dep: `uplot >=1.6.0`                        |
-| `<ShPipeline>`    | SVG DAG with topological layout. Props: `nodes [{id,label,status,detail}]`, `edges [{from,to}]`, `compact`, `ariaLabel`                                        |
+| Component         | Description                                                                                                                                                                                                                                                                                                                                                                          |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `<ShPageBanner>`  | Pixel-art SVG terminal page header. Props: `namespace`, `page`, `separator`, `subtitle`                                                                                                                                                                                                                                                                                              |
+| `<ShHeroCard>`    | KPI stat card with freshness cursor + optional sparkline. Props: `label`, `value`, `unit`, `status`, `timestamp`, `sparkData`, `sparkColor`, `href`, `loading`                                                                                                                                                                                                                       |
+| `<ShCollapsible>` | Collapsible section; cursor acts as toggle. Props: `title`, `open`, `children`                                                                                                                                                                                                                                                                                                       |
+| `<ShErrorState>`  | Error frame with optional retry. Props: `message`, `onRetry`                                                                                                                                                                                                                                                                                                                         |
+| `<ShStatsGrid>`   | Responsive label/value grid. Props: `items [{label,value,unit}]`, `cols`                                                                                                                                                                                                                                                                                                             |
+| `<ShDataTable>`   | Searchable + sortable table. Props: `columns [{key,label,sortable}]`, `rows`, `searchable`                                                                                                                                                                                                                                                                                           |
+| `<ShNav>`         | 3-mode responsive nav (phone/rail/sidebar). Props: `items [{id,label,icon,active,href,onClick}]`, `activeId`, `onNavigate`                                                                                                                                                                                                                                                           |
+| `<ShTimeChart>`   | uPlot time-series chart with CSS token theming. Props: `data [{t,v}]`, `compact`, `color`, `label`, `height`. Peer dep: `uplot >=1.6.0`                                                                                                                                                                                                                                              |
+| `<ShPipeline>`    | SVG DAG with ASCII SUPERHOT aesthetics. Props: `nodes [{id,label,status,detail,running?,total?}]`, `edges [{from,to}]`, `compact`, `selectedId`, `ariaLabel`. Features: `[BRACKET]` labels, `▸`/`▪` role glyphs, `[!]` badge on failed, `██░░░` health gauge, animated edge flow with `→` arrowheads, heartbeat/threat pulse, targeting reticle, dot-matrix grid, full keyboard a11y |
+| `<ShEmptyState>`  | Quiet-world empty state with piOS mantra. Props: `message`, `action?`, `class`                                                                                                                                                                                                                                                                                                       |
 
 **Example — dashboard page:**
 
@@ -546,7 +592,12 @@ function AriaPage() {
         ]}
       />
       <ShTimeChart data={cpuHistory} label="CPU %" color="var(--sh-fresh)" height={120} />
-      <ShPipeline nodes={dagNodes} edges={dagEdges} ariaLabel="Job pipeline" />
+      <ShPipeline
+        nodes={dagNodes}
+        edges={dagEdges}
+        selectedId={selectedNodeId}
+        ariaLabel="Job pipeline"
+      />
     </div>
   );
 }
@@ -622,11 +673,22 @@ CSS-only, no Preact required. Import via `@import "superhot-ui/css"`.
 <div class="sh-chart sh-chart--compact">...</div>
 <div class="sh-chart sh-chart--empty">No data</div>
 
+<!-- Pipeline with glow hierarchy + targeting reticle -->
 <div class="sh-pipeline">
   <div class="sh-pipeline-node--ok">step-1</div>
   <div class="sh-pipeline-node--running">step-2</div>
   <div class="sh-pipeline-node--error">step-3</div>
 </div>
+
+<!-- Pipeline CSS additions -->
+<g class="sh-pipeline-glow-ambient">...</g>
+<!-- 4px phosphor glow -->
+<g class="sh-pipeline-glow-standard">...</g>
+<!-- 8px phosphor glow -->
+<g class="sh-pipeline-glow-critical">...</g>
+<!-- 16px threat glow -->
+<g class="sh-pipeline-reticle">...</g>
+<!-- targeting crosshair -->
 ```
 
 ---
