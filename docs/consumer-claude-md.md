@@ -13,6 +13,7 @@ This project consumes superhot-ui for all visual effects and UI components.
 ### Key Rules
 
 **Typography — terminal voice, not web UI**
+
 - Labels: UPPERCASE, `--tracking-widest`, `--text-muted`
 - Values: numeric or terse — never prose
 - Status text: lowercase monospace codes (`healthy`, `error`, `warning`)
@@ -20,17 +21,20 @@ This project consumes superhot-ui for all visual effects and UI components.
 - Empty states: never apologetic (`NO ACTIVE JOBS` not "No jobs found")
 
 **Navigation — places, not functions**
+
 - `TOPOLOGY` not "Graph", `SYSTEMS` not "Services", `QUEUE` not "Job Queue"
 - Active route: phosphor left border — never filled highlight or background
 - No hover tooltips — if a label needs one, it's too long
 
 **Interface health states — whole interface changes at once**
+
 - Operational: phosphor calm, no pulse, CRT scanlines only
 - Degraded: ShThreatPulse + ShGlitch on affected surfaces, Incident HUD surfaces
 - Critical: ShMantra on layout root, header pulses, all failed nodes pulse
 - Rule: health state changes the whole interface simultaneously — never card by card
 
 **Failure theater — 6 coordinated surfaces**
+
 1. Graph node — `ShThreatPulse persistent`, color shifts to `--sh-threat`
 2. Stat card — `status="error"` + `ShThreatPulse`
 3. Sidebar — indicator dot pulses threat red
@@ -39,6 +43,7 @@ This project consumes superhot-ui for all visual effects and UI components.
 6. Layout root (critical only) — `ShMantra` watermarks entire interface
 
 **Time-freeze discipline — data age is visible**
+
 - Every data surface that can go stale wraps in `<ShFrozen timestamp={...}>` — no exceptions
 - Fresh: 0–5min (full color), Cooling: 5–30min (desaturated), Frozen: 30–60min (grey), Stale: 60+min (ghost + NO DATA mantra)
 - Header "last updated": `applyFreshness(el, timestamp)`
@@ -55,17 +60,42 @@ Tension → Pause → Plan → Execute → Catharsis
 
 **Interaction feedback — no silent actions**
 
-| Action | Response |
-|--------|----------|
-| Open command palette | `ShCommandPalette` opens with glitch burst |
-| Dismiss alert | `shatterElement` on the element |
-| Job submitted | `ShToast type="info"` + `playSfx('complete')` |
-| Job failed | `ShToast type="error" duration={0}` + `playSfx('error')` |
-| Navigate route | `@starting-style` entrance on incoming content |
-| Data refreshed | `ShGlitch` micro-burst on "last updated" timestamp |
-| Service recovers | `ShGlitch` burst on node, then phosphor calm |
+| Action               | Response                                                 |
+| -------------------- | -------------------------------------------------------- |
+| Open command palette | `ShCommandPalette` opens with glitch burst               |
+| Dismiss alert        | `shatterElement` on the element                          |
+| Job submitted        | `ShToast type="info"` + `playSfx('complete')`            |
+| Job failed           | `ShToast type="error" duration={0}` + `playSfx('error')` |
+| Navigate route       | `@starting-style` entrance on incoming content           |
+| Data refreshed       | `ShGlitch` micro-burst on "last updated" timestamp       |
+| Service recovers     | `ShGlitch` burst on node, then phosphor calm             |
+
+**Atmosphere rules (key subset from atmosphere-guide.md)**
+
+- Void ≥ 60% of viewport — if components cover more than 40%, the aesthetic collapses
+- Red budget ≤ 10% of visible surface during healthy state — scarcity = power
+- Max 3 simultaneous animated effects per viewport — use `trackEffect()` / `isOverBudget()`
+- Rest frames between animations: 300ms after shatter, 200ms after glitch, 500ms after state change
+- Glow hierarchy: ambient (4px), standard (8px), critical (16px) — one critical glow per viewport
+- Empty states show `ShEmptyState` with piOS mantra (`STANDBY`, `NO DATA`) — never apologetic text
+- CRT presets: `data` for tables, `status` for dashboards, `off` for mobile
+- Shatter presets by emotion: `toast` (4), `cancel` (6), `alert` (8), `purge` (12)
+- Hover reveals (phosphor left-border), never swaps background — hover is interrogation
+- Focus ring is threat-red (`2px solid var(--sh-threat)`) — focus is targeting
+- Numbers are absolute (`197` not "~200", `3h 14m` not "about 3 hours ago")
+- Time is military (`14:23:07`, `2026-03-16`) — no AM/PM, no month names
+- No icons — use text labels (`[PAUSE]` not ⏸, `ALERTS: 3` not 🔔)
+- Tables are logs — monospace, left-justified, timestamps first, status last
+- Modals are system interrupts — `CONFIRM: PURGE DLQ?` not "Are you sure?"
+- Alerts are binary: auto-dismiss (info) or persist until acknowledged (error) — nothing in between
+- Grids are crystalline — CSS Grid with uniform columns, void cells over collapsed layout
+- Error recovery is visible — glitch burst + border transition + toast confirmation
+- Interface has memory — `localStorage` for all UI preferences (CRT, sort, collapsed state)
+- Thresholds visible before they break — progressive glow as metrics approach danger zones
+- Skeleton shapes match content — stat card skeleton looks like a stat card, not a generic pill
 
 **Component rules**
+
 - Every effect communicates exactly one signal — not "status plus action"
 - Effects use only four palette colors: white (`--sh-bright`), black (`--sh-void`), red (`--sh-threat`), cyan (`--sh-phosphor`)
 - New UI patterns go in superhot-ui first — never build a DS component directly in this project

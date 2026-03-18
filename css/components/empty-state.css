@@ -1,0 +1,30 @@
+/* Empty state — atmosphere-guide.md Rule 9 (The Quiet World)
+   Purposeful void, not broken emptiness. */
+
+@layer superhot.base {
+  .sh-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    padding: var(--space-8, 2rem);
+    color: var(--text-tertiary, oklch(0.52 0 0));
+    font-family: var(--sh-font, monospace);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest, 0.1em);
+  }
+
+  .sh-empty-state__mantra {
+    font-size: var(--type-headline, 1.25rem);
+    font-weight: 700;
+    color: var(--text-muted, oklch(0.4 0 0));
+    letter-spacing: 0.2em;
+  }
+
+  .sh-empty-state__hint {
+    font-size: var(--type-micro, 0.6875rem);
+    color: var(--text-disabled, oklch(0.3 0 0));
+    margin-top: var(--space-4, 1rem);
+  }
+}

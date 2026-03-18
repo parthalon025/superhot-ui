@@ -1,0 +1,199 @@
+@keyframes sh-pipeline-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes sh-pipeline-edge-flow {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes sh-pipeline-threat-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes sh-pipeline-heartbeat {
+  0%,
+  100% {
+    opacity: 0.1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes sh-pipeline-ring-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@layer superhot.effects {
+  .sh-pipeline {
+    overflow: auto;
+    position: relative;
+  }
+
+  .sh-pipeline svg {
+    display: block;
+  }
+
+  /* Node base */
+  .sh-pipeline-node rect {
+    fill: var(--bg-surface);
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+  }
+
+  .sh-pipeline-node text {
+    fill: var(--text-primary);
+    font-size: var(--type-small);
+    font-family: var(--sh-font, monospace);
+  }
+
+  /* Node status variants */
+  .sh-pipeline-node--ok rect {
+    stroke: var(--sh-phosphor);
+  }
+
+  .sh-pipeline-node--ok text {
+    fill: var(--sh-phosphor);
+  }
+
+  .sh-pipeline-node--warn rect {
+    stroke: var(--status-warning);
+  }
+
+  .sh-pipeline-node--warn text {
+    fill: var(--status-warning);
+  }
+
+  .sh-pipeline-node--error rect {
+    stroke: var(--sh-threat);
+    fill: var(--bg-surface);
+  }
+
+  .sh-pipeline-node--error text {
+    fill: var(--sh-threat);
+  }
+
+  .sh-pipeline-node--running rect {
+    stroke: var(--sh-phosphor);
+    animation: sh-pipeline-pulse 1.5s ease-in-out infinite;
+  }
+
+  .sh-pipeline-node--running text {
+    fill: var(--sh-phosphor);
+  }
+
+  .sh-pipeline-node--idle rect {
+    stroke: var(--border-subtle);
+  }
+
+  .sh-pipeline-node--idle text {
+    fill: var(--text-tertiary);
+  }
+
+  /* Dither fills for frozen/failed nodes — applied via SVG pattern */
+  .sh-pipeline-node--frozen rect {
+    fill: url(#sh-pipeline-dither-frozen);
+  }
+
+  .sh-pipeline-node--failed rect {
+    fill: url(#sh-pipeline-dither-failed);
+  }
+
+  /* Edge base */
+  .sh-pipeline-edge {
+    fill: none;
+    stroke: var(--border-subtle);
+    stroke-width: 1.5;
+  }
+
+  .sh-pipeline-edge--ok {
+    stroke: var(--sh-phosphor);
+    opacity: 0.6;
+  }
+
+  .sh-pipeline-edge--warn {
+    stroke: var(--status-warning);
+  }
+
+  .sh-pipeline-edge--error {
+    stroke: var(--sh-threat);
+  }
+
+  .sh-pipeline-edge--running {
+    stroke: var(--sh-phosphor);
+  }
+
+  .sh-pipeline-edge--idle {
+    stroke: var(--border-subtle);
+    opacity: 0.5;
+  }
+
+  /* Glow hierarchy (atmosphere rule 6) */
+  .sh-pipeline-glow-ambient {
+    filter: drop-shadow(0 0 4px var(--sh-phosphor-glow));
+  }
+
+  .sh-pipeline-glow-standard {
+    filter: drop-shadow(0 0 8px var(--sh-phosphor-glow));
+  }
+
+  .sh-pipeline-glow-critical {
+    filter: drop-shadow(0 0 16px var(--sh-threat-glow));
+  }
+
+  /* Targeting reticle — orthogonal lines on selected node */
+  .sh-pipeline-reticle {
+    stroke: var(--sh-phosphor);
+    stroke-width: 0.5;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  /* Detail text */
+  .sh-pipeline-detail {
+    font-size: var(--type-small);
+    fill: var(--text-tertiary);
+  }
+
+  /* Compact variant */
+  .sh-pipeline--compact .sh-pipeline-detail {
+    display: none;
+  }
+}
+
+/* Reduced-motion overrides — outside @layer to ensure precedence */
+@media (prefers-reduced-motion: reduce) {
+  .sh-pipeline-node--running rect {
+    animation: none;
+  }
+
+  .sh-pipeline-node--running circle,
+  .sh-pipeline-node--error circle {
+    animation: none;
+  }
+
+  .sh-pipeline-node--error rect {
+    stroke: var(--sh-threat);
+    stroke-width: 2;
+  }
+
+  .sh-pipeline-node--running rect {
+    stroke: var(--sh-phosphor);
+  }
+}

@@ -14,6 +14,17 @@
 @import "./components/vram-bar.css";
 @import "./components/crt-toggle.css";
 @import "./components/stat-card.css";
+@import "./components/frame.css";
+@import "./components/banner.css";
+@import "./components/crt-overlay.css";
+@import "./components/animations.css";
+@import "./components/hero-card.css";
+@import "./components/nav.css";
+@import "./components/data-table.css";
+@import "./components/chart.css";
+@import "./components/pipeline.css";
+@import "./components/glow.css";
+@import "./components/empty-state.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 

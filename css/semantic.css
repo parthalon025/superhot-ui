@@ -192,6 +192,12 @@
   --transition-default: all var(--duration-normal) var(--ease-default);
   --transition-fast: all var(--duration-fast) var(--ease-default);
 
+  /* Rest-frame tokens — atmosphere-guide.md Rule 7 */
+  --rest-after-shatter: 300ms;
+  --rest-after-glitch: 200ms;
+  --rest-after-state-change: 500ms;
+  --rest-after-navigation: 200ms;
+
   /* ─────────────────────────────────────────
      Z-INDEX
      ───────────────────────────────────────── */
@@ -257,4 +263,18 @@
   /* Code blocks */
   --code-bg: var(--bg-inset);
   --code-text: var(--sh-phosphor);
+
+  /* ─────────────────────────────────────────
+     TERMINAL / CRT TOKENS
+     ───────────────────────────────────────── */
+
+  --bg-terminal: var(--bg-base); /* terminal surface — consumers override */
+  --scan-line: oklch(0 0 0 / 0.015); /* CRT stripe color */
+
+  /* Warm accent (orange) — T3 alerts, warning borders */
+  --accent-warm: var(--status-warning);
+  --accent-warm-glow: var(--status-warning-glow);
+
+  /* KPI display size — larger than --type-display for hero metrics */
+  --type-hero: 2.5rem;
 }

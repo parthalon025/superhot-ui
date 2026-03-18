@@ -15,3 +15,16 @@ export function setCrtMode({ stripe = false, scanline = false, flicker = false }
   root.style.setProperty("--sh-crt-scanline", scanline ? "block" : "none");
   root.style.setProperty("--sh-crt-flicker", flicker ? "block" : "none");
 }
+
+export const CRT_PRESETS = {
+  data: { stripe: true, scanline: false, flicker: false },
+  status: { stripe: true, scanline: true, flicker: false },
+  immersive: { stripe: true, scanline: true, flicker: true },
+  off: { stripe: false, scanline: false, flicker: false },
+};
+
+export function setCrtPreset(preset) {
+  const config = CRT_PRESETS[preset];
+  if (!config) throw new Error(`Unknown CRT preset: ${preset}`);
+  setCrtMode(config);
+}
