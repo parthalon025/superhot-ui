@@ -32,6 +32,8 @@ const jsConfig = {
       "export { trackEffect, activeEffectCount, isOverBudget, MAX_EFFECTS } from './js/atmosphere.js';",
       "export { CRT_PRESETS, setCrtPreset } from './js/crt.js';",
       "export { SHATTER_PRESETS } from './js/shatter.js';",
+      "export { revealLabel } from './js/revealLabel.js';",
+      "export { scrambleLabel } from './js/scrambleLabel.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",
