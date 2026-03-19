@@ -1,3 +1,5 @@
+import { playSfx } from "./audio.js";
+
 /**
  * Shatter an element into triangular fragments that drift and fade.
  *
@@ -85,6 +87,8 @@ export function shatterElement(element, opts = {}) {
     parent.appendChild(frag);
     fragmentEls.push(frag);
   }
+
+  playSfx("complete");
 
   const effectiveDuration = reducedMotion ? 0 : durationMs;
   const timer = setTimeout(() => {
