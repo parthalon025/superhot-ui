@@ -83,7 +83,7 @@ export function ShDataTable({ columns = [], rows = [], searchable = true, label 
               ))}
             </tr>
           </thead>
-          <tbody>
+          <tbody class="sh-stagger-children">
             {filtered.length === 0 ? (
               <tr>
                 <td colspan={columns.length} class="sh-data-table-empty">

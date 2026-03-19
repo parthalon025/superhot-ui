@@ -18,6 +18,7 @@
  * @param {string}  [props.href]     Wraps card in <a> when provided
  */
 import { computeFreshness } from "../js/freshness.js";
+import { glitchText } from "../js/glitch.js";
 import ShTimeChart from "./ShTimeChart.jsx";
 
 export function ShHeroCard({
@@ -57,7 +58,20 @@ export function ShHeroCard({
     >
       <div style="display: flex; align-items: baseline; gap: var(--space-2); justify-content: space-between;">
         <div style="display: flex; align-items: baseline; gap: var(--space-2);">
-          <span class="sh-hero-value">{value ?? "\u2014"}</span>
+          <span
+            class="sh-hero-value"
+            ref={(el) => {
+              if (!el) return;
+              const prev = el.getAttribute("data-sh-prev-value");
+              const current = String(value);
+              if (prev && prev !== current) {
+                glitchText(el, { duration: 100, intensity: "low" });
+              }
+              el.setAttribute("data-sh-prev-value", current);
+            }}
+          >
+            {value ?? "\u2014"}
+          </span>
           {unit && <span class="sh-hero-unit">{unit}</span>}
         </div>
         <div style="width: var(--sh-hero-sparkline-width); flex-shrink: 0;">

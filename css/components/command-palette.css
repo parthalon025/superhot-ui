@@ -129,6 +129,12 @@
     letter-spacing: var(--tracking-wide);
   }
 
+  /* Highlighted match text within results */
+  .sh-command-palette-match {
+    color: var(--sh-phosphor);
+    text-shadow: 0 0 4px var(--sh-phosphor-glow);
+  }
+
   .sh-command-palette-item-desc {
     color: var(--text-muted);
     font-size: var(--type-micro);

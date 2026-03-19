@@ -81,6 +81,10 @@ a.sh-stat-card:hover {
   color: var(--text-primary);
   line-height: var(--leading-tight);
   font-variant-numeric: tabular-nums;
+  transition: transform 150ms ease-out;
+}
+.sh-stat-card[data-sh-value-changed] .sh-stat-card-value {
+  animation: sh-value-bump 300ms ease-out;
 }
 
 /* Detail — secondary context, narrows decision space */
@@ -101,5 +105,21 @@ a.sh-stat-card:hover {
 @media (prefers-reduced-motion: reduce) {
   .sh-stat-card {
     transition: none;
+  }
+  .sh-stat-card-value {
+    transition: none;
+    animation: none;
+  }
+}
+
+@keyframes sh-value-bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
   }
 }
