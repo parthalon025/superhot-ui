@@ -311,6 +311,13 @@
 
   /* KPI display size — larger than --type-display for hero metrics */
   --type-hero: 2.5rem;
+
+  /* ─────────────────────────────────────────
+     EFFECT INTERNALS
+     ───────────────────────────────────────── */
+
+  --void-gradient-core: oklch(0.08 0 0);
+  --overlay-interlace: oklch(0 0 0 / 0.12);
 }
 
 /* ─────────────────────────────────────────

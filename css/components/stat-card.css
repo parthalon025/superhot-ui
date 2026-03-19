@@ -11,139 +11,141 @@
  *   </div>
  */
 
-.sh-stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-4);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
-  box-shadow: var(--card-shadow);
-  transition: var(--transition-default);
-  cursor: default;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Full-bleed link variant */
-a.sh-stat-card {
-  cursor: pointer;
-  text-decoration: none;
-  display: flex;
-}
-
-a.sh-stat-card:hover {
-  box-shadow: var(--card-shadow-hover);
-}
-
-/* Status-driven border + glow — whole card signals state */
-.sh-stat-card[data-sh-status="healthy"],
-.sh-stat-card[data-sh-status="ok"],
-.sh-stat-card[data-sh-status="active"] {
-  border-color: var(--status-healthy);
-  box-shadow:
-    var(--card-shadow),
-    0 0 8px var(--status-healthy-glow);
-}
-
-.sh-stat-card[data-sh-status="error"] {
-  border-color: var(--status-error);
-  box-shadow:
-    var(--card-shadow),
-    0 0 8px var(--status-error-glow);
-}
-
-.sh-stat-card[data-sh-status="warning"] {
-  border-color: var(--status-warning);
-  box-shadow:
-    var(--card-shadow),
-    0 0 8px var(--status-warning-glow);
-}
-
-.sh-stat-card[data-sh-status="waiting"] {
-  border-color: var(--status-waiting);
-}
-
-/* Label — uppercase, muted, widest tracking */
-.sh-stat-card-label {
-  font-family: var(--font-ui);
-  font-size: var(--type-label);
-  letter-spacing: var(--tracking-widest);
-  color: var(--text-muted);
-  text-transform: uppercase;
-  line-height: var(--leading-tight);
-}
-
-/* Value — dominant, instant read */
-.sh-stat-card-value {
-  font-family: var(--font-data);
-  font-size: var(--type-display);
-  color: var(--text-primary);
-  line-height: var(--leading-tight);
-  font-variant-numeric: tabular-nums;
-  transition: transform 150ms ease-out;
-}
-.sh-stat-card[data-sh-value-changed] .sh-stat-card-value {
-  animation: sh-value-bump 300ms ease-out;
-}
-
-/* Detail — secondary context, narrows decision space */
-.sh-stat-card-detail {
-  font-family: var(--font-data);
-  font-size: var(--type-small);
-  color: var(--text-secondary);
-  line-height: var(--leading-tight);
-}
-
-/* Status badge inline */
-.sh-stat-card .sh-status-badge {
-  margin-top: var(--space-2);
-  align-self: flex-start;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
+@layer superhot.effects {
   .sh-stat-card {
-    transition: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--card-shadow);
+    transition: var(--transition-default);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
   }
-  .sh-stat-card-value {
-    transition: none;
-    animation: none;
-  }
-}
 
-/* ── Delta indicators ── */
-.sh-delta {
-  font-family: var(--font-mono);
-  font-size: var(--type-micro);
-  letter-spacing: var(--tracking-wide);
-}
-.sh-delta--up {
-  color: var(--sh-phosphor);
-}
-.sh-delta--up::before {
-  content: "[+";
-}
-.sh-delta--up::after {
-  content: "]";
-}
-.sh-delta--down {
-  color: var(--sh-threat);
-}
-.sh-delta--down::before {
-  content: "[-";
-}
-.sh-delta--down::after {
-  content: "]";
-}
-.sh-delta--flat {
-  color: var(--text-tertiary);
-}
-.sh-delta--flat::before {
-  content: "[";
-}
-.sh-delta--flat::after {
-  content: "]";
+  /* Full-bleed link variant */
+  a.sh-stat-card {
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+  }
+
+  a.sh-stat-card:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* Status-driven border + glow — whole card signals state */
+  .sh-stat-card[data-sh-status="healthy"],
+  .sh-stat-card[data-sh-status="ok"],
+  .sh-stat-card[data-sh-status="active"] {
+    border-color: var(--status-healthy);
+    box-shadow:
+      var(--card-shadow),
+      0 0 8px var(--status-healthy-glow);
+  }
+
+  .sh-stat-card[data-sh-status="error"] {
+    border-color: var(--status-error);
+    box-shadow:
+      var(--card-shadow),
+      0 0 8px var(--status-error-glow);
+  }
+
+  .sh-stat-card[data-sh-status="warning"] {
+    border-color: var(--status-warning);
+    box-shadow:
+      var(--card-shadow),
+      0 0 8px var(--status-warning-glow);
+  }
+
+  .sh-stat-card[data-sh-status="waiting"] {
+    border-color: var(--status-waiting);
+  }
+
+  /* Label — uppercase, muted, widest tracking */
+  .sh-stat-card-label {
+    font-family: var(--font-ui);
+    font-size: var(--type-label);
+    letter-spacing: var(--tracking-widest);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    line-height: var(--leading-tight);
+  }
+
+  /* Value — dominant, instant read */
+  .sh-stat-card-value {
+    font-family: var(--font-data);
+    font-size: var(--type-display);
+    color: var(--text-primary);
+    line-height: var(--leading-tight);
+    font-variant-numeric: tabular-nums;
+    transition: transform 150ms ease-out;
+  }
+  .sh-stat-card[data-sh-value-changed] .sh-stat-card-value {
+    animation: sh-value-bump 300ms ease-out;
+  }
+
+  /* Detail — secondary context, narrows decision space */
+  .sh-stat-card-detail {
+    font-family: var(--font-data);
+    font-size: var(--type-small);
+    color: var(--text-secondary);
+    line-height: var(--leading-tight);
+  }
+
+  /* Status badge inline */
+  .sh-stat-card .sh-status-badge {
+    margin-top: var(--space-2);
+    align-self: flex-start;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-stat-card {
+      transition: none;
+    }
+    .sh-stat-card-value {
+      transition: none;
+      animation: none;
+    }
+  }
+
+  /* ── Delta indicators ── */
+  .sh-delta {
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    letter-spacing: var(--tracking-wide);
+  }
+  .sh-delta--up {
+    color: var(--sh-phosphor);
+  }
+  .sh-delta--up::before {
+    content: "[+";
+  }
+  .sh-delta--up::after {
+    content: "]";
+  }
+  .sh-delta--down {
+    color: var(--sh-threat);
+  }
+  .sh-delta--down::before {
+    content: "[-";
+  }
+  .sh-delta--down::after {
+    content: "]";
+  }
+  .sh-delta--flat {
+    color: var(--text-tertiary);
+  }
+  .sh-delta--flat::before {
+    content: "[";
+  }
+  .sh-delta--flat::after {
+    content: "]";
+  }
 }
 
 @keyframes sh-value-bump {

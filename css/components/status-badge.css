@@ -66,6 +66,13 @@
     box-shadow: none;
   }
 
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-status-badge {
+      transition: none !important;
+    }
+  }
+
   /* High contrast */
   @media (forced-colors: active) {
     .sh-status-badge {

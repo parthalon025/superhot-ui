@@ -34,6 +34,11 @@
     padding: var(--space-2) 0;
   }
 
+  .sh-collapsible-summary:focus-visible {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: 2px;
+  }
+
   .sh-collapsible-summary::before {
     content: "▸";
     transition: transform var(--duration-fast) var(--ease-default);
@@ -171,5 +176,12 @@
   }
   .sh-breadcrumb-separator::before {
     content: ">";
+  }
+
+  /* ── Reduced Motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-collapsible-content {
+      transition: none !important;
+    }
   }
 }

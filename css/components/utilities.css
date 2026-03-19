@@ -177,6 +177,10 @@
     color: var(--text-tertiary);
     border-color: var(--border-subtle);
   }
+  .sh-toggle:focus-within {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: 2px;
+  }
 
   /* ── Kbd (keyboard shortcut badge) ── */
   .sh-kbd {
@@ -212,6 +216,10 @@
   .sh-tab:hover {
     color: var(--text-primary);
   }
+  .sh-tab:focus-visible {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: -2px;
+  }
   .sh-tab--active {
     color: var(--sh-phosphor);
     border-bottom-color: var(--sh-phosphor);
@@ -219,7 +227,11 @@
 
   /* ── Void gradient ── */
   .sh-void-gradient {
-    background: radial-gradient(ellipse at center, oklch(0.08 0 0) 0%, var(--bg-base) 70%);
+    background: radial-gradient(
+      ellipse at center,
+      var(--void-gradient-core) 0%,
+      var(--bg-base) 70%
+    );
   }
 
   /* ── Loading dots ── */
@@ -287,5 +299,15 @@
   }
   100% {
     width: 3ch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-copied {
+    animation: none !important;
+  }
+  .sh-loading-dots::after {
+    animation: none !important;
+    width: 3ch !important;
   }
 }
