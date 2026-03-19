@@ -106,4 +106,114 @@
     content: "]";
     color: var(--text-tertiary);
   }
+
+  /* ── Input (terminal text field) ── */
+  .sh-input {
+    font-family: var(--font-mono);
+    font-size: var(--type-body);
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius);
+    padding: var(--space-2) var(--space-3);
+    outline: none;
+    caret-color: var(--sh-phosphor);
+  }
+  .sh-input:focus {
+    border-color: var(--sh-phosphor);
+    box-shadow: 0 0 4px var(--sh-phosphor-glow);
+  }
+  .sh-input::placeholder {
+    color: var(--input-placeholder);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* ── Select (terminal dropdown) ── */
+  .sh-select {
+    font-family: var(--font-mono);
+    font-size: var(--type-body);
+    background: var(--input-bg);
+    color: var(--input-text);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius);
+    padding: var(--space-2) var(--space-3);
+    outline: none;
+    cursor: pointer;
+    appearance: none;
+  }
+  .sh-select:focus {
+    border-color: var(--sh-phosphor);
+    box-shadow: 0 0 4px var(--sh-phosphor-glow);
+  }
+
+  /* ── Toggle (on/off switch) ── */
+  .sh-toggle {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-secondary);
+    user-select: none;
+  }
+  .sh-toggle-indicator {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius);
+    font-weight: 700;
+    min-width: 3ch;
+    text-align: center;
+  }
+  .sh-toggle[data-sh-on="true"] .sh-toggle-indicator {
+    color: var(--sh-phosphor);
+    border-color: var(--sh-phosphor);
+  }
+  .sh-toggle[data-sh-on="false"] .sh-toggle-indicator {
+    color: var(--text-tertiary);
+    border-color: var(--border-subtle);
+  }
+
+  /* ── Kbd (keyboard shortcut badge) ── */
+  .sh-kbd {
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    padding: 1px var(--space-1);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    background: var(--bg-inset);
+    white-space: nowrap;
+  }
+
+  /* ── Tabs (tab bar) ── */
+  .sh-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+  .sh-tab {
+    padding: var(--space-2) var(--space-4);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition:
+      color var(--duration-fast) var(--ease-default),
+      border-color var(--duration-fast) var(--ease-default);
+  }
+  .sh-tab:hover {
+    color: var(--text-primary);
+  }
+  .sh-tab--active {
+    color: var(--sh-phosphor);
+    border-bottom-color: var(--sh-phosphor);
+  }
 }
