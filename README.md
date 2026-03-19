@@ -16,7 +16,7 @@ Every effect communicates exactly one signal. No decoration. No noise.
 ## SYSTEM BOOT
 
 ```bash
-npm install file:../superhot-ui
+npm install superhot-ui
 ```
 
 ```css
@@ -220,6 +220,17 @@ CRT intensity: stripe, scanline, flicker — each independently toggled.
 | [Recipes](docs/recipes/)                       | 5 complete integration tutorials         |
 | [Component Docs](docs/components/)             | Props, usage, ARIA for all 24 components |
 | [Demo](examples/demo.html)                     | Interactive showcase — no build step     |
+
+---
+
+## USED BY
+
+| Project                                                      | Usage                                                              |
+| ------------------------------------------------------------ | ------------------------------------------------------------------ |
+| [ollama-queue](https://github.com/parthalon025/ollama-queue) | Job queue dashboard — orchestration, escalation, HostCard Now page |
+| [project-hub](https://github.com/parthalon025/project-hub)   | Unified project status dashboard                                   |
+| [lessons-db](https://github.com/parthalon025/lessons-db)     | Spaced-repetition lessons SPA (`/ui/`)                             |
+| [FrameCast](https://github.com/parthalon025/framecast)       | Raspberry Pi photo frame — phone upload UI + kiosk slideshow       |
 
 ---
 

@@ -2,7 +2,8 @@
 
 SUPERHOT-inspired visual effects package for dashboards. CSS-first with optional JS utilities and Preact components.
 
-**Repo:** https://github.com/parthalon025/superhot-ui (private)
+**Repo:** https://github.com/parthalon025/superhot-ui (public)
+**npm:** `npm install superhot-ui` — published as `superhot-ui@0.3.0`
 
 ## Architecture
 
@@ -14,9 +15,16 @@ Three layers (each optional):
 
 ## Quick Start
 
-Install as local dependency from sibling project: `npm install file:../superhot-ui`
+Install from npm: `npm install superhot-ui`
 
-Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/superhot.css">`
+Or link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/superhot.css">`
+
+## Consumers
+
+- `ollama-queue/` — orchestration, escalation, HostCard Now page
+- `project-hub/` — unified project status dashboard
+- `lessons-db/` — spaced-repetition lessons SPA (`/ui/`)
+- `framecast/` — phone upload UI + kiosk slideshow (green phosphor monitor variant)
 
 ## Build
 
