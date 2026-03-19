@@ -1,0 +1,92 @@
+/* superhot-ui utility classes
+ * Semantic utilities derived from atmosphere-guide rules.
+ * Rule 30: Opacity encodes relevance
+ * Rule 33: Whitespace is Gestalt
+ * Rule 21: Hover is interrogation
+ * Rule 36: Grids are crystalline
+ */
+
+@layer superhot.base {
+  /* ── Opacity (Rule 30) ── */
+  .sh-opacity-current {
+    opacity: 1;
+  }
+  .sh-opacity-secondary {
+    opacity: 0.8;
+  }
+  .sh-opacity-historical {
+    opacity: 0.6;
+  }
+  .sh-opacity-disabled {
+    opacity: 0.4;
+  }
+
+  /* ── Spacing (Rule 33) ── */
+  .sh-gap-entity {
+    gap: var(--space-1);
+  } /* 4px — same entity (label + value) */
+  .sh-gap-related {
+    gap: var(--space-2);
+  } /* 8px — related items */
+  .sh-gap-group {
+    gap: var(--space-4);
+  } /* 16px — same section */
+  .sh-gap-section {
+    gap: var(--space-6);
+  } /* 24px — section boundary */
+  .sh-gap-panel {
+    gap: var(--space-8);
+  } /* 32px — different concerns */
+
+  /* ── Typography ── */
+  .sh-label {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--text-muted);
+  }
+  .sh-value {
+    font-family: var(--font-mono);
+    font-size: var(--type-body);
+    color: var(--text-primary);
+  }
+  .sh-status-code {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    text-transform: lowercase;
+  }
+
+  /* ── Hover (Rule 21) ── */
+  .sh-hover-reveal:hover {
+    color: var(--text-primary);
+  }
+  .sh-hover-phosphor-border:hover {
+    border-left: 2px solid var(--sh-phosphor);
+  }
+
+  /* ── Grid (Rule 36) ── */
+  .sh-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+  .sh-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sh-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .sh-grid-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* ── Prompt (terminal prefix) ── */
+  .sh-prompt::before {
+    content: "$ ";
+    color: var(--sh-phosphor);
+  }
+  .sh-prompt-root::before {
+    content: "# ";
+    color: var(--sh-threat);
+  }
+}
