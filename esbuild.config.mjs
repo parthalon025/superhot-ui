@@ -15,7 +15,7 @@ const shared = {
   format: "esm",
   target: "es2020",
   minify: !isWatch,
-  sourcemap: isWatch,
+  sourcemap: true,
 };
 
 // JS utilities bundle (barrel via stdin)
@@ -68,6 +68,8 @@ const preactConfig = {
       "export { ShTimeChart } from './preact/ShTimeChart.jsx';",
       "export { ShPipeline } from './preact/ShPipeline.jsx';",
       "export { ShModal } from './preact/ShModal.jsx';",
+      "export { ShMatrixRain } from './preact/ShMatrixRain.jsx';",
+      "export { ShIncidentHUD } from './preact/ShIncidentHUD.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
