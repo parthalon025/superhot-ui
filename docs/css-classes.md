@@ -171,6 +171,30 @@ No dedicated glow classes exist. Glow is applied contextually through status var
 
 Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yellow, blue, and magenta to standard CGA hex values for both foreground and background.
 
+## Form Elements
+
+| Class                  | Signal                                           | File          |
+| ---------------------- | ------------------------------------------------ | ------------- |
+| `.sh-input`            | Terminal text input with phosphor focus glow     | utilities.css |
+| `.sh-select`           | Terminal dropdown                                | utilities.css |
+| `.sh-toggle`           | Binary ON/OFF switch with `data-sh-on` attribute | utilities.css |
+| `.sh-toggle-indicator` | Toggle state display                             | utilities.css |
+| `.sh-kbd`              | Keyboard shortcut badge                          | utilities.css |
+| `.sh-tabs`             | Tab bar container                                | utilities.css |
+| `.sh-tab`              | Individual tab                                   | utilities.css |
+| `.sh-tab--active`      | Active tab with phosphor border                  | utilities.css |
+
+## Data Visualization
+
+| Class             | Signal                                | File          |
+| ----------------- | ------------------------------------- | ------------- |
+| `.sh-delta`       | Trend indicator container             | stat-card.css |
+| `.sh-delta--up`   | Positive trend `[+value]` in phosphor | stat-card.css |
+| `.sh-delta--down` | Negative trend `[-value]` in threat   | stat-card.css |
+| `.sh-delta--flat` | Flat trend `[value]` in tertiary      | stat-card.css |
+| `.sh-progress`    | Terminal progress bar `[▓▓▓░░░]`      | utilities.css |
+| `.sh-badge-count` | Notification count pill               | utilities.css |
+
 ## Utilities
 
 ### Opacity (Rule 30)
@@ -222,6 +246,22 @@ Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yell
 | ----------------- | ---------------------- | ------------- |
 | `.sh-prompt`      | `$ ` in phosphor color | utilities.css |
 | `.sh-prompt-root` | `# ` in threat color   | utilities.css |
+
+### Divider
+
+| Class / Attribute                    | Signal                                           | File          |
+| ------------------------------------ | ------------------------------------------------ | ------------- |
+| `.sh-divider`                        | Horizontal separator                             | utilities.css |
+| `.sh-divider[data-sh-divider-label]` | Separator with centered label via data attribute | utilities.css |
+
+### Feedback & Animation
+
+| Class               | Signal                                    | File           |
+| ------------------- | ----------------------------------------- | -------------- |
+| `.sh-copied`        | Copy feedback flash (phosphor glow)       | utilities.css  |
+| `.sh-loading-dots`  | Animated `...` dots                       | utilities.css  |
+| `.sh-void-gradient` | Radial gradient from center to void edges | utilities.css  |
+| `.sh-ghost-row`     | Table row deletion fade animation         | data-table.css |
 
 ## Status
 
@@ -446,6 +486,37 @@ Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yell
 | `.sh-rest-after-state-change` | `--rest-after-state-change` | terminal-chrome.css |
 | `.sh-rest-after-navigation`   | `--rest-after-navigation`   | terminal-chrome.css |
 
+### Log Viewer
+
+| Class                  | Signal                    | File                |
+| ---------------------- | ------------------------- | ------------------- |
+| `.sh-log`              | Log viewer container      | terminal-chrome.css |
+| `.sh-log-timestamp`    | Timestamp in phosphor     | terminal-chrome.css |
+| `.sh-log-level--error` | Error level in threat red | terminal-chrome.css |
+| `.sh-log-level--warn`  | Warning level in amber    | terminal-chrome.css |
+| `.sh-log-level--info`  | Info level in secondary   | terminal-chrome.css |
+| `.sh-log-level--debug` | Debug level in tertiary   | terminal-chrome.css |
+
+### Code Block
+
+| Class      | Signal                                      | File                |
+| ---------- | ------------------------------------------- | ------------------- |
+| `.sh-code` | Code block with phosphor text + left border | terminal-chrome.css |
+
+### Tooltip
+
+| Class / Attribute | Signal                                        | File                |
+| ----------------- | --------------------------------------------- | ------------------- |
+| `.sh-tooltip`     | Hover tooltip via `data-sh-tooltip` attribute | terminal-chrome.css |
+
+### Breadcrumb
+
+| Class                      | Signal                                  | File                |
+| -------------------------- | --------------------------------------- | ------------------- |
+| `.sh-breadcrumb`           | Navigation path with `>` separators     | terminal-chrome.css |
+| `.sh-breadcrumb-item`      | Individual breadcrumb (last = phosphor) | terminal-chrome.css |
+| `.sh-breadcrumb-separator` | Separator element (`>` via `::before`)  | terminal-chrome.css |
+
 ### Terminal Grid
 
 | Class               | Purpose                                                   | File                |
@@ -471,6 +542,10 @@ Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yell
 | `data-sh-capability`       | `full`, `medium`, `low`, `minimal`                       | Hardware tier (CSS response)  |
 | `data-label`               | Any string                                               | Frame header text             |
 | `data-footer`              | Any string                                               | Frame footer text             |
+| `data-sh-on`               | `true`, `false`                                          | Toggle switch state           |
+| `data-sh-tooltip`          | Any string                                               | Tooltip hover text            |
+| `data-sh-divider-label`    | Any string                                               | Divider label text            |
+| `data-sh-timestamp`        | ISO timestamp                                            | watchFreshness target         |
 | `data-sortable`            | `true`                                                   | Data table sortable column    |
 | `data-sort-active`         | `true`                                                   | Data table active sort column |
 

@@ -522,6 +522,110 @@ Generalized metric bar with progressive color — calm (green), ambient, standar
 
 ---
 
+## Terminal Form Elements
+
+```html
+<!-- Terminal form elements -->
+<input class="sh-input" placeholder="SEARCH..." />
+<select class="sh-select">
+  <option>OPTION 1</option>
+</select>
+<label class="sh-toggle" data-sh-on="true">
+  <span class="sh-toggle-indicator">ON</span> CRT Mode
+</label>
+<span class="sh-kbd">Ctrl+K</span>
+<div class="sh-tabs">
+  <span class="sh-tab sh-tab--active">QUEUE</span>
+  <span class="sh-tab">LOGS</span>
+</div>
+```
+
+All form elements inherit the terminal aesthetic — phosphor focus glow, void backgrounds, mono typography. Toggle state is driven by `data-sh-on` attribute (set via JS).
+
+---
+
+## watchFreshness
+
+Auto-apply freshness state to all `[data-sh-timestamp]` children within a container. Re-evaluates on an interval.
+
+```js
+import { watchFreshness } from "superhot-ui";
+// Auto-apply freshness to all [data-sh-timestamp] children
+const cleanup = watchFreshness(containerEl, { interval: 15000 });
+```
+
+Returns a cleanup function that stops the interval.
+
+---
+
+## createToastManager
+
+Framework-agnostic toast state manager. Manages toast lifecycle (add, auto-dismiss, subscribe to changes).
+
+```js
+import { createToastManager } from "superhot-ui";
+const toasts = createToastManager();
+toasts.add("info", "JOB COMPLETE", 3000);
+toasts.add("error", "QUEUE FAILED", 0); // persistent
+toasts.subscribe((all) => renderToasts(all));
+```
+
+---
+
+## createShortcutRegistry
+
+Keyboard shortcut registry with conflict detection and listing.
+
+```js
+import { createShortcutRegistry } from "superhot-ui";
+const shortcuts = createShortcutRegistry();
+shortcuts.register("ctrl+k", "Command Palette", () => openPalette());
+window.addEventListener("keydown", (e) => shortcuts.handleKeyDown(e));
+```
+
+---
+
+## setMonitorTheme / loadMonitorTheme
+
+Switch between phosphor monitor color variants (green, amber) with localStorage persistence.
+
+```js
+import { setMonitorTheme, loadMonitorTheme } from "superhot-ui";
+loadMonitorTheme(); // restore from localStorage on init
+setMonitorTheme("amber"); // switch to amber phosphor
+```
+
+---
+
+## scrollSpy
+
+Tracks which section is currently in view and fires a callback with the active section ID.
+
+```js
+import { scrollSpy } from "superhot-ui";
+const sections = document.querySelectorAll("[data-section]");
+const cleanup = scrollSpy([...sections], (id) => setActiveNav(id));
+```
+
+Returns a cleanup function that disconnects the observer.
+
+---
+
+## formatTime
+
+Multi-format timestamp formatter for dashboard displays.
+
+```js
+import { formatTime } from "superhot-ui";
+formatTime(Date.now(), "full"); // "14:23:07"
+formatTime(Date.now(), "compact"); // "14:23"
+formatTime(Date.now(), "date"); // "2026-03-18"
+formatTime(Date.now(), "relative"); // "3m ago"
+formatTime(90000, "duration"); // "1m 30s"
+```
+
+---
+
 ## Design Pipeline
 
 ```
