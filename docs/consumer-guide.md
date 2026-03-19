@@ -407,6 +407,121 @@ Override `--sh-phosphor` for the entire subtree. Apply to layout root or individ
 
 ---
 
+## Signal Degradation
+
+```html
+<div class="sh-signal-degraded">
+  <MyDataCard source="{unreliableApi}" />
+</div>
+```
+
+SVG noise overlay + jitter animation signals that a data source is unreliable (T3 alert). Stacks with other effects — wrap any container to mark its contents as degraded.
+
+---
+
+## Interlace (Surveillance Mode)
+
+```html
+<div class="sh-interlace">
+  <SecurityFeed camera="{cam1}" />
+</div>
+```
+
+Repeating scan line overlay for passive monitoring contexts (T1 ambient). Purely cosmetic — no interaction or data implications.
+
+---
+
+## Burn-in (Anchor Elements)
+
+```html
+<div class="sh-frame" data-sh-burn-in="SYSTEMS" data-label="SYSTEMS">...content...</div>
+```
+
+Ghost text pseudo-element for permanent UI landmarks (T1 ambient). The burn-in value appears as a faint centered watermark behind the content — use for section headers or frames that never change identity.
+
+---
+
+## Boot Sequence
+
+```js
+import { bootSequence } from "superhot-ui";
+const cleanup = bootSequence(
+  containerEl,
+  ["piOS v2.1.0", "LOADING MODULES...", "QUEUE: ONLINE", "SYSTEM READY"],
+  { onComplete: () => startApp() },
+);
+```
+
+Progressive typewriter text reveal for system initialization. Each line appears with a clip-path animation, then locks into a solid state. The last line gets a blinking cursor. Returns a cleanup function that cancels pending timers.
+
+Container element should have `.sh-boot-container` class for terminal styling.
+
+---
+
+## Matrix Rain
+
+```jsx
+import { ShMatrixRain } from "superhot-ui/preact";
+<ShMatrixRain active={isProcessing} density="medium">
+  <ProcessingCard job={currentJob} />
+</ShMatrixRain>;
+```
+
+Canvas-based falling character columns. Signals that the system is computing a complex operation. Children render above the rain. Set `active={false}` to stop and clear.
+
+Density controls column spacing: `"low"` (40px), `"medium"` (24px), `"high"` (14px).
+
+---
+
+## Incident HUD
+
+```jsx
+import { ShIncidentHUD } from "superhot-ui/preact";
+<ShIncidentHUD
+  active={hasIncident}
+  severity="critical"
+  message="BACKEND OFFLINE"
+  timestamp={incidentStart}
+  onAcknowledge={() => ack()}
+/>;
+```
+
+Fixed top banner for system-wide incidents. Auto-formats elapsed time from `timestamp`. ACK button only renders when `onAcknowledge` is provided. Returns `null` when inactive.
+
+Severity options: `"warning"` (amber) or `"critical"` (red). Uses `role="alert"` + `aria-live="assertive"` for screen reader announcement.
+
+---
+
+## Hardware Auto-Downgrade
+
+```js
+import { detectCapability, applyCapability } from "superhot-ui";
+applyCapability(detectCapability()); // call once at app init
+```
+
+Detects device capability via `navigator.hardwareConcurrency` and `prefers-reduced-motion`, then sets `data-sh-capability` on `<html>` for CSS tier response. Four tiers: `"full"` (all effects), `"medium"` (standard), `"low"` (T1 off, overlays hidden), `"minimal"` (all animation/transitions off).
+
+Call once at app init. CSS rules in `advanced-effects.css` and `matrix-rain.css` respond automatically.
+
+---
+
+## Threshold Bar
+
+```html
+<div class="sh-threshold-bar" style="--sh-fill: 85"></div>
+```
+
+Use with `applyThreshold()` for automatic glow class application:
+
+```js
+import { applyThreshold } from "superhot-ui";
+applyThreshold(barEl, 85); // auto-applies sh-glow-critical class
+```
+
+Generalized metric bar with progressive color — calm (green), ambient, standard (amber), critical (red). Combine with any metric percentage.
+
+---
+
 ## Design Pipeline
 
 ```

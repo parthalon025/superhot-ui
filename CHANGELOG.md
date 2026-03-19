@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0] — 2026-03-18
+
+### Added
+
+- Signal degradation effect (.sh-signal-degraded) — SVG noise + jitter for unreliable sources
+- Interlace overlay (.sh-interlace) — scan line pattern for passive monitoring
+- Burn-in effect (data-sh-burn-in) — ghost text for permanent UI landmarks
+- Threshold bar (.sh-threshold-bar) — generalized metric bar with progressive color
+- Boot sequence utility (bootSequence) — progressive typewriter text reveal
+- Matrix rain component (ShMatrixRain) — canvas-based falling character columns
+- Incident HUD component (ShIncidentHUD) — fixed top banner for system-wide incidents
+- 4 new audio SFX: boot, static, warning, recovery
+- Hardware auto-downgrade (detectCapability, applyCapability) — CSS tier response
+- Production sourcemaps enabled
+
 ## [0.2.0] — 2026-03-18
 
 ### Added

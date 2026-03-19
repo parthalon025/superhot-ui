@@ -34,6 +34,53 @@ Complete reference of all CSS classes and data attributes in superhot-ui.
 | `data-sh-mantra="TEXT"`           | Repeating watermark overlay                               | superhot.css |
 | `.sh-fragment`                    | Shatter fragment (JS-created, animates out)               | superhot.css |
 
+## Signal Degradation & Overlays
+
+| Class / Attribute     | Signal                                                                | File                 |
+| --------------------- | --------------------------------------------------------------------- | -------------------- |
+| `.sh-signal-degraded` | SVG noise overlay + jitter animation for unreliable data sources (T3) | advanced-effects.css |
+| `.sh-interlace`       | Repeating scan line overlay for passive monitoring (T1 ambient)       | advanced-effects.css |
+| `[data-sh-burn-in]`   | Ghost text pseudo-element for permanent UI landmarks (T1 ambient)     | advanced-effects.css |
+
+## Threshold Bar
+
+| Class / Attribute   | Signal                                                        | File                 |
+| ------------------- | ------------------------------------------------------------- | -------------------- |
+| `.sh-threshold-bar` | Metric proximity bar (set `--sh-fill: 0-100`) with auto-color | advanced-effects.css |
+
+## Boot Sequence
+
+| Class                     | Signal                                              | File     |
+| ------------------------- | --------------------------------------------------- | -------- |
+| `.sh-boot-container`      | Mono terminal container for boot line output        | boot.css |
+| `.sh-boot-line`           | Individual boot line (hidden by default, opacity 0) | boot.css |
+| `.sh-boot-line--visible`  | Typewriter clip-path reveal animation               | boot.css |
+| `.sh-boot-line--complete` | Fully revealed line (no animation, solid opacity)   | boot.css |
+
+## Matrix Rain
+
+| Class                    | Signal                                               | File            |
+| ------------------------ | ---------------------------------------------------- | --------------- |
+| `.sh-matrix-rain`        | Container with relative position and overflow hidden | matrix-rain.css |
+| `.sh-matrix-rain-canvas` | Absolute-fill canvas for falling characters          | matrix-rain.css |
+
+## Incident HUD
+
+| Class                        | Signal                                     | File             |
+| ---------------------------- | ------------------------------------------ | ---------------- |
+| `.sh-incident-hud`           | Fixed top banner for system-wide incidents | incident-hud.css |
+| `.sh-incident-hud--warning`  | Amber border + warm background variant     | incident-hud.css |
+| `.sh-incident-hud--critical` | Red border + threat-tinted background      | incident-hud.css |
+
+## Hardware Capability
+
+| Attribute                        | Signal                                                    | File                 |
+| -------------------------------- | --------------------------------------------------------- | -------------------- |
+| `[data-sh-capability="full"]`    | All effects enabled (default, cores > 4)                  | advanced-effects.css |
+| `[data-sh-capability="medium"]`  | Standard effects (cores 3-4)                              | advanced-effects.css |
+| `[data-sh-capability="low"]`     | T1 animations off, overlays hidden (cores 1-2)            | advanced-effects.css |
+| `[data-sh-capability="minimal"]` | All animations + transitions off (prefers-reduced-motion) | advanced-effects.css |
+
 ## Glow & Color Tokens
 
 No dedicated glow classes exist. Glow is applied contextually through status variants on components (`.sh-status-badge`, `.sh-stat-card`) and via CSS custom properties (`--sh-threat-glow`, `--sh-phosphor-glow`). Override `--sh-*` tokens to customize.
@@ -420,6 +467,8 @@ Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yell
 | `data-sh-monitor`          | `amber`, `green`                                         | Phosphor monitor variant      |
 | `data-sh-ansi-mode`        | `full`                                                   | Full CGA color palette        |
 | `data-sh-open`             | `true`                                                   | Collapsible expanded state    |
+| `data-sh-burn-in`          | Any string                                               | Burn-in ghost text            |
+| `data-sh-capability`       | `full`, `medium`, `low`, `minimal`                       | Hardware tier (CSS response)  |
 | `data-label`               | Any string                                               | Frame header text             |
 | `data-footer`              | Any string                                               | Frame footer text             |
 | `data-sortable`            | `true`                                                   | Data table sortable column    |
