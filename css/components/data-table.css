@@ -87,5 +87,13 @@
 }
 
 @keyframes sh-ghost-fade {
-  from { opacity: 1; }
-  to { opacity: 0; height: 0; padding: 0; overflow: hidden; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+}

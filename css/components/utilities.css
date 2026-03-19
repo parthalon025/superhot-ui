@@ -235,5 +235,10 @@
 }
 
 @keyframes sh-dots {
-  0% { width: 0; }
-  100% { width: 3ch; }
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 3ch;
+  }
+}
