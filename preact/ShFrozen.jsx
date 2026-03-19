@@ -22,6 +22,10 @@ export function ShFrozen({ timestamp, thresholds, class: className, children, ..
       const val = getValue();
       if (val == null) return;
       applyFreshness(ref.current, val, thresholds);
+      const state = ref.current.getAttribute("data-sh-state");
+      if (state) {
+        ref.current.setAttribute("aria-description", `Data freshness: ${state}`);
+      }
     };
 
     apply();

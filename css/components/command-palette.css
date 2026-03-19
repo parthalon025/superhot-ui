@@ -118,6 +118,11 @@
       border-left-color: var(--sh-phosphor);
     }
 
+    &:focus-visible {
+      outline: 2px solid var(--sh-threat);
+      outline-offset: -2px;
+    }
+
     /* Reduced motion: no hover transition */
     @media (prefers-reduced-motion: reduce) {
       transition: none;
@@ -127,6 +132,12 @@
   .sh-command-palette-item-label {
     flex: 1;
     letter-spacing: var(--tracking-wide);
+  }
+
+  /* Highlighted match text within results */
+  .sh-command-palette-match {
+    color: var(--sh-phosphor);
+    text-shadow: 0 0 4px var(--sh-phosphor-glow);
   }
 
   .sh-command-palette-item-desc {

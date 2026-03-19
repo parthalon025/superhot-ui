@@ -4,11 +4,11 @@
  * Diegetic metaphor: terminal buffer filling line by line
  */
 
-@keyframes sh-skeleton-sweep {
-  0% {
+@keyframes sh-skeleton-shimmer {
+  from {
     background-position: -200% 0;
   }
-  100% {
+  to {
     background-position: 200% 0;
   }
 }
@@ -17,12 +17,12 @@
   .sh-skeleton {
     background: linear-gradient(
       90deg,
-      var(--bg-inset) 0%,
-      var(--sh-phosphor-glow) 50%,
-      var(--bg-inset) 100%
+      var(--bg-inset) 25%,
+      var(--bg-surface) 50%,
+      var(--bg-inset) 75%
     );
     background-size: 200% 100%;
-    animation: sh-skeleton-sweep var(--sh-frost-shimmer-duration) linear infinite;
+    animation: sh-skeleton-shimmer 1.5s ease-in-out infinite;
     border-radius: var(--radius);
     display: block;
 
@@ -30,6 +30,13 @@
     @media (prefers-reduced-motion: reduce) {
       animation: none;
       background: color-mix(in oklch, var(--sh-phosphor) 8%, var(--bg-inset));
+    }
+
+    /* Forced colors: static system background */
+    @media (forced-colors: active) {
+      animation: none;
+      background: GrayText;
+      border: 1px solid CanvasText;
     }
   }
 }

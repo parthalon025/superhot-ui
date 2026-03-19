@@ -1,0 +1,187 @@
+/* Terminal chrome — advanced piOS aesthetic
+ * Phosphor monitor variants, collapsible CSS, rest-frame delays,
+ * box-drawing grid alignment.
+ */
+
+@layer superhot.effects {
+  /* ── Phosphor Monitor Variants ── */
+  [data-sh-monitor="amber"] {
+    --sh-phosphor: oklch(0.72 0.15 55);
+    --sh-phosphor-glow: oklch(0.72 0.15 55 / 0.2);
+  }
+
+  [data-sh-monitor="green"] {
+    --sh-phosphor: oklch(0.65 0.18 135);
+    --sh-phosphor-glow: oklch(0.65 0.18 135 / 0.2);
+  }
+
+  /* ── Collapsible (standalone CSS) ── */
+  .sh-collapsible {
+    overflow: hidden;
+  }
+
+  .sh-collapsible-summary {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+    padding: var(--space-2) 0;
+  }
+
+  .sh-collapsible-summary:focus-visible {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: 2px;
+  }
+
+  .sh-collapsible-summary::before {
+    content: "▸";
+    transition: transform var(--duration-fast) var(--ease-default);
+  }
+
+  .sh-collapsible[data-sh-open="true"] .sh-collapsible-summary::before {
+    transform: rotate(90deg);
+  }
+
+  .sh-collapsible-content {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease-out;
+    overflow: hidden;
+  }
+
+  .sh-collapsible-content > * {
+    overflow: hidden;
+  }
+
+  .sh-collapsible[data-sh-open="true"] .sh-collapsible-content {
+    grid-template-rows: 1fr;
+  }
+
+  /* ── Rest-Frame Delay Utilities (Rule 7) ── */
+  .sh-rest-after-shatter {
+    animation-delay: var(--rest-after-shatter);
+  }
+  .sh-rest-after-glitch {
+    animation-delay: var(--rest-after-glitch);
+  }
+  .sh-rest-after-state-change {
+    animation-delay: var(--rest-after-state-change);
+  }
+  .sh-rest-after-navigation {
+    animation-delay: var(--rest-after-navigation);
+  }
+
+  /* ── Terminal Grid (box-drawing alignment) ── */
+  .sh-terminal-grid {
+    font-family: var(--font-mono);
+    font-kerning: none;
+    font-variant-ligatures: none;
+    letter-spacing: 0;
+    line-height: 1;
+    white-space: pre;
+    tab-size: 8;
+  }
+
+  /* ── Log Viewer ── */
+  .sh-log {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    line-height: 1.6;
+    white-space: pre-wrap;
+    background: var(--bg-inset);
+    padding: var(--space-3);
+    overflow-x: auto;
+  }
+  .sh-log-timestamp {
+    color: var(--sh-phosphor);
+  }
+  .sh-log-level--error {
+    color: var(--sh-threat);
+    font-weight: 700;
+  }
+  .sh-log-level--warn {
+    color: var(--status-warning);
+  }
+  .sh-log-level--info {
+    color: var(--text-secondary);
+  }
+  .sh-log-level--debug {
+    color: var(--text-tertiary);
+  }
+
+  /* ── Code Block ── */
+  .sh-code {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    background: var(--bg-inset);
+    color: var(--sh-phosphor);
+    padding: var(--space-3);
+    border-left: 2px solid var(--border-primary);
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+
+  /* ── Tooltip ── */
+  .sh-tooltip {
+    position: relative;
+  }
+  .sh-tooltip::after {
+    content: attr(data-sh-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-surface-raised);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-default);
+    z-index: var(--z-dropdown);
+    margin-bottom: var(--space-1);
+  }
+  .sh-tooltip:hover::after {
+    opacity: 1;
+  }
+
+  /* ── Breadcrumb ── */
+  .sh-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    color: var(--text-tertiary);
+  }
+  .sh-breadcrumb-item {
+    color: var(--text-secondary);
+  }
+  .sh-breadcrumb-item:last-child {
+    color: var(--sh-phosphor);
+  }
+  .sh-breadcrumb-separator {
+    color: var(--text-tertiary);
+  }
+  .sh-breadcrumb-separator::before {
+    content: ">";
+  }
+
+  /* ── Reduced Motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-collapsible-content {
+      transition: none !important;
+    }
+  }
+}

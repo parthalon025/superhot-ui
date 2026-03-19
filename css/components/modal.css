@@ -1,0 +1,111 @@
+/* ShModal — system interrupt overlay
+ * Signal: world is paused, system demands input
+ * Source: atmosphere-guide.md Rule 29
+ */
+
+@layer superhot.effects {
+  .sh-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-overlay);
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: sh-modal-fade-in 150ms ease-out;
+
+    @supports (backdrop-filter: blur(4px)) {
+      backdrop-filter: blur(4px);
+    }
+  }
+
+  .sh-modal {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius);
+    padding: var(--space-6);
+    max-width: 480px;
+    width: 90%;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sh-modal-title {
+    font-size: var(--type-title);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    margin-bottom: var(--space-4);
+  }
+
+  .sh-modal-body {
+    font-size: var(--type-body);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  .sh-modal-actions {
+    display: flex;
+    gap: var(--space-4);
+    justify-content: flex-end;
+  }
+
+  .sh-modal-action {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border-primary);
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  .sh-modal-action:focus-visible {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: 2px;
+  }
+
+  .sh-modal-action:hover {
+    border-color: var(--sh-phosphor);
+    color: var(--sh-phosphor);
+  }
+
+  .sh-modal-action--confirm {
+    border-color: var(--sh-threat);
+    color: var(--sh-threat);
+  }
+
+  .sh-modal-action--confirm:hover {
+    background: var(--sh-threat);
+    color: var(--sh-bright);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-modal-overlay {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sh-modal {
+      border-color: CanvasText;
+    }
+    .sh-modal-action {
+      border-color: ButtonText;
+      color: ButtonText;
+    }
+  }
+}
+
+@keyframes sh-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

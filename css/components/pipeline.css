@@ -1,0 +1,182 @@
+@keyframes sh-edge-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@keyframes sh-pipeline-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@layer superhot.effects {
+  .sh-pipeline {
+    overflow: auto;
+    position: relative;
+  }
+
+  .sh-pipeline svg {
+    display: block;
+  }
+
+  /* Node base */
+  .sh-pipeline-node rect {
+    fill: var(--bg-surface);
+    stroke: var(--border-subtle);
+    stroke-width: 1;
+  }
+
+  .sh-pipeline-node text {
+    fill: var(--text-primary);
+    font-size: var(--type-small);
+    font-family: var(--font-mono);
+  }
+
+  /* Node status variants */
+  .sh-pipeline-node--ok rect {
+    stroke: var(--status-ok);
+  }
+
+  .sh-pipeline-node--ok text {
+    fill: var(--status-ok);
+  }
+
+  .sh-pipeline-node--warn rect {
+    stroke: var(--status-warning);
+  }
+
+  .sh-pipeline-node--warn text {
+    fill: var(--status-warning);
+  }
+
+  .sh-pipeline-node--error rect {
+    stroke: var(--status-error);
+    fill: var(--bg-surface);
+  }
+
+  .sh-pipeline-node--error text {
+    fill: var(--status-error);
+  }
+
+  .sh-pipeline-node--running rect {
+    stroke: var(--accent);
+    animation: sh-pipeline-pulse 1.5s ease-in-out infinite;
+  }
+
+  .sh-pipeline-node--running text {
+    fill: var(--accent);
+  }
+
+  .sh-pipeline-node--idle rect {
+    stroke: var(--border-subtle);
+  }
+
+  .sh-pipeline-node--idle text {
+    fill: var(--text-tertiary);
+  }
+
+  /* Edge base */
+  .sh-pipeline-edge {
+    fill: none;
+    stroke: var(--border-subtle);
+    stroke-width: 1.5;
+    stroke-dasharray: 8 4;
+    animation: sh-edge-flow 1.5s linear infinite;
+  }
+
+  .sh-pipeline-edge--ok {
+    stroke: var(--status-ok);
+    opacity: 0.6;
+  }
+
+  .sh-pipeline-edge--warn {
+    stroke: var(--status-warning);
+  }
+
+  .sh-pipeline-edge--error {
+    stroke: var(--status-error);
+  }
+
+  .sh-pipeline-edge--running {
+    stroke: var(--accent);
+  }
+
+  .sh-pipeline-edge--idle {
+    stroke: var(--border-subtle);
+    opacity: 0.5;
+  }
+
+  /* Detail text */
+  .sh-pipeline-detail {
+    font-size: var(--type-small);
+    fill: var(--text-tertiary);
+  }
+
+  /* Compact variant */
+  .sh-pipeline--compact .sh-pipeline-detail {
+    display: none;
+  }
+
+  /* Reduced motion — disable pulse and edge flow, keep static colors */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-pipeline-node--running rect {
+      animation: none;
+      opacity: 1;
+    }
+    .sh-pipeline-edge {
+      animation: none;
+    }
+  }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-pipeline-node rect {
+      stroke: CanvasText;
+      fill: Canvas;
+    }
+    .sh-pipeline-node text {
+      fill: CanvasText;
+    }
+    .sh-pipeline-node--ok rect,
+    .sh-pipeline-node--warn rect,
+    .sh-pipeline-node--error rect,
+    .sh-pipeline-node--running rect {
+      stroke: CanvasText;
+    }
+    .sh-pipeline-node--ok text,
+    .sh-pipeline-node--warn text,
+    .sh-pipeline-node--error text,
+    .sh-pipeline-node--running text {
+      fill: CanvasText;
+    }
+    .sh-pipeline-node--running rect {
+      animation: none;
+    }
+    .sh-pipeline-node--idle rect {
+      stroke: GrayText;
+    }
+    .sh-pipeline-node--idle text {
+      fill: GrayText;
+    }
+    .sh-pipeline-edge {
+      stroke: CanvasText;
+    }
+    .sh-pipeline-edge--running,
+    .sh-pipeline-edge--ok,
+    .sh-pipeline-edge--warn,
+    .sh-pipeline-edge--error {
+      stroke: Highlight;
+    }
+    .sh-pipeline-edge--idle {
+      stroke: GrayText;
+    }
+    .sh-pipeline-detail {
+      fill: CanvasText;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+/* Matrix rain — falling character columns
+ * Signal: "system is computing a complex operation"
+ */
+
+@layer superhot.effects {
+  .sh-matrix-rain {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .sh-matrix-rain-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-matrix-rain-canvas {
+      display: none;
+    }
+  }
+
+  [data-sh-capability="low"] .sh-matrix-rain-canvas,
+  [data-sh-capability="minimal"] .sh-matrix-rain-canvas {
+    display: none;
+  }
+}

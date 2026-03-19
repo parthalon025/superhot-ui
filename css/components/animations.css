@@ -1,0 +1,398 @@
+/* ARIA Animation Tier System
+ * T1: Ambient — always-on decorative, lowest energy
+ * T2: Data Refresh — one-shot triggered by data update
+ * T3: Status Alert — strongest attention, auto-expires
+ *
+ * Usage: add/remove class on element. JS removes after animationend for T2/T3.
+ * Source: ARIA index.css animation tier system
+ */
+
+/* ── Keyframes ── */
+
+@keyframes sh-t1-scan-sweep-kf {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes sh-t1-grid-pulse-kf {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes sh-t1-border-shimmer-kf {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes sh-t1-data-stream-kf {
+  0% {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+}
+
+@keyframes sh-t1-scan-line-kf {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes sh-t1-pulse-ring-kf {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 4px oklch(0 0 0 / 0);
+  }
+}
+
+@keyframes sh-t2-typewriter-kf {
+  0% {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sh-t2-tick-flash-kf {
+  0% {
+    background-color: var(--accent-glow);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+@keyframes sh-t2-bar-grow-kf {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes sh-t3-orange-pulse-kf {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-warm-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 6px var(--accent-warm-glow);
+  }
+}
+
+@keyframes sh-t3-border-alert-kf {
+  0% {
+    border-left-color: var(--accent-warm);
+  }
+  50% {
+    border-left-color: var(--accent);
+  }
+  100% {
+    border-left-color: var(--border-subtle);
+  }
+}
+
+@keyframes sh-t3-badge-appear-kf {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  70% {
+    transform: translateX(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sh-t3-counter-bump-kf {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sh-page-enter-kf {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sh-data-refresh-kf {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+  50% {
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-glow);
+  }
+}
+
+@keyframes sh-fade-in-up-kf {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Tier 1: Ambient ── */
+
+@layer superhot.effects {
+  .sh-t1-scan-sweep {
+    animation: sh-t1-scan-sweep-kf 6s ease-in-out infinite;
+  }
+  .sh-t1-grid-pulse {
+    animation: sh-t1-grid-pulse-kf 8s ease-in-out infinite;
+  }
+  .sh-t1-border-shimmer {
+    background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    background-size: 200% 100%;
+    animation: sh-t1-border-shimmer-kf 3s ease-in-out infinite;
+  }
+  .sh-t1-data-stream {
+    animation: sh-t1-data-stream-kf 2s ease-in-out infinite;
+  }
+  .sh-t1-scan-line {
+    animation: sh-t1-scan-line-kf 3s linear infinite;
+  }
+  .sh-t1-pulse-ring {
+    animation: sh-t1-pulse-ring-kf 3s ease-in-out infinite;
+  }
+
+  /* ── Tier 2: Data Refresh ── */
+
+  .sh-t2-typewriter {
+    animation: sh-t2-typewriter-kf 0.3s ease-out;
+  }
+  .sh-t2-tick-flash {
+    animation: sh-t2-tick-flash-kf 0.4s ease-out;
+  }
+  .sh-t2-bar-grow {
+    animation: sh-t2-bar-grow-kf 0.5s ease-out;
+    transform-origin: bottom;
+  }
+
+  /* ── Tier 3: Status Alert ── */
+
+  .sh-t3-orange-pulse {
+    animation: sh-t3-orange-pulse-kf 0.6s ease-out 3;
+  }
+  .sh-t3-border-alert {
+    animation: sh-t3-border-alert-kf 1s ease-out forwards;
+    border-left: 3px solid var(--accent-warm);
+  }
+  .sh-t3-badge-appear {
+    animation: sh-t3-badge-appear-kf 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .sh-t3-counter-bump {
+    animation: sh-t3-counter-bump-kf 0.3s ease-out;
+  }
+
+  /* ── Utilities ── */
+
+  .sh-animate-page-enter {
+    animation: sh-page-enter-kf 0.25s ease-out both;
+  }
+  .sh-animate-data-refresh {
+    animation: sh-data-refresh-kf 0.3s ease-out;
+  }
+
+  /* Stagger children — parent receives this class; 10 child slots */
+  .sh-stagger-children > * {
+    opacity: 0;
+    animation: sh-fade-in-up-kf 0.4s ease-out forwards;
+  }
+  .sh-stagger-children > *:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+  .sh-stagger-children > *:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .sh-stagger-children > *:nth-child(3) {
+    animation-delay: 0.15s;
+  }
+  .sh-stagger-children > *:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  .sh-stagger-children > *:nth-child(5) {
+    animation-delay: 0.25s;
+  }
+  .sh-stagger-children > *:nth-child(6) {
+    animation-delay: 0.3s;
+  }
+  .sh-stagger-children > *:nth-child(7) {
+    animation-delay: 0.35s;
+  }
+  .sh-stagger-children > *:nth-child(8) {
+    animation-delay: 0.4s;
+  }
+  .sh-stagger-children > *:nth-child(9) {
+    animation-delay: 0.45s;
+  }
+  .sh-stagger-children > *:nth-child(10) {
+    animation-delay: 0.5s;
+  }
+  .sh-stagger-children > *:nth-child(n + 11) {
+    animation: none;
+    opacity: 1;
+  }
+
+  /* Animation delay utilities */
+  .sh-delay-100 {
+    animation-delay: 0.1s;
+  }
+  .sh-delay-200 {
+    animation-delay: 0.2s;
+  }
+  .sh-delay-300 {
+    animation-delay: 0.3s;
+  }
+  .sh-delay-400 {
+    animation-delay: 0.4s;
+  }
+  .sh-delay-500 {
+    animation-delay: 0.5s;
+  }
+  .sh-delay-600 {
+    animation-delay: 0.6s;
+  }
+  .sh-delay-700 {
+    animation-delay: 0.7s;
+  }
+  .sh-delay-800 {
+    animation-delay: 0.8s;
+  }
+
+  /* ── Responsive: phone — T1 off ── */
+  @media (max-width: 639px) {
+    .sh-t1-scan-sweep,
+    .sh-t1-grid-pulse,
+    .sh-t1-border-shimmer,
+    .sh-t1-data-stream,
+    .sh-t1-scan-line,
+    .sh-t1-pulse-ring {
+      animation: none;
+    }
+  }
+
+  /* Tablet — reduce T1 */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .sh-t1-grid-pulse,
+    .sh-t1-border-shimmer,
+    .sh-t1-data-stream {
+      animation: none;
+    }
+  }
+
+  /* Reduced motion — T1 + T2 off; T3 degrades to static color */
+  @media (prefers-reduced-motion: reduce) {
+    [class*="sh-t1-"],
+    [class*="sh-t2-"],
+    .sh-animate-page-enter,
+    .sh-animate-data-refresh,
+    .sh-stagger-children > * {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+
+    .sh-t3-orange-pulse {
+      animation: none;
+      box-shadow: 0 0 0 4px var(--accent-warm-glow);
+    }
+    .sh-t3-border-alert {
+      animation: none;
+      border-left-color: var(--accent-warm);
+    }
+    .sh-t3-badge-appear {
+      animation: none;
+      opacity: 1;
+    }
+    .sh-t3-counter-bump {
+      animation: none;
+    }
+  }
+
+  /* Forced colors — system color fallbacks for color-dependent effects */
+  @media (forced-colors: active) {
+    .sh-t1-border-shimmer {
+      background: none;
+      animation: none;
+    }
+    .sh-t1-pulse-ring {
+      animation: none;
+      box-shadow: none;
+      outline: 2px solid Highlight;
+    }
+    .sh-t2-tick-flash {
+      animation: none;
+      background-color: transparent;
+    }
+    .sh-t3-orange-pulse {
+      animation: none;
+      box-shadow: none;
+      outline: 2px solid Highlight;
+    }
+    .sh-t3-border-alert {
+      animation: none;
+      border-left-color: Highlight;
+    }
+    .sh-animate-data-refresh {
+      animation: none;
+      box-shadow: none;
+    }
+  }
+}

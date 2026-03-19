@@ -1,0 +1,57 @@
+/* Boot sequence — system initialization display
+ * Signal: "system is initializing"
+ */
+
+@keyframes sh-boot-typewriter {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@layer superhot.effects {
+  .sh-boot-container {
+    font-family: var(--sh-font);
+    color: var(--sh-phosphor);
+    background: var(--bg-base);
+    padding: var(--space-4);
+    white-space: pre;
+    line-height: 1.6;
+  }
+
+  .sh-boot-line {
+    opacity: 0;
+    display: block;
+  }
+
+  .sh-boot-line--visible {
+    opacity: 1;
+    animation: sh-boot-typewriter var(--sh-boot-char-duration, 0.5s) steps(var(--sh-boot-chars, 20))
+      forwards;
+  }
+
+  .sh-boot-line--complete {
+    opacity: 1;
+    animation: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-boot-line--visible {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-boot-container {
+      color: CanvasText;
+      background: Canvas;
+    }
+    .sh-boot-line--visible {
+      color: CanvasText;
+    }
+  }
+}

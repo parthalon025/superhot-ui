@@ -8,56 +8,88 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      background: #fafafa;
-      color: #212121;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--sh-font);
       padding: 2rem;
-      max-width: 900px;
+      max-width: 1000px;
       margin: 0 auto;
     }
-    [data-theme="dark"] body {
-      background: #111318;
-      color: #e8eaed;
+    section { margin-bottom: var(--space-8); }
+    h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--sh-phosphor); }
+    h2 {
+      font-family: var(--font-mono);
+      font-size: var(--type-label);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-widest);
+      color: var(--text-muted);
+      margin: 2rem 0 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 0.5rem;
     }
-    h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-    h2 { font-size: 1.25rem; margin: 2rem 0 0.75rem; color: #727272; }
     .card {
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
       padding: 1.5rem;
       margin-bottom: 1rem;
-      background: white;
+      background: var(--bg-surface);
       position: relative;
-    }
-    [data-theme="dark"] .card {
-      border-color: #333;
-      background: #1c1c1e;
     }
     .row { display: flex; gap: 1rem; flex-wrap: wrap; }
     .row > * { flex: 1; min-width: 180px; }
     button {
-      font-family: inherit;
+      font-family: var(--font-mono);
+      font-size: var(--type-label);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-wide);
       padding: 0.5rem 1rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: white;
+      border: 1px solid var(--border-primary);
+      border-radius: var(--radius);
+      background: transparent;
+      color: var(--text-primary);
       cursor: pointer;
       margin-top: 0.5rem;
     }
-    button:hover { background: #f0f0f0; }
+    button:hover { border-color: var(--sh-phosphor); color: var(--sh-phosphor); }
+    button.active { border-color: var(--sh-phosphor); color: var(--sh-phosphor); background: var(--bg-surface-raised); }
     .controls { margin-bottom: 2rem; }
     .value { font-size: 2rem; font-weight: bold; }
-    .label { font-size: 0.75rem; color: #727272; text-transform: uppercase; letter-spacing: 0.1em; }
+    .label {
+      font-family: var(--font-mono);
+      font-size: var(--type-label);
+      text-transform: uppercase;
+      letter-spacing: var(--tracking-widest);
+      color: var(--text-muted);
+    }
+    .demo-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    .demo-swatch {
+      padding: 0.5rem 1rem;
+      font-family: var(--font-mono);
+      font-size: var(--type-body);
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--sh-phosphor);
+    }
   </style>
 </head>
 <body>
+  <div class="sh-crt-overlay"></div>
+
   <div class="controls">
     <h1>SUPERHOT UI</h1>
-    <p style="color: #727272; margin-bottom: 1rem;">Visual effects demo — no build step required.</p>
-    <button onclick="document.documentElement.toggleAttribute('data-theme') || document.documentElement.setAttribute('data-theme', document.documentElement.getAttribute('data-theme') ? '' : 'dark')">
-      Toggle Dark Mode
-    </button>
+    <p class="sh-label" style="margin-bottom: 1rem;">Visual effects demo — 35+ effects — no build step required.</p>
   </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EXISTING DEMOS (10 effects)
+       ═══════════════════════════════════════════════════════ -->
 
   <!-- FRESHNESS STATES -->
   <h2>[ FRESHNESS STATES ]</h2>
@@ -115,7 +147,6 @@
   <!-- MANTRA -->
   <h2>[ MANTRA WATERMARK ]</h2>
   <div class="row">
-    <!-- applyMantra sets data-sh-mantra="TEXT" on the element -->
     <div class="card" id="mantra-card" style="min-height: 100px;">
       <div class="label">System Status</div>
       <div class="value">Disconnected</div>
@@ -201,18 +232,664 @@
     <div id="toast-container" class="sh-toast-container" style="position: static; margin-top: 1rem; max-width: 100%;"></div>
   </div>
 
+  <!-- ═══════════════════════════════════════════════════════
+       NEW DEMOS (25+ additional effects)
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- 1. ANSI TEXT ATTRIBUTES -->
+  <h2>[ ANSI TEXT ATTRIBUTES ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">SGR Text Attributes (10 classes)</div>
+      <div class="demo-row">
+        <span class="sh-ansi-bold">bold</span>
+        <span class="sh-ansi-dim">dim</span>
+        <span class="sh-ansi-italic">italic</span>
+        <span class="sh-ansi-underline">underline</span>
+        <span class="sh-ansi-blink">blink</span>
+        <span class="sh-ansi-blink-fast">blink-fast</span>
+        <span class="sh-ansi-reverse">reverse</span>
+        <span class="sh-ansi-hidden">hidden (invisible)</span>
+        <span class="sh-ansi-strike">strike</span>
+        <span class="sh-ansi-reset sh-ansi-bold">reset (cancels bold)</span>
+      </div>
+      <div class="label" style="margin: 0.75rem 0;">Composable: bold + underline + fg-red</div>
+      <div class="demo-row">
+        <span class="sh-ansi-bold sh-ansi-underline sh-ansi-fg-red">CRITICAL ERROR</span>
+        <span class="sh-ansi-dim sh-ansi-italic sh-ansi-fg-cyan">// dimmed comment</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Foreground Colors (superhot palette)</div>
+      <div class="demo-row">
+        <span class="sh-ansi-fg-black demo-swatch" style="background: var(--text-primary); padding: 0.25rem 0.5rem;">black</span>
+        <span class="sh-ansi-fg-red demo-swatch">red</span>
+        <span class="sh-ansi-fg-green demo-swatch">green</span>
+        <span class="sh-ansi-fg-yellow demo-swatch">yellow</span>
+        <span class="sh-ansi-fg-blue demo-swatch">blue</span>
+        <span class="sh-ansi-fg-magenta demo-swatch">magenta</span>
+        <span class="sh-ansi-fg-cyan demo-swatch">cyan</span>
+        <span class="sh-ansi-fg-white demo-swatch">white</span>
+      </div>
+      <div class="label" style="margin: 0.75rem 0;">Reverse Video</div>
+      <div class="demo-row">
+        <span class="sh-ansi-reverse demo-swatch">reversed text</span>
+        <span class="sh-ansi-reverse sh-ansi-bold demo-swatch">reversed + bold</span>
+      </div>
+    </div>
+
+    <div class="card" data-sh-ansi-mode="full">
+      <div class="label" style="margin-bottom: 0.75rem;">CGA Mode (data-sh-ansi-mode="full")</div>
+      <div class="demo-row">
+        <span class="sh-ansi-fg-red demo-swatch">red</span>
+        <span class="sh-ansi-fg-green demo-swatch">green</span>
+        <span class="sh-ansi-fg-yellow demo-swatch">yellow</span>
+        <span class="sh-ansi-fg-blue demo-swatch">blue</span>
+        <span class="sh-ansi-fg-magenta demo-swatch">magenta</span>
+        <span class="sh-ansi-fg-cyan demo-swatch">cyan</span>
+      </div>
+      <div class="label" style="margin: 0.75rem 0;">CGA Background Colors</div>
+      <div class="demo-row">
+        <span class="sh-ansi-bg-red demo-swatch" style="color: var(--sh-bright);">bg-red</span>
+        <span class="sh-ansi-bg-green demo-swatch" style="color: var(--sh-bright);">bg-green</span>
+        <span class="sh-ansi-bg-yellow demo-swatch" style="color: var(--sh-bright);">bg-yellow</span>
+        <span class="sh-ansi-bg-blue demo-swatch" style="color: var(--sh-bright);">bg-blue</span>
+        <span class="sh-ansi-bg-magenta demo-swatch" style="color: var(--sh-bright);">bg-magenta</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. UTILITY CLASSES -->
+  <h2>[ UTILITY CLASSES ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Opacity Levels (Rule 30: opacity encodes relevance)</div>
+      <div class="demo-row">
+        <span class="sh-opacity-current" style="padding: 0.5rem 1rem; background: var(--bg-surface-raised);">current (1.0)</span>
+        <span class="sh-opacity-secondary" style="padding: 0.5rem 1rem; background: var(--bg-surface-raised);">secondary (0.8)</span>
+        <span class="sh-opacity-historical" style="padding: 0.5rem 1rem; background: var(--bg-surface-raised);">historical (0.6)</span>
+        <span class="sh-opacity-disabled" style="padding: 0.5rem 1rem; background: var(--bg-surface-raised);">disabled (0.4)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Typography</div>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div><span class="sh-label">.sh-label</span> — monospace uppercase, muted</div>
+        <div><span class="sh-value">.sh-value</span> — monospace body, primary</div>
+        <div><span class="sh-status-code">.sh-status-code</span> — monospace small, lowercase</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Spacing Gaps (Rule 33: whitespace is Gestalt)</div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div class="sh-gap-entity" style="display: flex; background: var(--bg-inset); padding: 0.5rem;">
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">A</span>
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">B</span>
+          <span class="sh-label" style="margin-left: 0.5rem;">gap-entity (4px)</span>
+        </div>
+        <div class="sh-gap-related" style="display: flex; background: var(--bg-inset); padding: 0.5rem;">
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">A</span>
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">B</span>
+          <span class="sh-label" style="margin-left: 0.5rem;">gap-related (8px)</span>
+        </div>
+        <div class="sh-gap-group" style="display: flex; background: var(--bg-inset); padding: 0.5rem;">
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">A</span>
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">B</span>
+          <span class="sh-label" style="margin-left: 0.5rem;">gap-group (16px)</span>
+        </div>
+        <div class="sh-gap-section" style="display: flex; background: var(--bg-inset); padding: 0.5rem;">
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">A</span>
+          <span style="background: var(--sh-phosphor); color: var(--bg-base); padding: 0.25rem;">B</span>
+          <span class="sh-label" style="margin-left: 0.5rem;">gap-section (24px)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Grid Layout</div>
+      <div class="sh-grid sh-grid-3" style="margin-bottom: 1rem;">
+        <div style="background: var(--bg-surface-raised); padding: 1rem; text-align: center;">Col 1</div>
+        <div style="background: var(--bg-surface-raised); padding: 1rem; text-align: center;">Col 2</div>
+        <div style="background: var(--bg-surface-raised); padding: 1rem; text-align: center;">Col 3</div>
+      </div>
+      <div class="label" style="margin-bottom: 0.75rem;">Prompt Prefixes</div>
+      <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <div class="sh-prompt">ls -la /var/log</div>
+        <div class="sh-prompt-root">systemctl restart nginx</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. SIGNAL DEGRADATION -->
+  <h2>[ SIGNAL DEGRADATION ]</h2>
+  <section>
+    <div class="card" id="signal-card" style="min-height: 80px;">
+      <div class="label">Telemetry Feed</div>
+      <div class="value">Sensor Array 7</div>
+      <div style="margin-top: 0.5rem; color: var(--text-secondary);">Jitter + noise overlay + desaturation</div>
+      <button onclick="toggleSignal()">Toggle .sh-signal-degraded</button>
+    </div>
+  </section>
+
+  <!-- 4. INTERLACE -->
+  <h2>[ INTERLACE ]</h2>
+  <section>
+    <div class="card" id="interlace-card" style="min-height: 80px;">
+      <div class="label">Display Output</div>
+      <div class="value">CRT Scanline Effect</div>
+      <div style="margin-top: 0.5rem; color: var(--text-secondary);">Horizontal line overlay simulating interlaced display</div>
+      <button onclick="toggleInterlace()">Toggle .sh-interlace</button>
+    </div>
+  </section>
+
+  <!-- 5. BURN-IN -->
+  <h2>[ BURN-IN ]</h2>
+  <section>
+    <div class="card" data-sh-burn-in="SYSTEMS" style="min-height: 120px;">
+      <div class="label">Persistent Display</div>
+      <div class="value">Active Content Here</div>
+      <div style="margin-top: 0.5rem; color: var(--text-secondary);">Ghost text "SYSTEMS" burned into the panel via data-sh-burn-in attribute</div>
+    </div>
+    <div class="card" data-sh-burn-in="OFFLINE" style="min-height: 120px;">
+      <div class="label">Disconnected Terminal</div>
+      <div class="value">No Signal</div>
+      <div style="margin-top: 0.5rem; color: var(--text-secondary);">Ghost text "OFFLINE" — low opacity, sepia filter, screen blend mode</div>
+    </div>
+  </section>
+
+  <!-- 6. THRESHOLD BAR -->
+  <h2>[ THRESHOLD BAR ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Drag slider to see glow auto-apply at 60% / 80% / 90%</div>
+      <input type="range" min="0" max="100" value="0" id="threshold-slider">
+      <div class="sh-threshold-bar" id="threshold-bar" style="--sh-fill: 0; margin: 1rem 0;"></div>
+      <div style="display: flex; justify-content: space-between;">
+        <span class="label" id="threshold-pct">0%</span>
+        <span class="label" id="threshold-level">calm</span>
+      </div>
+      <div class="label" style="margin-top: 1rem; margin-bottom: 0.5rem;">Static examples</div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <div>
+          <span class="label">40% — calm (no glow)</span>
+          <div class="sh-threshold-bar" style="--sh-fill: 40;"></div>
+        </div>
+        <div>
+          <span class="label">65% — ambient (phosphor)</span>
+          <div class="sh-threshold-bar sh-glow-ambient" style="--sh-fill: 65;"></div>
+        </div>
+        <div>
+          <span class="label">85% — standard (warning)</span>
+          <div class="sh-threshold-bar sh-glow-standard" style="--sh-fill: 85;"></div>
+        </div>
+        <div>
+          <span class="label">95% — critical (threat)</span>
+          <div class="sh-threshold-bar sh-glow-critical" style="--sh-fill: 95;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. BOOT SEQUENCE -->
+  <h2>[ BOOT SEQUENCE ]</h2>
+  <section>
+    <div class="card">
+      <button onclick="triggerBoot()">BOOT</button>
+      <div id="boot-container" class="sh-boot-container" style="margin-top: 1rem; min-height: 6em;"></div>
+    </div>
+  </section>
+
+  <!-- 8. TERMINAL CHROME -->
+  <h2>[ TERMINAL CHROME ]</h2>
+  <section>
+    <div class="row">
+      <div class="card" data-sh-monitor="amber">
+        <div class="label">Phosphor: Amber</div>
+        <div style="color: var(--sh-phosphor); font-size: 1.5rem; margin: 0.5rem 0;">data-sh-monitor="amber"</div>
+        <div style="color: var(--sh-phosphor);">All phosphor-colored elements shift to amber</div>
+      </div>
+      <div class="card" data-sh-monitor="green">
+        <div class="label">Phosphor: Green</div>
+        <div style="color: var(--sh-phosphor); font-size: 1.5rem; margin: 0.5rem 0;">data-sh-monitor="green"</div>
+        <div style="color: var(--sh-phosphor);">Classic green-screen terminal</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Collapsible Section</div>
+      <div class="sh-collapsible" id="demo-collapsible" data-sh-open="false">
+        <div class="sh-collapsible-summary" onclick="toggleCollapsible()">System Details</div>
+        <div class="sh-collapsible-content" style="padding: 0.5rem 0;">
+          <div style="color: var(--text-secondary);">CPU: 12 cores @ 3.4GHz</div>
+          <div style="color: var(--text-secondary);">RAM: 32GB DDR5</div>
+          <div style="color: var(--text-secondary);">GPU: RTX 4090 24GB</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Terminal Grid (box-drawing characters)</div>
+      <div class="sh-terminal-grid" style="color: var(--sh-phosphor);">&#x250C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x252C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x252C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2510;
+&#x2502; ENTITY       &#x2502; STATE &#x2502; UPTIME &#x2502;
+&#x251C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x253C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x253C;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2524;
+&#x2502; light.office  &#x2502;  ON   &#x2502;  4h 12m&#x2502;
+&#x2502; sensor.temp   &#x2502;  72F  &#x2502; 12h 03m&#x2502;
+&#x2502; switch.garage &#x2502;  OFF  &#x2502;  0h 44m&#x2502;
+&#x2514;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2534;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2500;&#x2518;</div>
+    </div>
+  </section>
+
+  <!-- 9. HARDWARE CAPABILITY -->
+  <h2>[ HARDWARE CAPABILITY ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Set data-sh-capability on document root to control animation tiers</div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <button onclick="setCapability('full')">Full</button>
+        <button onclick="setCapability('medium')">Medium</button>
+        <button onclick="setCapability('low')">Low</button>
+        <button onclick="setCapability('minimal')">Minimal</button>
+        <button onclick="setCapability(null)">Remove</button>
+      </div>
+      <div class="label" id="capability-current" style="margin-bottom: 0.75rem;">Current: (none)</div>
+      <div id="capability-demo" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div class="sh-t1-pulse-ring" style="width: 60px; height: 60px; border-radius: 50%; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">
+          <span class="sh-label">T1</span>
+        </div>
+        <div class="sh-interlace" style="width: 120px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">
+          <span class="sh-label">Interlace</span>
+        </div>
+        <div class="sh-signal-degraded" style="width: 120px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">
+          <span class="sh-label">Signal</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. MODAL (static HTML) -->
+  <h2>[ MODAL — static CSS structure ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Preact component required for interactive use. CSS classes shown here.</div>
+      <button onclick="toggleModal()">Show Modal</button>
+    </div>
+    <div class="sh-modal-overlay" id="demo-modal" style="display: none;">
+      <div class="sh-modal">
+        <div class="sh-modal-title">System Interrupt</div>
+        <div class="sh-modal-body">Confirm destructive action: purge all stale entities from registry. This cannot be undone.</div>
+        <div class="sh-modal-actions">
+          <button class="sh-modal-action" onclick="toggleModal()">Cancel</button>
+          <button class="sh-modal-action sh-modal-action--confirm" onclick="toggleModal()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. INCIDENT HUD -->
+  <h2>[ INCIDENT HUD — system-wide banners ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Normally fixed to top of viewport. Shown inline for demo.</div>
+      <div class="sh-incident-hud sh-incident-hud--warning" style="position: relative; margin-bottom: 1rem; animation: none;">
+        <span class="sh-incident-hud-message">Network degradation detected — 3 sensors offline</span>
+        <span class="sh-incident-hud-time">14:32:07</span>
+        <button class="sh-incident-hud-action">Acknowledge</button>
+      </div>
+      <div class="sh-incident-hud sh-incident-hud--critical" style="position: relative; animation: none;">
+        <span class="sh-incident-hud-message">Power failure — UPS on battery — estimated 8 min runtime</span>
+        <span class="sh-incident-hud-time">14:35:22</span>
+        <button class="sh-incident-hud-action">Acknowledge</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. ANIMATION TIERS -->
+  <h2>[ ANIMATION TIERS ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">T1: Ambient — always-on decorative</div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <div class="sh-t1-scan-sweep" style="width: 200px; height: 4px; background: var(--bg-surface-raised); position: relative; overflow: hidden;">
+          <div style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, var(--sh-phosphor), transparent);"></div>
+        </div>
+        <span class="sh-label">scan-sweep</span>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <div class="sh-t1-grid-pulse" style="width: 40px; height: 40px; background: var(--bg-surface-raised); border: 1px solid var(--border-subtle);"></div>
+        <span class="sh-label">grid-pulse</span>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem;">
+        <div class="sh-t1-data-stream" style="padding: 0.25rem 0.5rem; color: var(--sh-phosphor);">42.7</div>
+        <span class="sh-label">data-stream</span>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <div class="sh-t1-pulse-ring" style="width: 40px; height: 40px; border-radius: 50%; background: var(--bg-surface-raised);"></div>
+        <span class="sh-label">pulse-ring</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">T2: Data Refresh — one-shot on data update</div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+        <button onclick="triggerT2('typewriter')">Typewriter</button>
+        <button onclick="triggerT2('tick-flash')">Tick Flash</button>
+        <button onclick="triggerT2('bar-grow')">Bar Grow</button>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1rem; align-items: flex-end; height: 60px;">
+        <div id="t2-typewriter" style="color: var(--sh-phosphor);">847 W</div>
+        <div id="t2-tick-flash" style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">OK</div>
+        <div id="t2-bar-grow" style="width: 30px; height: 50px; background: var(--sh-phosphor); transform-origin: bottom;"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">T3: Status Alert — strongest attention, auto-expires</div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <button onclick="triggerT3('orange-pulse')">Orange Pulse</button>
+        <button onclick="triggerT3('border-alert')">Border Alert</button>
+        <button onclick="triggerT3('badge-appear')">Badge Appear</button>
+        <button onclick="triggerT3('counter-bump')">Counter Bump</button>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1rem; align-items: center;">
+        <div id="t3-orange-pulse" style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center; border-radius: var(--radius);">!</div>
+        <div id="t3-border-alert" style="padding: 0.5rem 1rem; background: var(--bg-surface-raised); border-left: 3px solid var(--border-subtle);">Alert</div>
+        <div id="t3-badge-appear" style="padding: 0.25rem 0.5rem; background: var(--sh-threat); color: var(--sh-bright); border-radius: var(--radius);">3</div>
+        <div id="t3-counter-bump" style="font-size: 1.5rem; font-weight: bold; color: var(--sh-phosphor);">42</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. GLOW HIERARCHY (Threshold Bar variants) -->
+  <h2>[ GLOW HIERARCHY ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Threshold bar glow classes — applied via applyThreshold()</div>
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div>
+          <div class="label" style="margin-bottom: 0.25rem;">No glow (below 60%)</div>
+          <div class="sh-threshold-bar" style="--sh-fill: 45; height: 10px;"></div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom: 0.25rem;">.sh-glow-ambient — phosphor (60%+)</div>
+          <div class="sh-threshold-bar sh-glow-ambient" style="--sh-fill: 70; height: 10px;"></div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom: 0.25rem;">.sh-glow-standard — warning (80%+)</div>
+          <div class="sh-threshold-bar sh-glow-standard" style="--sh-fill: 85; height: 10px;"></div>
+        </div>
+        <div>
+          <div class="label" style="margin-bottom: 0.25rem;">.sh-glow-critical — threat (90%+)</div>
+          <div class="sh-threshold-bar sh-glow-critical" style="--sh-fill: 95; height: 10px;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. FRAME SYSTEM -->
+  <h2>[ FRAME SYSTEM ]</h2>
+  <section>
+    <div class="sh-frame" data-label="System Overview" data-footer="Last sync: 2m ago" style="margin-bottom: 1rem;">
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <div><span class="sh-label">Entities</span> <span class="sh-value">3,047</span></div>
+        <div><span class="sh-label">Active</span> <span class="sh-value">2,891</span></div>
+        <div><span class="sh-label">Stale</span> <span class="sh-value">156</span></div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom: 1rem;">
+      <div class="sh-card" style="padding: 1rem;">
+        <div class="label">.sh-card</div>
+        <div style="margin-top: 0.5rem;">Simple container — no label system. Hover for border highlight.</div>
+      </div>
+      <div class="sh-callout" style="padding: 1rem;">
+        <div class="label">.sh-callout</div>
+        <div style="margin-top: 0.5rem;">Info box with accent left border.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Bracket Labels + Status Pills</div>
+      <div class="demo-row">
+        <span class="sh-bracket">system</span>
+        <span class="sh-bracket">queue</span>
+        <span class="sh-bracket">network</span>
+      </div>
+      <div class="demo-row" style="margin-top: 0.75rem;">
+        <span class="sh-status-pill sh-status-pill--healthy">healthy</span>
+        <span class="sh-status-pill sh-status-pill--warning">warning</span>
+        <span class="sh-status-pill sh-status-pill--error">error</span>
+        <span class="sh-status-pill sh-status-pill--waiting">waiting</span>
+        <span class="sh-status-pill sh-status-pill--active">active</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Cursor States</div>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div><span class="sh-cursor-active">Active cursor</span> <span class="sh-label" style="margin-left: 1rem;">.sh-cursor-active (1s blink)</span></div>
+        <div><span class="sh-cursor-working">Working cursor</span> <span class="sh-label" style="margin-left: 1rem;">.sh-cursor-working (0.5s blink)</span></div>
+        <div><span class="sh-cursor-idle">Idle cursor</span> <span class="sh-label" style="margin-left: 1rem;">.sh-cursor-idle (2s blink)</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Additional Frame Utilities</div>
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div class="sh-section-header" style="padding-bottom: 0.5rem; position: relative; overflow: hidden;">
+          <span>.sh-section-header — animated bottom border sweep</span>
+        </div>
+        <div class="sh-terminal-bg" style="padding: 1rem; margin-top: 0.5rem;">
+          <span>.sh-terminal-bg — CRT scanline background texture</span>
+        </div>
+        <div>
+          <span class="sh-clickable" style="display: inline-block; padding: 0.5rem;">.sh-clickable — hover for accent left border</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. PAGE ANIMATIONS -->
+  <h2>[ PAGE ANIMATIONS ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.75rem;">Page Enter + Data Refresh + Stagger Children</div>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
+        <button onclick="triggerPageEnter()">Page Enter</button>
+        <button onclick="triggerDataRefresh()">Data Refresh</button>
+        <button onclick="triggerStagger()">Stagger Children</button>
+      </div>
+      <div id="page-anim-target" style="display: flex; gap: 0.5rem;">
+        <div style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">1</div>
+        <div style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">2</div>
+        <div style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">3</div>
+        <div style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">4</div>
+        <div style="width: 60px; height: 60px; background: var(--bg-surface-raised); display: flex; align-items: center; justify-content: center;">5</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. CRT OVERLAY -->
+  <h2>[ CRT OVERLAY ]</h2>
+  <section>
+    <div class="card">
+      <div class="label" style="margin-bottom: 0.5rem;">Full-page CRT scanline overlay is active on this page</div>
+      <div style="color: var(--text-secondary);">The .sh-crt-overlay div is positioned fixed over the entire viewport. Look closely at the screen to see faint horizontal scanlines.</div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       MISSING EFFECTS (12 additional sections)
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- 17. SYSTEM CORRUPTION -->
+  <h2>[ SYSTEM CORRUPTION ]</h2>
+  <div class="card sh-system-corrupted" id="corruption-demo" style="min-height: 80px;">
+    <p>This container is experiencing system-level corruption glitches.</p>
+  </div>
+  <button onclick="document.getElementById('corruption-demo').classList.toggle('sh-system-corrupted')">TOGGLE CORRUPTION</button>
+
+  <!-- 18. EVENT TIMELINE -->
+  <h2>[ EVENT TIMELINE ]</h2>
+  <div class="sh-event-timeline">
+    <div class="sh-event-item sh-event-item--success">
+      <span class="sh-event-item-time">14:23:07</span>
+      <span class="sh-event-item-label">DEPLOY COMPLETE</span>
+      <div class="sh-event-item-detail">v2.1.0 rolled out to production</div>
+    </div>
+    <div class="sh-event-item sh-event-item--warning">
+      <span class="sh-event-item-time">14:22:51</span>
+      <span class="sh-event-item-label">LATENCY SPIKE</span>
+      <div class="sh-event-item-detail">P99 exceeded 500ms threshold</div>
+    </div>
+    <div class="sh-event-item sh-event-item--error">
+      <span class="sh-event-item-time">14:20:03</span>
+      <span class="sh-event-item-label">SERVICE FAULT</span>
+      <div class="sh-event-item-detail">Backend connection refused</div>
+    </div>
+    <div class="sh-event-item">
+      <span class="sh-event-item-time">14:18:44</span>
+      <span class="sh-event-item-label">DEPLOY STARTED</span>
+    </div>
+  </div>
+
+  <!-- 19. PROGRESS STEPS -->
+  <h2>[ PROGRESS STEPS ]</h2>
+  <div class="sh-progress-steps">
+    <span class="sh-progress-step sh-progress-step--complete"><span class="sh-progress-step-number">1</span> BUILD</span>
+    <span class="sh-progress-step sh-progress-step--complete"><span class="sh-progress-step-number">2</span> TEST</span>
+    <span class="sh-progress-step sh-progress-step--current"><span class="sh-progress-step-number">3</span> DEPLOY</span>
+    <span class="sh-progress-step"><span class="sh-progress-step-number">4</span> VERIFY</span>
+    <span class="sh-progress-step"><span class="sh-progress-step-number">5</span> MONITOR</span>
+  </div>
+
+  <!-- 20. FILTER PANEL -->
+  <h2>[ FILTER PANEL ]</h2>
+  <div class="sh-filter-panel" style="max-width: 300px;">
+    <div class="sh-filter-group">
+      <div class="sh-filter-group-label">STATUS</div>
+      <span class="sh-filter-chip sh-filter-chip--active">HEALTHY</span>
+      <span class="sh-filter-chip">ERROR</span>
+      <span class="sh-filter-chip sh-filter-chip--active">WARNING</span>
+      <span class="sh-filter-chip">WAITING</span>
+    </div>
+    <div class="sh-filter-group">
+      <div class="sh-filter-group-label">ENVIRONMENT</div>
+      <span class="sh-filter-chip sh-filter-chip--active">PRODUCTION</span>
+      <span class="sh-filter-chip">STAGING</span>
+    </div>
+  </div>
+
+  <!-- 21. SIGNAL STRENGTH -->
+  <h2>[ SIGNAL STRENGTH ]</h2>
+  <div style="display: flex; gap: 2rem; align-items: center;">
+    <div><span class="sh-label">CRITICAL</span> <span class="sh-signal-bars" data-sh-signal="1"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">POOR</span> <span class="sh-signal-bars" data-sh-signal="2"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">FAIR</span> <span class="sh-signal-bars" data-sh-signal="3"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">GOOD</span> <span class="sh-signal-bars" data-sh-signal="4"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">EXCELLENT</span> <span class="sh-signal-bars" data-sh-signal="5"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+  </div>
+
+  <!-- 22. LOG VIEWER -->
+  <h2>[ LOG VIEWER ]</h2>
+  <div class="sh-log">
+<span class="sh-log-timestamp">14:23:07</span> <span class="sh-log-level--error">ERROR</span> Connection refused: backend:5432
+<span class="sh-log-timestamp">14:23:06</span> <span class="sh-log-level--warn">WARN</span>  Retry attempt 3/5 for database connection
+<span class="sh-log-timestamp">14:23:05</span> <span class="sh-log-level--info">INFO</span>  Health check initiated
+<span class="sh-log-timestamp">14:23:04</span> <span class="sh-log-level--debug">DEBUG</span> Query cache miss: users/auth/session
+  </div>
+
+  <!-- 23. CODE BLOCK -->
+  <h2>[ CODE BLOCK ]</h2>
+  <div class="sh-code">import { orchestrateEscalation } from "superhot-ui";
+
+const esc = orchestrateEscalation({
+  surfaces: { component: [cardEl], layout: [rootEl] },
+  sounds: true,
+});
+esc.start();</div>
+
+  <!-- 24. TOOLTIP -->
+  <h2>[ TOOLTIP ]</h2>
+  <div style="display: flex; gap: 2rem;">
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Service is responding normally" style="--pill-color: var(--sh-phosphor)">HEALTHY</span>
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Response time exceeding threshold" style="--pill-color: var(--status-warning)">WARNING</span>
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Service is not responding" style="--pill-color: var(--sh-threat)">ERROR</span>
+  </div>
+
+  <!-- 25. BREADCRUMB -->
+  <h2>[ BREADCRUMB ]</h2>
+  <div class="sh-breadcrumb">
+    <span class="sh-breadcrumb-item">SYSTEMS</span>
+    <span class="sh-breadcrumb-separator"></span>
+    <span class="sh-breadcrumb-item">BACKEND</span>
+    <span class="sh-breadcrumb-separator"></span>
+    <span class="sh-breadcrumb-item">DATABASE</span>
+  </div>
+
+  <!-- 26. UTILITY EFFECTS -->
+  <h2>[ UTILITY EFFECTS ]</h2>
+  <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;">
+    <div><span class="sh-label">DELTA UP</span> <span class="sh-delta sh-delta--up">12%</span></div>
+    <div><span class="sh-label">DELTA DOWN</span> <span class="sh-delta sh-delta--down">3%</span></div>
+    <div><span class="sh-label">DELTA FLAT</span> <span class="sh-delta sh-delta--flat">0%</span></div>
+    <div><span class="sh-label">BADGE</span> <span class="sh-badge-count">7</span></div>
+    <div><span class="sh-label">LOADING</span> <span class="sh-loading-dots">PROCESSING</span></div>
+    <div><span class="sh-label">DIVIDER</span></div>
+  </div>
+  <hr class="sh-divider" data-sh-divider-label="SECTION BOUNDARY">
+  <div style="display: flex; gap: 2rem;">
+    <span class="sh-kbd">Ctrl+K</span>
+    <span class="sh-kbd">Esc</span>
+    <span class="sh-kbd">Enter</span>
+  </div>
+
+  <!-- 27. CELEBRATION -->
+  <h2>[ CELEBRATION ]</h2>
+  <div class="card" id="celebration-container" style="min-height: 100px; position: relative;">
+    <div class="sh-frame" data-label="SYSTEM STATUS">
+      <span class="sh-value">ALL CLEAR</span>
+    </div>
+  </div>
+  <button onclick="celebrationSequence(document.getElementById('celebration-container'), { text: 'RESTORED', duration: 3000 })">TRIGGER CELEBRATION</button>
+
+  <!-- 28. FORM ELEMENTS -->
+  <h2>[ FORM ELEMENTS ]</h2>
+  <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+    <input class="sh-input" placeholder="SEARCH..." style="width: 200px;">
+    <select class="sh-select"><option>OPTION 1</option><option>OPTION 2</option></select>
+    <label class="sh-toggle" data-sh-on="true" onclick="this.setAttribute('data-sh-on', this.getAttribute('data-sh-on') === 'true' ? 'false' : 'true')">
+      <span class="sh-toggle-indicator">ON</span> CRT MODE
+    </label>
+  </div>
+  <div style="margin-top: 1rem;">
+    <div class="sh-tabs">
+      <span class="sh-tab sh-tab--active">QUEUE</span>
+      <span class="sh-tab">LOGS</span>
+      <span class="sh-tab">CONFIG</span>
+    </div>
+  </div>
+
   <script type="module">
     import { applyFreshness } from '../js/freshness.js';
     import { shatterElement } from '../js/shatter.js';
     import { glitchText } from '../js/glitch.js';
     import { applyMantra, removeMantra } from '../js/mantra.js';
+    import { bootSequence } from '../js/boot.js';
+    import { applyThreshold } from '../js/threshold.js';
+    import { detectCapability, applyCapability } from '../js/hardware.js';
+    import { celebrationSequence } from '../js/celebration.js';
 
     window.applyFreshness = applyFreshness;
     window.shatterElement = shatterElement;
     window.glitchText = glitchText;
     window.applyMantra = applyMantra;
     window.removeMantra = removeMantra;
+    window.celebrationSequence = celebrationSequence;
 
+    // ── Live Freshness ──
     let liveTimestamp = Date.now();
     const liveCard = document.getElementById('live-card');
     const liveValue = document.getElementById('live-value');
@@ -227,16 +904,19 @@
     setInterval(updateLive, 1000);
     updateLive();
 
+    // ── Threat Pulse ──
     window.triggerThreat = () => {
       const card = document.getElementById('threat-card');
       card.setAttribute('data-sh-effect', 'threat-pulse');
       setTimeout(() => card.removeAttribute('data-sh-effect'), 3000);
     };
 
+    // ── Glitch ──
     window.triggerGlitch = (intensity) => {
       glitchText(document.getElementById('glitch-target'), { intensity, duration: 600 });
     };
 
+    // ── Mantra ──
     let mantraOn = false;
     window.toggleMantra = () => {
       const card = document.getElementById('mantra-card');
@@ -245,18 +925,41 @@
       else removeMantra(card);
     };
 
-    const shatterHTML = document.getElementById('shatter-card').outerHTML;
+    // ── Shatter ──
     window.triggerShatter = () => {
       const card = document.getElementById('shatter-card');
       if (card) shatterElement(card, { fragments: 6 });
     };
     window.resetShatter = () => {
       const container = document.getElementById('shatter-container');
-      // shatter-card is a static demo element — safe to restore via outerHTML
-      container.innerHTML = shatterHTML;
+      // Remove existing content safely
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+      // Rebuild the card using safe DOM methods
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'shatter-card';
+
+      const labelDiv = document.createElement('div');
+      labelDiv.className = 'label';
+      labelDiv.textContent = 'Resolved Alert';
+      card.appendChild(labelDiv);
+
+      const valueDiv = document.createElement('div');
+      valueDiv.className = 'value';
+      valueDiv.textContent = 'Motion detected in garage';
+      card.appendChild(valueDiv);
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Dismiss (Shatter)';
+      btn.addEventListener('click', () => window.triggerShatter());
+      card.appendChild(btn);
+
+      container.appendChild(card);
     };
 
-    // VRAM slider live demo
+    // ── VRAM slider ──
     const vramSlider = document.getElementById('vram-slider');
     const vramLive = document.getElementById('vram-live');
     const vramPct = document.getElementById('vram-pct');
@@ -268,7 +971,7 @@
       });
     }
 
-    // Toast demo — uses safe DOM methods (no innerHTML)
+    // ── Toast ──
     window.showToast = (type, message) => {
       const container = document.getElementById('toast-container');
       if (!container) return;
@@ -296,12 +999,127 @@
       el.appendChild(msgSpan);
       container.appendChild(el);
 
-      // Auto-dismiss info/warn after 3s; error toasts require click to dismiss
       if (type !== 'error') {
         setTimeout(() => shatterElement(el, { onComplete: () => el.remove() }), 3000);
       } else {
         el.addEventListener('click', () => shatterElement(el, { onComplete: () => el.remove() }));
       }
+    };
+
+    // ── Signal Degradation ──
+    window.toggleSignal = () => {
+      document.getElementById('signal-card').classList.toggle('sh-signal-degraded');
+    };
+
+    // ── Interlace ──
+    window.toggleInterlace = () => {
+      document.getElementById('interlace-card').classList.toggle('sh-interlace');
+    };
+
+    // ── Threshold Bar ──
+    const thresholdSlider = document.getElementById('threshold-slider');
+    const thresholdBar = document.getElementById('threshold-bar');
+    const thresholdPctEl = document.getElementById('threshold-pct');
+    const thresholdLevelEl = document.getElementById('threshold-level');
+    if (thresholdSlider) {
+      thresholdSlider.addEventListener('input', () => {
+        const val = Number(thresholdSlider.value);
+        thresholdBar.style.setProperty('--sh-fill', val);
+        thresholdPctEl.textContent = `${val}%`;
+        const level = applyThreshold(thresholdBar, val);
+        thresholdLevelEl.textContent = level;
+      });
+    }
+
+    // ── Boot Sequence ──
+    let bootCleanup = null;
+    window.triggerBoot = () => {
+      if (bootCleanup) bootCleanup();
+      const container = document.getElementById('boot-container');
+      bootCleanup = bootSequence(container, [
+        '[  OK  ] Initializing kernel modules...',
+        '[  OK  ] Mounting /dev/sensors (3,047 entities)',
+        '[ WARN ] Stale cache detected — rebuilding index',
+        '[  OK  ] SUPERHOT UI v2.0 — SYSTEM READY'
+      ]);
+    };
+
+    // ── Collapsible ──
+    window.toggleCollapsible = () => {
+      const el = document.getElementById('demo-collapsible');
+      const isOpen = el.getAttribute('data-sh-open') === 'true';
+      el.setAttribute('data-sh-open', isOpen ? 'false' : 'true');
+    };
+
+    // ── Hardware Capability ──
+    window.setCapability = (tier) => {
+      const label = document.getElementById('capability-current');
+      if (tier === null) {
+        document.documentElement.removeAttribute('data-sh-capability');
+        label.textContent = 'Current: (none)';
+      } else {
+        applyCapability(tier);
+        label.textContent = `Current: ${tier}`;
+      }
+    };
+
+    // ── Modal ──
+    window.toggleModal = () => {
+      const modal = document.getElementById('demo-modal');
+      if (modal.style.display === 'none') {
+        modal.style.display = 'flex';
+      } else {
+        modal.style.display = 'none';
+      }
+    };
+
+    // ── Animation Tiers: T2 ──
+    window.triggerT2 = (type) => {
+      const el = document.getElementById(`t2-${type}`);
+      if (!el) return;
+      const cls = `sh-t2-${type}`;
+      el.classList.remove(cls);
+      // Force reflow to restart animation
+      void el.offsetWidth;
+      el.classList.add(cls);
+      el.addEventListener('animationend', () => el.classList.remove(cls), { once: true });
+    };
+
+    // ── Animation Tiers: T3 ──
+    window.triggerT3 = (type) => {
+      const el = document.getElementById(`t3-${type}`);
+      if (!el) return;
+      const cls = `sh-t3-${type}`;
+      el.classList.remove(cls);
+      void el.offsetWidth;
+      el.classList.add(cls);
+      el.addEventListener('animationend', () => el.classList.remove(cls), { once: true });
+    };
+
+    // ── Page Animations ──
+    window.triggerPageEnter = () => {
+      const target = document.getElementById('page-anim-target');
+      target.classList.remove('sh-animate-page-enter');
+      void target.offsetWidth;
+      target.classList.add('sh-animate-page-enter');
+      target.addEventListener('animationend', () => target.classList.remove('sh-animate-page-enter'), { once: true });
+    };
+
+    window.triggerDataRefresh = () => {
+      const target = document.getElementById('page-anim-target');
+      target.classList.remove('sh-animate-data-refresh');
+      void target.offsetWidth;
+      target.classList.add('sh-animate-data-refresh');
+      target.addEventListener('animationend', () => target.classList.remove('sh-animate-data-refresh'), { once: true });
+    };
+
+    window.triggerStagger = () => {
+      const target = document.getElementById('page-anim-target');
+      target.classList.remove('sh-stagger-children');
+      void target.offsetWidth;
+      target.classList.add('sh-stagger-children');
+      // Remove after last child animates (~0.5s delay + 0.4s duration)
+      setTimeout(() => target.classList.remove('sh-stagger-children'), 1200);
     };
   </script>
 </body>

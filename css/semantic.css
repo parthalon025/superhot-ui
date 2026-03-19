@@ -12,20 +12,30 @@
      SURFACES
      ───────────────────────────────────────── */
 
+  --bg-base: #0f0f0f;
   --bg-base: oklch(0.06 0 0); /* near-black void — page background */
+  --bg-surface: #1a1a1a;
   --bg-surface: oklch(0.1 0 0); /* cards, panels */
+  --bg-surface-raised: #242424;
   --bg-surface-raised: oklch(0.14 0 0); /* elevated cards, dropdowns */
+  --bg-inset: #080808;
   --bg-inset: oklch(0.04 0 0); /* inset wells, code blocks */
+  --bg-overlay: rgba(18, 18, 18, 0.92);
   --bg-overlay: oklch(0.08 0 0 / 0.92); /* modal backdrop */
+  --bg-elevated: #2a2a2a;
   --bg-elevated: oklch(0.16 0 0); /* highest surface layer */
 
   /* ─────────────────────────────────────────
      PRIMARY COLOR (threat red)
      ───────────────────────────────────────── */
 
+  --color-primary: #dc2626;
   --color-primary: oklch(0.58 0.25 25);
+  --color-primary-hover: #ef4444;
   --color-primary-hover: oklch(0.63 0.25 25);
+  --color-primary-active: #b91c1c;
   --color-primary-active: oklch(0.52 0.25 25);
+  --color-primary-subtle: rgba(220, 38, 38, 0.12);
   --color-primary-subtle: oklch(0.58 0.25 25 / 0.12);
 
   /* ─────────────────────────────────────────
@@ -33,31 +43,44 @@
      ───────────────────────────────────────── */
 
   --color-secondary: var(--sh-phosphor);
+  --color-secondary-hover: #22d3ee;
   --color-secondary-hover: oklch(0.9 0.18 195);
+  --color-secondary-active: #06b6d4;
   --color-secondary-active: oklch(0.75 0.18 195);
+  --color-secondary-subtle: rgba(0, 212, 255, 0.12);
   --color-secondary-subtle: oklch(0.85 0.18 195 / 0.12);
 
   /* ─────────────────────────────────────────
      TEXT
      ───────────────────────────────────────── */
 
+  --text-primary: #eeeeee;
   --text-primary: oklch(0.95 0 0);
+  --text-secondary: #a3a3a3;
   --text-secondary: oklch(0.72 0 0);
+  --text-tertiary: #6b6b6b;
   --text-tertiary: oklch(0.52 0 0);
   --text-accent: var(--color-primary);
+  --text-inverse: #0f0f0f;
   --text-inverse: oklch(0.06 0 0); /* dark text on light surfaces */
+  --text-muted: #484848;
   --text-muted: oklch(0.4 0 0);
+  --text-disabled: #303030;
   --text-disabled: oklch(0.3 0 0);
 
   /* ─────────────────────────────────────────
      BORDERS
      ───────────────────────────────────────── */
 
+  --border-subtle: #1f1210;
   --border-subtle: oklch(0.15 0.02 25); /* very faint red tint */
+  --border-primary: #2e1614;
   --border-primary: oklch(0.22 0.04 25); /* standard border */
   --border-accent: var(--color-primary);
   --border-focus: var(--color-primary);
+  --border-default: #261412;
   --border-default: oklch(0.18 0.02 25);
+  --border-hover: #45201c;
   --border-hover: oklch(0.28 0.06 25);
   --border-error: var(--color-primary);
 
@@ -71,7 +94,9 @@
   --status-error: var(--sh-threat);
   --status-healthy: var(--sh-phosphor);
   --status-success: var(--sh-phosphor);
+  --status-warning: #f59e0b;
   --status-warning: oklch(0.72 0.18 55); /* amber */
+  --status-waiting: #3b3b3b;
   --status-waiting: oklch(0.35 0 0); /* dim grey */
   --status-active: var(--sh-phosphor);
   --status-ok: var(--sh-phosphor);
@@ -80,11 +105,14 @@
   --status-error-glow: var(--sh-threat-glow);
   --status-healthy-glow: var(--sh-phosphor-glow);
   --status-success-glow: var(--sh-phosphor-glow);
+  --status-warning-glow: rgba(245, 158, 11, 0.2);
   --status-warning-glow: oklch(0.72 0.18 55 / 0.2);
   --status-active-glow: var(--sh-phosphor-glow);
 
   /* Shorthand aliases for common patterns */
+  --status-warn: #f59e0b;
   --status-warn: oklch(0.72 0.18 55);
+  --status-warn-text: #fbbf24;
   --status-warn-text: oklch(0.8 0.18 55);
 
   /* ─────────────────────────────────────────
@@ -166,12 +194,18 @@
      SHADOWS — deep black + faint threat red glow
      ───────────────────────────────────────── */
 
+  --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.7);
   --shadow-sm: 0 1px 4px oklch(0 0 0 / 0.7);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.8);
   --shadow-md: 0 2px 8px oklch(0 0 0 / 0.8);
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.9);
   --shadow-lg: 0 4px 20px oklch(0 0 0 / 0.9);
+  --shadow-glow: 0 0 16px rgba(220, 38, 38, 0.5);
   --shadow-glow: 0 0 16px oklch(0.58 0.25 25 / 0.5);
 
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.8), 0 0 1px rgba(220, 38, 38, 0.2);
   --card-shadow: 0 2px 8px oklch(0 0 0 / 0.8), 0 0 1px oklch(0.58 0.25 25 / 0.2);
+  --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.9), 0 0 8px rgba(220, 38, 38, 0.25);
   --card-shadow-hover: 0 4px 16px oklch(0 0 0 / 0.9), 0 0 8px oklch(0.58 0.25 25 / 0.25);
 
   /* ─────────────────────────────────────────
@@ -214,8 +248,10 @@
      DISABLED STATES
      ───────────────────────────────────────── */
 
+  --disabled-bg: #161616;
   --disabled-bg: oklch(0.12 0 0);
   --disabled-text: var(--text-disabled);
+  --disabled-border: #1e1e1e;
   --disabled-border: oklch(0.15 0 0);
   --disabled-opacity: 0.4;
 
@@ -234,6 +270,7 @@
   --focus-ring-offset: 0 0 0 4px var(--bg-base);
 
   /* Selection */
+  --selection-bg: rgba(220, 38, 38, 0.3);
   --selection-bg: oklch(0.58 0.25 25 / 0.3);
   --selection-text: var(--text-primary);
 
@@ -250,11 +287,58 @@
   --badge-padding: 0 var(--space-2);
 
   /* Table */
+  --table-row-hover-bg: #1a1210;
   --table-row-hover-bg: oklch(0.12 0.01 25);
+  --table-row-stripe-bg: #121212;
   --table-row-stripe-bg: oklch(0.08 0 0);
   --table-border: var(--border-subtle);
 
   /* Code blocks */
   --code-bg: var(--bg-inset);
   --code-text: var(--sh-phosphor);
+
+  /* ─────────────────────────────────────────
+     TERMINAL / CRT TOKENS
+     ───────────────────────────────────────── */
+
+  --bg-terminal: var(--bg-base); /* terminal surface — consumers override */
+  --scan-line: rgba(0, 0, 0, 0.015);
+  --scan-line: oklch(0 0 0 / 0.015); /* CRT stripe color */
+
+  /* Warm accent (orange) — T3 alerts, warning borders */
+  --accent-warm: var(--status-warning);
+  --accent-warm-glow: var(--status-warning-glow);
+
+  /* KPI display size — larger than --type-display for hero metrics */
+  --type-hero: 2.5rem;
+
+  /* ─────────────────────────────────────────
+     EFFECT INTERNALS
+     ───────────────────────────────────────── */
+
+  --void-gradient-core: oklch(0.08 0 0);
+  --overlay-interlace: oklch(0 0 0 / 0.12);
+}
+
+/* ─────────────────────────────────────────
+   SCROLLBAR STYLING
+   ───────────────────────────────────────── */
+
+/* Apply scrollbar tokens */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }

@@ -1,0 +1,328 @@
+/* sh-frame — ASCII terminal frame system
+ * Signal: structured data container with labeled header/footer
+ * Source: ARIA .t-frame, .t-bracket, .t-status, cursor system
+ */
+
+@keyframes sh-cursor-blink {
+  0%,
+  49.9% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@layer superhot.effects {
+  /* ── Frame container ── */
+  .sh-frame {
+    position: relative;
+    background: var(--bg-surface);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    box-shadow: var(--card-shadow);
+    transition: box-shadow var(--duration-normal) var(--ease-default);
+  }
+
+  .sh-frame::before {
+    content: attr(data-label);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .sh-frame::after {
+    content: attr(data-footer);
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    color: var(--text-tertiary);
+    padding-top: 12px;
+    margin-top: 12px;
+    border-top: 1px solid var(--border-subtle);
+    text-align: right;
+  }
+
+  .sh-frame:not([data-label])::before {
+    display: none;
+  }
+  .sh-frame:not([data-footer])::after {
+    display: none;
+  }
+
+  .sh-frame:hover {
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  /* Nested frames — inset appearance, no double shadow */
+  .sh-frame .sh-frame {
+    background: var(--bg-inset);
+    box-shadow: none;
+  }
+
+  /* ── Base card (simpler than sh-frame — no label system) ── */
+  .sh-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius);
+    box-shadow: var(--card-shadow);
+    transition:
+      background var(--duration-normal) var(--ease-default),
+      border-color var(--duration-normal) var(--ease-default),
+      box-shadow var(--duration-normal) var(--ease-default),
+      transform var(--duration-normal) var(--ease-default);
+  }
+
+  .sh-card:hover {
+    border-color: var(--border-primary);
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-1px);
+  }
+
+  /* ── Callout / info box ── */
+  .sh-callout {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    box-shadow: var(--card-shadow);
+  }
+
+  /* ── Bracket labels — wraps content in [value] ── */
+  .sh-bracket {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+  }
+
+  .sh-bracket::before {
+    content: "[";
+    color: var(--text-tertiary);
+  }
+  .sh-bracket::after {
+    content: "]";
+    color: var(--text-tertiary);
+  }
+
+  /* ── Status pill — monospace uppercase with left border ── */
+  .sh-status-pill {
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: var(--radius);
+    background: var(--bg-surface-raised);
+  }
+
+  .sh-status-pill--healthy {
+    color: var(--status-healthy);
+    border-left: 3px solid var(--status-healthy);
+  }
+  .sh-status-pill--warning {
+    color: var(--status-warning);
+    border-left: 3px solid var(--status-warning);
+  }
+  .sh-status-pill--error {
+    color: var(--status-error);
+    border-left: 3px solid var(--status-error);
+  }
+  .sh-status-pill--waiting {
+    color: var(--status-waiting);
+    border-left: 3px solid var(--status-waiting);
+  }
+  .sh-status-pill--active {
+    color: var(--status-active);
+    border-left: 3px solid var(--status-active);
+  }
+
+  /* ── Section header — scan-sweep animated bottom border ── */
+  .sh-section-header {
+    position: relative;
+    overflow: hidden;
+    border-bottom: 2px solid var(--border-subtle);
+  }
+
+  .sh-section-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: sh-t1-scan-sweep-kf 4s ease-in-out infinite;
+  }
+
+  /* ── Terminal background texture — CRT scan lines ── */
+  .sh-terminal-bg {
+    background-color: var(--bg-terminal);
+    background-image: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      var(--scan-line) 2px,
+      var(--scan-line) 4px
+    );
+    background-size: 100% 4px;
+  }
+
+  /* ── Clickable data affordance — terminal-style hover ── */
+  .sh-clickable {
+    cursor: pointer;
+    transition:
+      background var(--duration-fast) ease,
+      border-color var(--duration-fast) ease;
+    border-left: 2px solid transparent;
+    padding-left: 4px;
+  }
+
+  .sh-clickable:hover {
+    background: var(--bg-surface-raised);
+    border-left-color: var(--accent);
+  }
+
+  /* ── Cursor system — state indicators ── */
+
+  .sh-cursor-active::after {
+    content: "\2588"; /* █ full block */
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    margin-left: 2px;
+    animation: sh-cursor-blink 1s step-end infinite;
+  }
+
+  .sh-cursor-working::after {
+    content: "\258A"; /* ▊ left 3/4 block */
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    margin-left: 2px;
+    animation: sh-cursor-blink 0.5s step-end infinite;
+  }
+
+  .sh-cursor-idle::after {
+    content: "_";
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+    margin-left: 2px;
+    animation: sh-cursor-blink 2s step-end infinite;
+  }
+
+  /* Phone: smaller cursors, hide idle */
+  @media (max-width: 639px) {
+    .sh-frame {
+      padding: 12px 16px;
+      border-radius: 0;
+    }
+    .sh-frame::before {
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    .sh-frame::after {
+      padding-top: 8px;
+      margin-top: 8px;
+    }
+    .sh-terminal-bg {
+      background-image: none;
+    }
+    .sh-cursor-active::after,
+    .sh-cursor-working::after,
+    .sh-cursor-idle::after {
+      font-size: 0.75em;
+    }
+    .sh-cursor-idle::after {
+      display: none;
+    }
+  }
+
+  /* Tablet: no terminal texture except section headers */
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .sh-terminal-bg:not(.sh-section-header) {
+      background-image: none;
+    }
+  }
+
+  /* Reduced motion: static symbols, no blink */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-cursor-active::after,
+    .sh-cursor-working::after,
+    .sh-cursor-idle::after {
+      animation: none;
+      opacity: 1;
+    }
+    .sh-section-header::after {
+      animation: none;
+    }
+  }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-frame {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+    }
+    .sh-frame::before {
+      color: CanvasText;
+      border-bottom-color: CanvasText;
+    }
+    .sh-frame::after {
+      color: CanvasText;
+      border-top-color: CanvasText;
+    }
+    .sh-frame:hover {
+      box-shadow: none;
+    }
+    .sh-card {
+      border-color: CanvasText;
+      box-shadow: none;
+    }
+    .sh-card:hover {
+      border-color: Highlight;
+      box-shadow: none;
+    }
+    .sh-callout {
+      border-color: CanvasText;
+      border-left-color: Highlight;
+      box-shadow: none;
+    }
+    .sh-status-pill--healthy,
+    .sh-status-pill--warning,
+    .sh-status-pill--error,
+    .sh-status-pill--waiting,
+    .sh-status-pill--active {
+      color: ButtonText;
+      border-left-color: Highlight;
+    }
+    .sh-section-header {
+      border-bottom-color: CanvasText;
+    }
+    .sh-section-header::after {
+      background: none;
+      animation: none;
+    }
+    .sh-clickable:hover {
+      border-left-color: Highlight;
+    }
+    .sh-cursor-active::after,
+    .sh-cursor-working::after,
+    .sh-cursor-idle::after {
+      color: CanvasText;
+      animation: none;
+    }
+  }
+}

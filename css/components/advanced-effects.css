@@ -1,0 +1,246 @@
+/* advanced-effects.css — signal degradation, interlace, burn-in, threshold bar, hardware capability
+ * Part of superhot.effects layer.
+ */
+
+/* ═══════════════════════════════════════
+   KEYFRAMES (outside layers — always available)
+   ═══════════════════════════════════════ */
+
+@keyframes sh-signal-jitter {
+  0%,
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(-1px);
+    opacity: 0.95;
+  }
+  40% {
+    transform: translateX(1px);
+    opacity: 0.9;
+  }
+  60% {
+    transform: translateX(-0.5px);
+    opacity: 0.97;
+  }
+  80% {
+    transform: translateX(0.5px);
+    opacity: 0.93;
+  }
+}
+
+/* ═══════════════════════════════════════
+   EFFECTS LAYER
+   ═══════════════════════════════════════ */
+
+@layer superhot.effects {
+  /* ── SIGNAL DEGRADATION ── */
+  .sh-signal-degraded {
+    filter: brightness(0.9) saturate(0.8) contrast(1.1);
+    animation: sh-signal-jitter 0.15s steps(5) infinite;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.03) 2px,
+          rgba(255, 255, 255, 0.03) 4px
+        ),
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.02) 2px,
+          rgba(255, 255, 255, 0.02) 4px
+        );
+      pointer-events: none;
+      z-index: 2;
+      mix-blend-mode: overlay;
+    }
+  }
+
+  /* ── INTERLACE ── */
+  .sh-interlace {
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 1px,
+        var(--overlay-interlace) 1px,
+        var(--overlay-interlace) 2px
+      );
+      pointer-events: none;
+      z-index: 2;
+    }
+  }
+
+  /* ── BURN-IN ── */
+  [data-sh-burn-in] {
+    position: relative;
+
+    &::before {
+      content: attr(data-sh-burn-in);
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--sh-font);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0.05;
+      filter: sepia(0.4) blur(1px);
+      mix-blend-mode: screen;
+      color: var(--sh-dim);
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  /* ── THRESHOLD BAR ── */
+  .sh-threshold-bar {
+    height: 6px;
+    background: var(--bg-inset);
+    background-image:
+      linear-gradient(
+        to right,
+        transparent 59.9%,
+        var(--border-primary) 60%,
+        var(--border-primary) 60.2%,
+        transparent 60.3%
+      ),
+      linear-gradient(
+        to right,
+        transparent 79.9%,
+        var(--border-primary) 80%,
+        var(--border-primary) 80.2%,
+        transparent 80.3%
+      ),
+      linear-gradient(
+        to right,
+        transparent 89.9%,
+        var(--border-primary) 90%,
+        var(--border-primary) 90.2%,
+        transparent 90.3%
+      );
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      width: calc(var(--sh-fill, 0) * 1%);
+      background: var(--sh-phosphor);
+      transition:
+        width 0.3s,
+        background 0.3s;
+    }
+
+    /* Color variants */
+    &.sh-glow-ambient::before {
+      background: var(--sh-phosphor);
+    }
+
+    &.sh-glow-standard::before {
+      background: var(--status-warning);
+    }
+
+    &.sh-glow-critical::before {
+      background: var(--sh-threat);
+    }
+  }
+
+  /* ── HARDWARE CAPABILITY: LOW ── */
+  [data-sh-capability="low"] {
+    /* Disable T1 animations */
+    & *,
+    & {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+    }
+
+    /* Hide interlace and degradation overlays */
+    & .sh-interlace::after,
+    & .sh-signal-degraded::after {
+      display: none;
+    }
+
+    /* Disable alive-pulse on freshness states */
+    & [data-sh-state="fresh"],
+    & [data-sh-state="cooling"] {
+      animation: none !important;
+    }
+  }
+
+  /* ── HARDWARE CAPABILITY: MINIMAL ── */
+  [data-sh-capability="minimal"] {
+    /* Disable T1 + T2 animations */
+    & *,
+    & {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+
+    /* Hide all overlays */
+    & .sh-interlace::after,
+    & .sh-signal-degraded::after,
+    & [data-sh-burn-in]::before {
+      display: none;
+    }
+
+    /* Disable alive-pulse on freshness states */
+    & [data-sh-state="fresh"],
+    & [data-sh-state="cooling"] {
+      animation: none !important;
+    }
+  }
+
+  /* ── REDUCED MOTION ── */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-signal-degraded {
+      filter: brightness(0.9) saturate(0.8) contrast(1.1);
+      animation: none !important;
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  /* ── FORCED COLORS (High Contrast Mode) ── */
+  @media (forced-colors: active) {
+    .sh-signal-degraded {
+      border: 2px dashed LinkText;
+      filter: none;
+      animation: none !important;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .sh-interlace::after,
+    [data-sh-burn-in]::before {
+      display: none;
+    }
+  }
+}

@@ -43,7 +43,8 @@ export function ShCommandPalette({
       // Auto-focus input after render
       requestAnimationFrame(() => {
         if (inputRef.current) inputRef.current.focus();
-        if (overlayRef.current) glitchText(overlayRef.current, { duration: 150, intensity: "low" });
+        if (overlayRef.current)
+          glitchText(overlayRef.current, { duration: 100, intensity: "medium" });
       });
     }
   }, [open]);
@@ -120,11 +121,7 @@ export function ShCommandPalette({
         {filtered.length === 0 ? (
           <div class="sh-command-palette-empty">NO MATCH</div>
         ) : (
-          <ul
-            id="sh-command-palette-list"
-            class="sh-command-palette-list"
-            role="listbox"
-          >
+          <ul id="sh-command-palette-list" class="sh-command-palette-list" role="listbox">
             {filtered.map((item, idx) => (
               <li
                 key={item.id}

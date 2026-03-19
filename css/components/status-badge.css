@@ -18,7 +18,15 @@
     letter-spacing: var(--tracking-wide);
     white-space: nowrap;
 
-    /* No animation — static indicator, motion reserved for ShThreatPulse */
+    /* Entry animation — pulse on mount */
+    transition:
+      opacity 150ms ease-out,
+      transform 150ms ease-out;
+
+    @starting-style {
+      opacity: 0;
+      transform: scale(0.9);
+    }
   }
 
   /* Status variants */
@@ -56,6 +64,13 @@
   /* Suppress glow when data-sh-glow="false" */
   .sh-status-badge[data-sh-glow="false"] {
     box-shadow: none;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-status-badge {
+      transition: none !important;
+    }
   }
 
   /* High contrast */

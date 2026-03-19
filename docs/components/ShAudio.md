@@ -17,6 +17,10 @@ playSfx("complete"); // ascending two-tone — job finished
 playSfx("error"); // descending buzz — job failed / DLQ
 playSfx("dlq"); // single low tone — DLQ entry added
 playSfx("pause"); // soft click — daemon paused/resumed
+playSfx("boot"); // ascending beep — system initialization
+playSfx("static"); // noise burst — signal degradation
+playSfx("warning"); // double-pulse — threshold approaching danger
+playSfx("recovery"); // descending chime — system restored
 ```
 
 ## Sound Design
@@ -29,6 +33,10 @@ All sounds generated procedurally via Web Audio API. No audio files required.
 | `error`    | 220Hz + 110Hz | 200ms + 200ms | Descending with distortion, threat |
 | `dlq`      | 110Hz         | 300ms         | Single low tone, ominous           |
 | `pause`    | 880Hz         | 50ms          | Short click, neutral               |
+| `boot`     | 200Hz → 600Hz | 200ms         | Ascending two-tone POST beep       |
+| `static`   | White noise   | 150ms         | Bandpass-filtered noise burst      |
+| `warning`  | 440Hz         | 150ms         | Double-pulse square wave           |
+| `recovery` | 800Hz → 400Hz | 250ms         | Descending chime, inverse of error |
 
 ## Accessibility
 

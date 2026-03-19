@@ -9,73 +9,73 @@
    ═══════════════════════════════════════ */
 
 @property --sh-threat {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
-  initial-value: oklch(52% 0.22 25);
+  initial-value: oklch(68% 0.22 25);
 }
 
 @property --sh-phosphor {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: oklch(85% 0.18 195);
 }
 
 @property --sh-frozen {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: oklch(55% 0.04 240);
 }
 
 @property --sh-glass {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: oklch(95% 0.04 25);
 }
 
 @property --sh-void {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: #000000;
 }
 
 @property --sh-bright {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: #ffffff;
 }
 
 @property --sh-middle {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: #d3d3d3;
 }
 
 @property --sh-dim {
-  syntax: '<color>';
+  syntax: "<color>";
   inherits: true;
   initial-value: #808080;
 }
 
 @property --sh-shatter-duration {
-  syntax: '<time>';
+  syntax: "<time>";
   inherits: true;
   initial-value: 600ms;
 }
 
 @property --sh-glitch-duration {
-  syntax: '<time>';
+  syntax: "<time>";
   inherits: true;
   initial-value: 300ms;
 }
 
 @property --sh-threat-pulse-duration {
-  syntax: '<time>';
+  syntax: "<time>";
   inherits: true;
   initial-value: 1.5s;
 }
 
 @property --sh-frost-shimmer-duration {
-  syntax: '<time>';
+  syntax: "<time>";
   inherits: true;
   initial-value: 3s;
 }
@@ -89,20 +89,26 @@
 :root {
   color-scheme: light dark;
 
-  /* Threat (crystalline red — pure hue, no orange drift) */
-  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(62% 0.22 25));
+  /* Hex fallbacks for browsers without oklch/light-dark support */
 
-  /* Threat glow — derived, stays in sync when --sh-threat overridden */
-  --sh-threat-glow: color-mix(in oklch, var(--sh-threat) 15%, transparent);
+  /* Threat (crystalline red — pure hue, no orange drift) */
+  --sh-threat: #dc2626;
+  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(68% 0.22 25));
 
   /* Phosphor (CRT cyan — glow color, distinct from threat red) */
+  --sh-phosphor: #00d4ff;
   --sh-phosphor: light-dark(oklch(55% 0.18 195), oklch(85% 0.18 195));
-  --sh-phosphor-glow: color-mix(in oklch, var(--sh-phosphor) 20%, transparent);
+
+  /* Glow tokens — hex fallbacks (color-mix overrides in @supports below) */
+  --sh-threat-glow: rgba(220, 38, 38, 0.15);
+  --sh-phosphor-glow: rgba(0, 212, 255, 0.2);
 
   /* Frozen (desaturated slate) */
+  --sh-frozen: #6b7280;
   --sh-frozen: light-dark(oklch(55% 0.04 240), oklch(40% 0.04 240));
 
   /* Glass (red-tinted crystalline fragments — not white) */
+  --sh-glass: #f0a0a0;
   --sh-glass: color-mix(in oklch, var(--sh-threat) 25%, white);
 
   /* Void (pure black for watermark backgrounds) */
@@ -110,11 +116,13 @@
 
   /* piOS text hierarchy */
   --sh-bright: #ffffff;
+  --sh-middle: #d3d3d3;
   --sh-middle: light-dark(#696969, #d3d3d3);
-  --sh-dim:    light-dark(#a9a9a9, #808080);
+  --sh-dim: #808080;
+  --sh-dim: light-dark(#a9a9a9, #808080);
 
   /* piOS terminal font stack */
-  --sh-font: 'Perfect DOS VGA 437', 'Fixedsys Excelsior', monospace;
+  --sh-font: "Perfect DOS VGA 437", "Fixedsys Excelsior", monospace;
 
   /* Timing */
   --sh-shatter-duration: 600ms;
@@ -123,7 +131,20 @@
   --sh-frost-shimmer-duration: 3s;
 
   /* CRT toggles — set to 'block' to enable each layer */
-  --sh-crt-stripe: block;   /* static scanline stripes (cheap) */
-  --sh-crt-scanline: none;  /* moving scan beam (performance-intensive) */
-  --sh-crt-flicker: none;   /* phosphor flicker (a11y: photosensitivity risk) */
+  --sh-crt-stripe: block; /* static scanline stripes (cheap) */
+  --sh-crt-scanline: none; /* moving scan beam (performance-intensive) */
+  --sh-crt-flicker: none; /* phosphor flicker (a11y: photosensitivity risk) */
+}
+
+/* ═══════════════════════════════════════
+   COLOR-MIX OVERRIDES
+   Browsers that support color-mix() get derived glow tokens.
+   Others keep the rgba fallbacks declared in :root above.
+   ═══════════════════════════════════════ */
+
+@supports (color: color-mix(in oklch, red, blue)) {
+  :root {
+    --sh-threat-glow: color-mix(in oklch, var(--sh-threat) 15%, transparent);
+    --sh-phosphor-glow: color-mix(in oklch, var(--sh-phosphor) 20%, transparent);
+  }
 }

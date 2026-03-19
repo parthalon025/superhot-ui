@@ -1,0 +1,99 @@
+/* sh-data-table — searchable/sortable data table */
+@layer superhot.effects {
+  .sh-data-table {
+    width: 100%;
+  }
+  .sh-data-table-search {
+    width: 100%;
+    background: var(--bg-inset);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius);
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+  }
+  .sh-data-table-search:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+  }
+  .sh-data-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+  }
+  .sh-data-table th {
+    text-align: left;
+    padding: 6px 10px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-subtle);
+    cursor: default;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .sh-data-table th[data-sortable="true"] {
+    cursor: pointer;
+  }
+  .sh-data-table th[data-sortable="true"]:hover {
+    color: var(--text-primary);
+  }
+  .sh-data-table th[data-sort-active="true"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .sh-data-table td {
+    padding: 6px 10px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 200px;
+  }
+  .sh-data-table tr:hover td {
+    background: var(--table-row-hover-bg);
+  }
+  .sh-data-table-empty {
+    text-align: center;
+    padding: 24px;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .sh-ghost-row {
+    animation: sh-ghost-fade 500ms ease-out forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sh-ghost-row {
+      animation: none;
+      display: none;
+    }
+  }
+
+  @media (max-width: 639px) {
+    .sh-data-table td,
+    .sh-data-table th {
+      padding: 4px 8px;
+    }
+  }
+}
+
+@keyframes sh-ghost-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+}

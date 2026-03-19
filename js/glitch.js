@@ -1,3 +1,5 @@
+import { playSfx } from "./audio.js";
+
 /**
  * Apply a glitch effect to an element.
  *
@@ -14,6 +16,7 @@ export function glitchText(element, opts = {}) {
 
   element.setAttribute("data-sh-glitch-text", element.textContent || "");
   element.setAttribute("data-sh-effect", "glitch");
+  playSfx("static");
   if (intensity !== "medium") {
     element.setAttribute("data-sh-glitch-intensity", intensity);
   }

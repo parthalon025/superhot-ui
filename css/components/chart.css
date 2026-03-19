@@ -1,0 +1,142 @@
+/* chart.css — uPlot container theming for ShTimeChart
+ * Overrides uPlot internals to match the SUPERHOT aesthetic:
+ * void-black surfaces, threat-red accent, terminal mono text.
+ */
+
+@layer superhot.effects {
+  /* ─────────────────────────────────────────
+     CONTAINER
+     ───────────────────────────────────────── */
+
+  .sh-chart {
+    width: 100%;
+    height: var(--sh-chart-height, 120px);
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    font-family: var(--font-mono);
+    --sh-chart-marker-size: 8px; /* legend color swatch width */
+    --sh-chart-marker-h: 2px; /* legend color swatch height */
+    --sh-chart-cursor-pt: 5px; /* cursor crosshair dot size */
+  }
+
+  /* uPlot root wrapper fills container */
+  .sh-chart .u-wrap {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* Canvas fills wrapper */
+  .sh-chart .u-over,
+  .sh-chart .u-under {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* ─────────────────────────────────────────
+     COMPACT MODE — sparkline, no chrome
+     ───────────────────────────────────────── */
+
+  .sh-chart--compact {
+    --sh-chart-height: 48px;
+  }
+
+  /* ─────────────────────────────────────────
+     AXIS LABELS
+     SVG text elements rendered by uPlot
+     ───────────────────────────────────────── */
+
+  .sh-chart .u-axis text {
+    fill: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+  }
+
+  /* Axis tick marks */
+  .sh-chart .u-axis path,
+  .sh-chart .u-axis line {
+    stroke: var(--border-subtle);
+  }
+
+  /* ─────────────────────────────────────────
+     LEGEND
+     ───────────────────────────────────────── */
+
+  .sh-chart .u-legend {
+    font-family: var(--font-mono);
+    font-size: var(--type-nano);
+    color: var(--text-tertiary);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: var(--space-1) 0 0 0;
+    border: none;
+    background: transparent;
+  }
+
+  .sh-chart .u-legend .u-series > * {
+    padding: 0 var(--space-2) 0 0;
+  }
+
+  /* Legend color marker */
+  .sh-chart .u-legend .u-marker {
+    width: var(--sh-chart-marker-size);
+    height: var(--sh-chart-marker-h);
+    border-radius: 0;
+    margin-right: var(--space-1);
+    vertical-align: middle;
+  }
+
+  /* ─────────────────────────────────────────
+     CURSOR
+     ───────────────────────────────────────── */
+
+  .sh-chart .u-cursor-x {
+    border-left: 1px solid var(--accent);
+    opacity: 0.6;
+  }
+
+  .sh-chart .u-cursor-y {
+    border-top: 1px solid var(--accent);
+    opacity: 0.4;
+  }
+
+  /* Cursor crosshair dot */
+  .sh-chart .u-cursor-pt {
+    border-radius: 0;
+    width: var(--sh-chart-cursor-pt) !important;
+    height: var(--sh-chart-cursor-pt) !important;
+  }
+
+  /* ─────────────────────────────────────────
+     EMPTY / LOADING STATE
+     ───────────────────────────────────────── */
+
+  .sh-chart--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  /* ─────────────────────────────────────────
+     CROSSHAIR CURSOR
+     ───────────────────────────────────────── */
+
+  .sh-chart:hover {
+    cursor: crosshair;
+  }
+
+  /* ─────────────────────────────────────────
+     REDUCED MOTION
+     ───────────────────────────────────────── */
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-chart .u-cursor-x,
+    .sh-chart .u-cursor-y {
+      transition: none !important;
+    }
+  }
+}

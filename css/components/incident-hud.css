@@ -1,0 +1,93 @@
+/* ShIncidentHUD — system-wide incident banner
+ * Signal: "active system-wide incident"
+ * Pushes content down. Persists until acknowledged or resolved.
+ */
+
+@keyframes sh-incident-slide-in {
+  from {
+    transform: translateY(-100%);
+    filter: brightness(2);
+  }
+  20% {
+    transform: translateY(0);
+    filter: brightness(1.5);
+  }
+  to {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+}
+
+@layer superhot.effects {
+  .sh-incident-hud {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-toast);
+    font-family: var(--font-mono);
+    padding: var(--space-3) var(--space-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    animation: sh-incident-slide-in 200ms ease-out;
+  }
+
+  .sh-incident-hud--warning {
+    background: oklch(0.12 0.04 55);
+    border-bottom: 2px solid var(--status-warning);
+    color: var(--status-warn-text);
+  }
+
+  .sh-incident-hud--critical {
+    background: oklch(0.12 0.04 25);
+    border-bottom: 2px solid var(--sh-threat);
+    color: var(--sh-threat);
+  }
+
+  .sh-incident-hud-message {
+    font-size: var(--type-label);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    flex: 1;
+  }
+
+  .sh-incident-hud-time {
+    font-size: var(--type-micro);
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  .sh-incident-hud-action {
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    padding: var(--space-1) var(--space-3);
+    border: 1px solid currentColor;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    border-radius: var(--radius);
+  }
+
+  .sh-incident-hud-action:hover {
+    background: oklch(1 0 0 / 0.1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-incident-hud {
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sh-incident-hud {
+      border-bottom-color: Highlight;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}
