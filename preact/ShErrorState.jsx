@@ -11,7 +11,7 @@ export function ShErrorState({ title = "Error", message, onRetry, class: classNa
     >
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
         <span style="color: var(--status-error); font-family: var(--font-mono); font-weight: 700;">
-          ✕ {title}
+          FAULT: {title}
         </span>
       </div>
       {message && (

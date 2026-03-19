@@ -78,7 +78,7 @@ export function ShDataTable({ columns = [], rows = [], searchable = true, label 
                   }
                 >
                   {col.label}
-                  {sortKey === col.key ? (sortDir === "asc" ? " ▲" : " ▼") : ""}
+                  {sortKey === col.key ? (sortDir === "asc" ? " [ASC]" : " [DESC]") : ""}
                 </th>
               ))}
             </tr>

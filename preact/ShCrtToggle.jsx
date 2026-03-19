@@ -103,7 +103,7 @@ export function ShCrtToggle({
           />
           <span class="sh-crt-toggle-label">Phosphor flicker</span>
         </label>
-        <span class="sh-crt-toggle-warning">⚠ photosensitivity risk</span>
+        <span class="sh-crt-toggle-warning">CAUTION: PHOTOSENSITIVITY RISK</span>
       </div>
     </div>
   );
