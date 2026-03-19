@@ -42,6 +42,16 @@ export function ShMatrixRain({ active, density = "medium", class: className, chi
     observer.observe(container);
     resize();
 
+    // Read --sh-phosphor from theme tokens
+    const tempEl = document.createElement("span");
+    tempEl.style.color = "var(--sh-phosphor)";
+    container.appendChild(tempEl);
+    const phosphorRgb = getComputedStyle(tempEl).color || "rgb(0, 212, 255)";
+    tempEl.remove();
+    // Extract r,g,b for alpha compositing
+    const rgbMatch = phosphorRgb.match(/(\d+),\s*(\d+),\s*(\d+)/);
+    const [pr, pg, pb] = rgbMatch ? [rgbMatch[1], rgbMatch[2], rgbMatch[3]] : [0, 212, 255];
+
     function draw(timestamp) {
       if (timestamp - lastFrameRef.current < FRAME_INTERVAL) {
         rafRef.current = requestAnimationFrame(draw);
@@ -67,7 +77,7 @@ export function ShMatrixRain({ active, density = "medium", class: className, chi
         if (y >= 0 && y < height) {
           // Lead character — bright
           const leadChar = CHARS[Math.floor(Math.random() * CHARS.length)];
-          ctx.fillStyle = "rgba(0, 212, 255, 0.9)";
+          ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, 0.9)`;
           ctx.fillText(leadChar, x, y);
         }
 
@@ -76,7 +86,7 @@ export function ShMatrixRain({ active, density = "medium", class: className, chi
           const trailY = y - t * spacing;
           if (trailY >= 0 && trailY < height) {
             const trailChar = CHARS[Math.floor(Math.random() * CHARS.length)];
-            ctx.fillStyle = "rgba(0, 212, 255, 0.15)";
+            ctx.fillStyle = `rgba(${pr}, ${pg}, ${pb}, 0.15)`;
             ctx.fillText(trailChar, x, trailY);
           }
         }

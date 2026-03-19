@@ -1,3 +1,5 @@
+import { glitchText } from "../js/glitch.js";
+
 /**
  * ShErrorState — terminal-styled error fallback.
  */
@@ -10,7 +12,12 @@ export function ShErrorState({ title = "Error", message, onRetry, class: classNa
       {...rest}
     >
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-        <span style="color: var(--status-error); font-family: var(--font-mono); font-weight: 700;">
+        <span
+          ref={(el) => {
+            if (el) glitchText(el, { duration: 200, intensity: "low" });
+          }}
+          style="color: var(--status-error); font-family: var(--font-mono); font-weight: 700;"
+        >
           FAULT: {title}
         </span>
       </div>

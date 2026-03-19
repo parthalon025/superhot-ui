@@ -57,6 +57,7 @@ const preactConfig = {
       "export { ShPageBanner } from './preact/ShPageBanner.jsx';",
       "export { ShHeroCard } from './preact/ShHeroCard.jsx';",
       "export { ShCollapsible } from './preact/ShCollapsible.jsx';",
+      "export { ShEmptyState } from './preact/ShEmptyState.jsx';",
       "export { ShErrorState } from './preact/ShErrorState.jsx';",
       "export { ShStatsGrid } from './preact/ShStatsGrid.jsx';",
       "export { ShDataTable } from './preact/ShDataTable.jsx';",

@@ -38,7 +38,7 @@ export function ShToast({
 
   function handleClick() {
     if (timerRef.current) clearTimeout(timerRef.current);
-    _dismiss(ref.current, onDismiss);
+    onDismiss?.();
   }
 
   const now = new Date();
