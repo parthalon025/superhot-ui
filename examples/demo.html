@@ -720,6 +720,158 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════
+       MISSING EFFECTS (12 additional sections)
+       ═══════════════════════════════════════════════════════ -->
+
+  <!-- 17. SYSTEM CORRUPTION -->
+  <h2>[ SYSTEM CORRUPTION ]</h2>
+  <div class="card sh-system-corrupted" id="corruption-demo" style="min-height: 80px;">
+    <p>This container is experiencing system-level corruption glitches.</p>
+  </div>
+  <button onclick="document.getElementById('corruption-demo').classList.toggle('sh-system-corrupted')">TOGGLE CORRUPTION</button>
+
+  <!-- 18. EVENT TIMELINE -->
+  <h2>[ EVENT TIMELINE ]</h2>
+  <div class="sh-event-timeline">
+    <div class="sh-event-item sh-event-item--success">
+      <span class="sh-event-item-time">14:23:07</span>
+      <span class="sh-event-item-label">DEPLOY COMPLETE</span>
+      <div class="sh-event-item-detail">v2.1.0 rolled out to production</div>
+    </div>
+    <div class="sh-event-item sh-event-item--warning">
+      <span class="sh-event-item-time">14:22:51</span>
+      <span class="sh-event-item-label">LATENCY SPIKE</span>
+      <div class="sh-event-item-detail">P99 exceeded 500ms threshold</div>
+    </div>
+    <div class="sh-event-item sh-event-item--error">
+      <span class="sh-event-item-time">14:20:03</span>
+      <span class="sh-event-item-label">SERVICE FAULT</span>
+      <div class="sh-event-item-detail">Backend connection refused</div>
+    </div>
+    <div class="sh-event-item">
+      <span class="sh-event-item-time">14:18:44</span>
+      <span class="sh-event-item-label">DEPLOY STARTED</span>
+    </div>
+  </div>
+
+  <!-- 19. PROGRESS STEPS -->
+  <h2>[ PROGRESS STEPS ]</h2>
+  <div class="sh-progress-steps">
+    <span class="sh-progress-step sh-progress-step--complete"><span class="sh-progress-step-number">1</span> BUILD</span>
+    <span class="sh-progress-step sh-progress-step--complete"><span class="sh-progress-step-number">2</span> TEST</span>
+    <span class="sh-progress-step sh-progress-step--current"><span class="sh-progress-step-number">3</span> DEPLOY</span>
+    <span class="sh-progress-step"><span class="sh-progress-step-number">4</span> VERIFY</span>
+    <span class="sh-progress-step"><span class="sh-progress-step-number">5</span> MONITOR</span>
+  </div>
+
+  <!-- 20. FILTER PANEL -->
+  <h2>[ FILTER PANEL ]</h2>
+  <div class="sh-filter-panel" style="max-width: 300px;">
+    <div class="sh-filter-group">
+      <div class="sh-filter-group-label">STATUS</div>
+      <span class="sh-filter-chip sh-filter-chip--active">HEALTHY</span>
+      <span class="sh-filter-chip">ERROR</span>
+      <span class="sh-filter-chip sh-filter-chip--active">WARNING</span>
+      <span class="sh-filter-chip">WAITING</span>
+    </div>
+    <div class="sh-filter-group">
+      <div class="sh-filter-group-label">ENVIRONMENT</div>
+      <span class="sh-filter-chip sh-filter-chip--active">PRODUCTION</span>
+      <span class="sh-filter-chip">STAGING</span>
+    </div>
+  </div>
+
+  <!-- 21. SIGNAL STRENGTH -->
+  <h2>[ SIGNAL STRENGTH ]</h2>
+  <div style="display: flex; gap: 2rem; align-items: center;">
+    <div><span class="sh-label">CRITICAL</span> <span class="sh-signal-bars" data-sh-signal="1"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">POOR</span> <span class="sh-signal-bars" data-sh-signal="2"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">FAIR</span> <span class="sh-signal-bars" data-sh-signal="3"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">GOOD</span> <span class="sh-signal-bars" data-sh-signal="4"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+    <div><span class="sh-label">EXCELLENT</span> <span class="sh-signal-bars" data-sh-signal="5"><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span><span class="sh-signal-bar"></span></span></div>
+  </div>
+
+  <!-- 22. LOG VIEWER -->
+  <h2>[ LOG VIEWER ]</h2>
+  <div class="sh-log">
+<span class="sh-log-timestamp">14:23:07</span> <span class="sh-log-level--error">ERROR</span> Connection refused: backend:5432
+<span class="sh-log-timestamp">14:23:06</span> <span class="sh-log-level--warn">WARN</span>  Retry attempt 3/5 for database connection
+<span class="sh-log-timestamp">14:23:05</span> <span class="sh-log-level--info">INFO</span>  Health check initiated
+<span class="sh-log-timestamp">14:23:04</span> <span class="sh-log-level--debug">DEBUG</span> Query cache miss: users/auth/session
+  </div>
+
+  <!-- 23. CODE BLOCK -->
+  <h2>[ CODE BLOCK ]</h2>
+  <div class="sh-code">import { orchestrateEscalation } from "superhot-ui";
+
+const esc = orchestrateEscalation({
+  surfaces: { component: [cardEl], layout: [rootEl] },
+  sounds: true,
+});
+esc.start();</div>
+
+  <!-- 24. TOOLTIP -->
+  <h2>[ TOOLTIP ]</h2>
+  <div style="display: flex; gap: 2rem;">
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Service is responding normally" style="--pill-color: var(--sh-phosphor)">HEALTHY</span>
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Response time exceeding threshold" style="--pill-color: var(--status-warning)">WARNING</span>
+    <span class="sh-tooltip sh-status-pill" data-sh-tooltip="Service is not responding" style="--pill-color: var(--sh-threat)">ERROR</span>
+  </div>
+
+  <!-- 25. BREADCRUMB -->
+  <h2>[ BREADCRUMB ]</h2>
+  <div class="sh-breadcrumb">
+    <span class="sh-breadcrumb-item">SYSTEMS</span>
+    <span class="sh-breadcrumb-separator"></span>
+    <span class="sh-breadcrumb-item">BACKEND</span>
+    <span class="sh-breadcrumb-separator"></span>
+    <span class="sh-breadcrumb-item">DATABASE</span>
+  </div>
+
+  <!-- 26. UTILITY EFFECTS -->
+  <h2>[ UTILITY EFFECTS ]</h2>
+  <div style="display: flex; gap: 2rem; flex-wrap: wrap; align-items: center;">
+    <div><span class="sh-label">DELTA UP</span> <span class="sh-delta sh-delta--up">12%</span></div>
+    <div><span class="sh-label">DELTA DOWN</span> <span class="sh-delta sh-delta--down">3%</span></div>
+    <div><span class="sh-label">DELTA FLAT</span> <span class="sh-delta sh-delta--flat">0%</span></div>
+    <div><span class="sh-label">BADGE</span> <span class="sh-badge-count">7</span></div>
+    <div><span class="sh-label">LOADING</span> <span class="sh-loading-dots">PROCESSING</span></div>
+    <div><span class="sh-label">DIVIDER</span></div>
+  </div>
+  <hr class="sh-divider" data-sh-divider-label="SECTION BOUNDARY">
+  <div style="display: flex; gap: 2rem;">
+    <span class="sh-kbd">Ctrl+K</span>
+    <span class="sh-kbd">Esc</span>
+    <span class="sh-kbd">Enter</span>
+  </div>
+
+  <!-- 27. CELEBRATION -->
+  <h2>[ CELEBRATION ]</h2>
+  <div class="card" id="celebration-container" style="min-height: 100px; position: relative;">
+    <div class="sh-frame" data-label="SYSTEM STATUS">
+      <span class="sh-value">ALL CLEAR</span>
+    </div>
+  </div>
+  <button onclick="celebrationSequence(document.getElementById('celebration-container'), { text: 'RESTORED', duration: 3000 })">TRIGGER CELEBRATION</button>
+
+  <!-- 28. FORM ELEMENTS -->
+  <h2>[ FORM ELEMENTS ]</h2>
+  <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+    <input class="sh-input" placeholder="SEARCH..." style="width: 200px;">
+    <select class="sh-select"><option>OPTION 1</option><option>OPTION 2</option></select>
+    <label class="sh-toggle" data-sh-on="true" onclick="this.setAttribute('data-sh-on', this.getAttribute('data-sh-on') === 'true' ? 'false' : 'true')">
+      <span class="sh-toggle-indicator">ON</span> CRT MODE
+    </label>
+  </div>
+  <div style="margin-top: 1rem;">
+    <div class="sh-tabs">
+      <span class="sh-tab sh-tab--active">QUEUE</span>
+      <span class="sh-tab">LOGS</span>
+      <span class="sh-tab">CONFIG</span>
+    </div>
+  </div>
+
   <script type="module">
     import { applyFreshness } from '../js/freshness.js';
     import { shatterElement } from '../js/shatter.js';
@@ -728,12 +880,14 @@
     import { bootSequence } from '../js/boot.js';
     import { applyThreshold } from '../js/threshold.js';
     import { detectCapability, applyCapability } from '../js/hardware.js';
+    import { celebrationSequence } from '../js/celebration.js';
 
     window.applyFreshness = applyFreshness;
     window.shatterElement = shatterElement;
     window.glitchText = glitchText;
     window.applyMantra = applyMantra;
     window.removeMantra = removeMantra;
+    window.celebrationSequence = celebrationSequence;
 
     // ── Live Freshness ──
     let liveTimestamp = Date.now();
