@@ -361,4 +361,34 @@
       animation: none;
     }
   }
+
+  /* Forced colors — system color fallbacks for color-dependent effects */
+  @media (forced-colors: active) {
+    .sh-t1-border-shimmer {
+      background: none;
+      animation: none;
+    }
+    .sh-t1-pulse-ring {
+      animation: none;
+      box-shadow: none;
+      outline: 2px solid Highlight;
+    }
+    .sh-t2-tick-flash {
+      animation: none;
+      background-color: transparent;
+    }
+    .sh-t3-orange-pulse {
+      animation: none;
+      box-shadow: none;
+      outline: 2px solid Highlight;
+    }
+    .sh-t3-border-alert {
+      animation: none;
+      border-left-color: Highlight;
+    }
+    .sh-animate-data-refresh {
+      animation: none;
+      box-shadow: none;
+    }
+  }
 }

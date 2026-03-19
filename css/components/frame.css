@@ -262,4 +262,60 @@
       animation: none;
     }
   }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-frame {
+      border: 1px solid CanvasText;
+      box-shadow: none;
+    }
+    .sh-frame::before {
+      color: CanvasText;
+      border-bottom-color: CanvasText;
+    }
+    .sh-frame::after {
+      color: CanvasText;
+      border-top-color: CanvasText;
+    }
+    .sh-frame:hover {
+      box-shadow: none;
+    }
+    .sh-card {
+      border-color: CanvasText;
+      box-shadow: none;
+    }
+    .sh-card:hover {
+      border-color: Highlight;
+      box-shadow: none;
+    }
+    .sh-callout {
+      border-color: CanvasText;
+      border-left-color: Highlight;
+      box-shadow: none;
+    }
+    .sh-status-pill--healthy,
+    .sh-status-pill--warning,
+    .sh-status-pill--error,
+    .sh-status-pill--waiting,
+    .sh-status-pill--active {
+      color: ButtonText;
+      border-left-color: Highlight;
+    }
+    .sh-section-header {
+      border-bottom-color: CanvasText;
+    }
+    .sh-section-header::after {
+      background: none;
+      animation: none;
+    }
+    .sh-clickable:hover {
+      border-left-color: Highlight;
+    }
+    .sh-cursor-active::after,
+    .sh-cursor-working::after,
+    .sh-cursor-idle::after {
+      color: CanvasText;
+      animation: none;
+    }
+  }
 }

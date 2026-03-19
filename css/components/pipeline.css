@@ -113,4 +113,59 @@
   .sh-pipeline--compact .sh-pipeline-detail {
     display: none;
   }
+
+  /* Reduced motion — disable pulse, keep static colors */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-pipeline-node--running rect {
+      animation: none;
+      opacity: 1;
+    }
+  }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-pipeline-node rect {
+      stroke: CanvasText;
+      fill: Canvas;
+    }
+    .sh-pipeline-node text {
+      fill: CanvasText;
+    }
+    .sh-pipeline-node--ok rect,
+    .sh-pipeline-node--warn rect,
+    .sh-pipeline-node--error rect,
+    .sh-pipeline-node--running rect {
+      stroke: CanvasText;
+    }
+    .sh-pipeline-node--ok text,
+    .sh-pipeline-node--warn text,
+    .sh-pipeline-node--error text,
+    .sh-pipeline-node--running text {
+      fill: CanvasText;
+    }
+    .sh-pipeline-node--running rect {
+      animation: none;
+    }
+    .sh-pipeline-node--idle rect {
+      stroke: GrayText;
+    }
+    .sh-pipeline-node--idle text {
+      fill: GrayText;
+    }
+    .sh-pipeline-edge {
+      stroke: CanvasText;
+    }
+    .sh-pipeline-edge--running,
+    .sh-pipeline-edge--ok,
+    .sh-pipeline-edge--warn,
+    .sh-pipeline-edge--error {
+      stroke: Highlight;
+    }
+    .sh-pipeline-edge--idle {
+      stroke: GrayText;
+    }
+    .sh-pipeline-detail {
+      fill: CanvasText;
+    }
+  }
 }

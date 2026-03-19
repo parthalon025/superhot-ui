@@ -31,5 +31,12 @@
       animation: none;
       background: color-mix(in oklch, var(--sh-phosphor) 8%, var(--bg-inset));
     }
+
+    /* Forced colors: static system background */
+    @media (forced-colors: active) {
+      animation: none;
+      background: GrayText;
+      border: 1px solid CanvasText;
+    }
   }
 }

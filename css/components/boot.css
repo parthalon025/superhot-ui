@@ -43,4 +43,15 @@
       opacity: 1;
     }
   }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-boot-container {
+      color: CanvasText;
+      background: Canvas;
+    }
+    .sh-boot-line--visible {
+      color: CanvasText;
+    }
+  }
 }

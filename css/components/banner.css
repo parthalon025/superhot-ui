@@ -114,4 +114,28 @@
       display: none;
     }
   }
+
+  /* Forced colors — system color fallbacks */
+  @media (forced-colors: active) {
+    .sh-page-banner {
+      animation: none;
+      border-color: CanvasText;
+      border-left-color: Highlight;
+    }
+    .sh-page-banner::before {
+      background: none;
+    }
+    .sh-page-banner::after {
+      display: none;
+    }
+    .sh-page-banner svg {
+      animation: none;
+      filter: none;
+      color: CanvasText;
+      fill: CanvasText;
+    }
+    .sh-page-banner p {
+      color: CanvasText;
+    }
+  }
 }
