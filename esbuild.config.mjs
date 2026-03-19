@@ -40,6 +40,7 @@ const jsConfig = {
       "export { formatTime } from './js/formatTime.js';",
       "export { orchestrateEscalation } from './js/orchestrate.js';",
       "export { celebrationSequence } from './js/celebration.js';",
+      "export { confirmAction } from './js/commandFeedback.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",

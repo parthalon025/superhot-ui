@@ -46,6 +46,17 @@ export function orchestrateEscalation(config) {
         }
       }
 
+      // Level 2+: dramatic pause before section effects
+      if (level >= 2) {
+        // Freeze all alive-pulse animations momentarily
+        if (dimContainer) {
+          dimContainer.style.animationPlayState = "paused";
+          setTimeout(() => {
+            dimContainer.style.animationPlayState = "";
+          }, 200);
+        }
+      }
+
       // Level 2: pulse sidebar + dim others
       if (level >= 2 && surfaces.sidebar) {
         for (const el of surfaces.sidebar) {

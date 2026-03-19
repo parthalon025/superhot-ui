@@ -59,6 +59,16 @@ export class EscalationTimer {
     }
   }
 
+  /** Pause escalation at current level. */
+  pause() {
+    this.stop();
+  }
+
+  /** Resume escalation from current level. */
+  resume() {
+    this._scheduleNext();
+  }
+
   _scheduleNext() {
     if (this.level >= LEVEL_NAMES.length - 1) return;
     const delay = this.thresholds[this.level] || 5000;
