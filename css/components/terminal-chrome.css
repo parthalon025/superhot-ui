@@ -1,0 +1,78 @@
+/* Terminal chrome — advanced piOS aesthetic
+ * Phosphor monitor variants, collapsible CSS, rest-frame delays,
+ * box-drawing grid alignment.
+ */
+
+@layer superhot.effects {
+  /* ── Phosphor Monitor Variants ── */
+  [data-sh-monitor="amber"] {
+    --sh-phosphor: oklch(0.72 0.15 55);
+    --sh-phosphor-glow: oklch(0.72 0.15 55 / 0.2);
+  }
+
+  [data-sh-monitor="green"] {
+    --sh-phosphor: oklch(0.65 0.18 135);
+    --sh-phosphor-glow: oklch(0.65 0.18 135 / 0.2);
+  }
+
+  /* ── Collapsible (standalone CSS) ── */
+  .sh-collapsible {
+    overflow: hidden;
+  }
+
+  .sh-collapsible-summary {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--type-label);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-secondary);
+    padding: var(--space-2) 0;
+  }
+
+  .sh-collapsible-summary::before {
+    content: "▸";
+    transition: transform var(--duration-fast) var(--ease-default);
+  }
+
+  .sh-collapsible[data-sh-open="true"] .sh-collapsible-summary::before {
+    transform: rotate(90deg);
+  }
+
+  .sh-collapsible-content {
+    display: none;
+  }
+
+  .sh-collapsible[data-sh-open="true"] .sh-collapsible-content {
+    display: block;
+  }
+
+  /* ── Rest-Frame Delay Utilities (Rule 7) ── */
+  .sh-rest-after-shatter {
+    animation-delay: var(--rest-after-shatter);
+  }
+  .sh-rest-after-glitch {
+    animation-delay: var(--rest-after-glitch);
+  }
+  .sh-rest-after-state-change {
+    animation-delay: var(--rest-after-state-change);
+  }
+  .sh-rest-after-navigation {
+    animation-delay: var(--rest-after-navigation);
+  }
+
+  /* ── Terminal Grid (box-drawing alignment) ── */
+  .sh-terminal-grid {
+    font-family: var(--font-mono);
+    font-kerning: none;
+    font-variant-ligatures: none;
+    letter-spacing: 0;
+    line-height: 1;
+    white-space: pre;
+    tab-size: 8;
+  }
+}
