@@ -1,0 +1,49 @@
+/* System corruption — the piOS is unstable
+ * Signal: "the system itself is breaking"
+ * Apply to layout root during critical failures
+ */
+
+@keyframes sh-corruption {
+  0%,
+  94%,
+  100% {
+    filter: none;
+    transform: none;
+  }
+  95% {
+    filter: hue-rotate(45deg) brightness(1.1);
+    transform: translateX(-1px);
+  }
+  96% {
+    filter: hue-rotate(-30deg) brightness(0.9);
+    transform: translateX(1px);
+  }
+  97% {
+    filter: none;
+    transform: translateX(-0.5px);
+  }
+  98% {
+    filter: hue-rotate(15deg);
+    transform: none;
+  }
+}
+
+@layer superhot.effects {
+  .sh-system-corrupted {
+    animation: sh-corruption 4s steps(1) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-system-corrupted {
+      animation: none;
+      border: 2px dashed var(--sh-threat);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .sh-system-corrupted {
+      animation: none;
+      border: 2px dashed Highlight;
+    }
+  }
+}
