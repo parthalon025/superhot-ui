@@ -122,6 +122,7 @@ export function ShPipeline({
         role="img"
         aria-label={ariaLabel}
       >
+        <desc>{nodes.map((n) => `${n.label}: ${n.status || "idle"}`).join(", ")}</desc>
         {/* Edges rendered first (behind nodes) */}
         <g class="sh-pipeline-edges">
           {edges.map((edge, idx) => {

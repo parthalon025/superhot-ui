@@ -27,6 +27,8 @@ export function ShStatusBadge({ status, label, glow = true, class: className, ..
     <span
       ref={badgeRef}
       class={["sh-status-badge", className].filter(Boolean).join(" ")}
+      role="status"
+      aria-label={`Status: ${label != null ? label : status}`}
       data-sh-status={status}
       data-sh-glow={String(glow)}
       {...rest}

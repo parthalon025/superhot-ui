@@ -17,11 +17,14 @@ import { ShThreatPulse } from "./ShThreatPulse.jsx";
 export function ShStatCard({ label, value, status, detail, href, class: className, ...rest }) {
   const isError = status === "error";
 
+  const ariaLabel = `${label}: ${value ?? "\u2014"} \u2014 ${status}`;
+
   const inner = href ? (
     <a
       href={href}
       class={["sh-stat-card", className].filter(Boolean).join(" ")}
       data-sh-status={status}
+      aria-label={ariaLabel}
       {...rest}
     >
       <span class="sh-stat-card-label">{label}</span>
@@ -32,6 +35,7 @@ export function ShStatCard({ label, value, status, detail, href, class: classNam
     <div
       class={["sh-stat-card", className].filter(Boolean).join(" ")}
       data-sh-status={status}
+      aria-label={ariaLabel}
       {...rest}
     >
       <span class="sh-stat-card-label">{label}</span>

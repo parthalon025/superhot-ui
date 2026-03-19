@@ -54,6 +54,7 @@ export function ShHeroCard({
       ref={attachFreshness}
       class={`sh-frame ${cursorClass}${warning ? " sh-hero-card--warning" : ""}`}
       data-label={label}
+      aria-label={`${label}: ${value ?? "\u2014"}${unit ? ` ${unit}` : ""}`}
       style={warning ? "border-left: 3px solid var(--status-warning);" : ""}
     >
       <div style="display: flex; align-items: baseline; gap: var(--space-2); justify-content: space-between;">
