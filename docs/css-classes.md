@@ -523,31 +523,82 @@ Opt-in via `data-sh-ansi-mode="full"` on a parent element. Overrides green, yell
 | ------------------- | --------------------------------------------------------- | ------------------- |
 | `.sh-terminal-grid` | Box-drawing character alignment (mono, no ligatures, pre) | terminal-chrome.css |
 
+## System Corruption
+
+| Class                  | Signal                                                       | File           |
+| ---------------------- | ------------------------------------------------------------ | -------------- |
+| `.sh-system-corrupted` | piOS system instability — micro-glitches on entire interface | corruption.css |
+
+## Event Timeline
+
+| Class                     | Signal                                          | File               |
+| ------------------------- | ----------------------------------------------- | ------------------ |
+| `.sh-event-timeline`      | Vertical timeline container with connector line | event-timeline.css |
+| `.sh-event-item`          | Individual event entry with dot marker          | event-timeline.css |
+| `.sh-event-item--error`   | Error severity (threat red dot)                 | event-timeline.css |
+| `.sh-event-item--warning` | Warning severity (amber dot)                    | event-timeline.css |
+| `.sh-event-item--success` | Success severity (phosphor dot)                 | event-timeline.css |
+| `.sh-event-item-time`     | Timestamp display                               | event-timeline.css |
+| `.sh-event-item-label`    | Event name/title                                | event-timeline.css |
+| `.sh-event-item-detail`   | Expandable detail text                          | event-timeline.css |
+
+## Progress Steps
+
+| Class                         | Signal                              | File               |
+| ----------------------------- | ----------------------------------- | ------------------ |
+| `.sh-progress-steps`          | Horizontal step sequence container  | progress-steps.css |
+| `.sh-progress-step`           | Individual step (default: pending)  | progress-steps.css |
+| `.sh-progress-step-number`    | Circled step number                 | progress-steps.css |
+| `.sh-progress-step--complete` | Completed step (phosphor border)    | progress-steps.css |
+| `.sh-progress-step--current`  | Current step (phosphor fill + glow) | progress-steps.css |
+| `.sh-progress-step--error`    | Failed step (threat fill)           | progress-steps.css |
+
+## Filter Panel
+
+| Class                     | Signal                            | File             |
+| ------------------------- | --------------------------------- | ---------------- |
+| `.sh-filter-panel`        | Faceted filter sidebar container  | filter-panel.css |
+| `.sh-filter-group`        | Filter category group             | filter-panel.css |
+| `.sh-filter-group-label`  | Category label (micro, uppercase) | filter-panel.css |
+| `.sh-filter-chip`         | Individual filter tag (clickable) | filter-panel.css |
+| `.sh-filter-chip--active` | Active filter (phosphor border)   | filter-panel.css |
+| `.sh-filter-chip-remove`  | Remove button on active chip      | filter-panel.css |
+| `.sh-active-filters`      | Applied filters bar above content | filter-panel.css |
+
+## Signal Bars
+
+| Class             | Signal                             | File            |
+| ----------------- | ---------------------------------- | --------------- |
+| `.sh-signal-bars` | Signal strength container (5 bars) | signal-bars.css |
+| `.sh-signal-bar`  | Individual bar (height varies 1-5) | signal-bars.css |
+
 ## Data Attributes Summary
 
-| Attribute                  | Values                                                   | Component                     |
-| -------------------------- | -------------------------------------------------------- | ----------------------------- |
-| `data-sh-state`            | `fresh`, `cooling`, `frozen`, `stale`                    | Freshness system              |
-| `data-sh-effect`           | `glitch`, `threat-pulse`                                 | Effects system                |
-| `data-sh-glitch-text`      | Any string                                               | Glitch pseudo-element content |
-| `data-sh-glitch-intensity` | `high`, `low`                                            | Glitch intensity modifier     |
-| `data-sh-mantra`           | Any string                                               | Mantra watermark text         |
-| `data-sh-status`           | `healthy`, `ok`, `active`, `error`, `warning`, `waiting` | Status badge, stat card       |
-| `data-sh-glow`             | `false`                                                  | Suppresses status badge glow  |
-| `data-sh-toast-type`       | `info`, `warn`, `error`                                  | Toast severity                |
-| `data-sh-monitor`          | `amber`, `green`                                         | Phosphor monitor variant      |
-| `data-sh-ansi-mode`        | `full`                                                   | Full CGA color palette        |
-| `data-sh-open`             | `true`                                                   | Collapsible expanded state    |
-| `data-sh-burn-in`          | Any string                                               | Burn-in ghost text            |
-| `data-sh-capability`       | `full`, `medium`, `low`, `minimal`                       | Hardware tier (CSS response)  |
-| `data-label`               | Any string                                               | Frame header text             |
-| `data-footer`              | Any string                                               | Frame footer text             |
-| `data-sh-on`               | `true`, `false`                                          | Toggle switch state           |
-| `data-sh-tooltip`          | Any string                                               | Tooltip hover text            |
-| `data-sh-divider-label`    | Any string                                               | Divider label text            |
-| `data-sh-timestamp`        | ISO timestamp                                            | watchFreshness target         |
-| `data-sortable`            | `true`                                                   | Data table sortable column    |
-| `data-sort-active`         | `true`                                                   | Data table active sort column |
+| Attribute                  | Values                                                   | Component                                      |
+| -------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
+| `data-sh-state`            | `fresh`, `cooling`, `frozen`, `stale`                    | Freshness system                               |
+| `data-sh-effect`           | `glitch`, `threat-pulse`                                 | Effects system                                 |
+| `data-sh-glitch-text`      | Any string                                               | Glitch pseudo-element content                  |
+| `data-sh-glitch-intensity` | `high`, `low`                                            | Glitch intensity modifier                      |
+| `data-sh-mantra`           | Any string                                               | Mantra watermark text                          |
+| `data-sh-status`           | `healthy`, `ok`, `active`, `error`, `warning`, `waiting` | Status badge, stat card                        |
+| `data-sh-glow`             | `false`                                                  | Suppresses status badge glow                   |
+| `data-sh-toast-type`       | `info`, `warn`, `error`                                  | Toast severity                                 |
+| `data-sh-monitor`          | `amber`, `green`                                         | Phosphor monitor variant                       |
+| `data-sh-ansi-mode`        | `full`                                                   | Full CGA color palette                         |
+| `data-sh-open`             | `true`                                                   | Collapsible expanded state                     |
+| `data-sh-burn-in`          | Any string                                               | Burn-in ghost text                             |
+| `data-sh-capability`       | `full`, `medium`, `low`, `minimal`                       | Hardware tier (CSS response)                   |
+| `data-label`               | Any string                                               | Frame header text                              |
+| `data-footer`              | Any string                                               | Frame footer text                              |
+| `data-sh-on`               | `true`, `false`                                          | Toggle switch state                            |
+| `data-sh-tooltip`          | Any string                                               | Tooltip hover text                             |
+| `data-sh-divider-label`    | Any string                                               | Divider label text                             |
+| `data-sh-timestamp`        | ISO timestamp                                            | watchFreshness target                          |
+| `data-sortable`            | `true`                                                   | Data table sortable column                     |
+| `data-sort-active`         | `true`                                                   | Data table active sort column                  |
+| `data-sh-signal`           | `1`-`5`                                                  | Signal strength level, controls bar fill color |
+| `data-sh-escalation`       | `2`-`4`                                                  | Escalation level, controls mantra opacity      |
 
 ## Global Styles (unlayered)
 

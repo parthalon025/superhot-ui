@@ -626,6 +626,139 @@ formatTime(90000, "duration"); // "1m 30s"
 
 ---
 
+## Escalation Orchestration
+
+```js
+import { orchestrateEscalation } from "superhot-ui";
+
+const esc = orchestrateEscalation({
+  surfaces: {
+    component: [failedCardEl],
+    sidebar: [navIndicatorEl],
+    section: sectionEl,
+    layout: layoutEl,
+  },
+  sectionMantra: "BACKEND OFFLINE",
+  layoutMantra: "SYSTEM CRITICAL",
+  sounds: true,
+  dimOthers: true,
+  dimContainer: gridEl,
+});
+
+esc.start(); // begin escalation
+esc.reset(); // on recovery — clears all effects + stops drone
+```
+
+---
+
+## Celebration Sequence
+
+```js
+import { celebrationSequence } from "superhot-ui";
+
+// Trigger after crisis resolves
+celebrationSequence(containerEl, {
+  text: "RESTORED",
+  duration: 3000,
+  shatter: true,
+  sound: true,
+  onComplete: () => console.log("calm restored"),
+});
+```
+
+---
+
+## Action Feedback
+
+```js
+import { confirmAction } from "superhot-ui";
+
+// After command palette selection or button action
+confirmAction(targetCardEl, { sound: "complete", intensity: "medium" });
+```
+
+---
+
+## Tension Drone
+
+```js
+import { setTensionDrone, stopTensionDrone } from "superhot-ui";
+
+setTensionDrone(1); // subtle 40Hz rumble
+setTensionDrone(3); // dissonant 3-oscillator cluster
+stopTensionDrone(); // fade out over 300ms
+```
+
+Note: Automatically wired into `orchestrateEscalation` — manual use only needed for custom escalation patterns.
+
+---
+
+## System Corruption
+
+```html
+<!-- Apply to layout root during critical system failure -->
+<div class="sh-system-corrupted">...entire dashboard...</div>
+```
+
+---
+
+## Event Timeline
+
+```html
+<div class="sh-event-timeline">
+  <div class="sh-event-item sh-event-item--error">
+    <span class="sh-event-item-time">14:23:07</span>
+    <span class="sh-event-item-label">SERVICE FAULT</span>
+    <div class="sh-event-item-detail">Connection refused</div>
+  </div>
+</div>
+```
+
+---
+
+## Progress Steps
+
+```html
+<div class="sh-progress-steps">
+  <span class="sh-progress-step sh-progress-step--complete">
+    <span class="sh-progress-step-number">1</span> BUILD
+  </span>
+  <span class="sh-progress-step sh-progress-step--current">
+    <span class="sh-progress-step-number">2</span> DEPLOY
+  </span>
+</div>
+```
+
+---
+
+## Filter Panel
+
+```html
+<div class="sh-filter-panel">
+  <div class="sh-filter-group">
+    <div class="sh-filter-group-label">STATUS</div>
+    <span class="sh-filter-chip sh-filter-chip--active">HEALTHY</span>
+    <span class="sh-filter-chip">ERROR</span>
+  </div>
+</div>
+```
+
+---
+
+## Signal Bars
+
+```html
+<span class="sh-signal-bars" data-sh-signal="4">
+  <span class="sh-signal-bar"></span>
+  <span class="sh-signal-bar"></span>
+  <span class="sh-signal-bar"></span>
+  <span class="sh-signal-bar"></span>
+  <span class="sh-signal-bar"></span>
+</span>
+```
+
+---
+
 ## Design Pipeline
 
 ```
