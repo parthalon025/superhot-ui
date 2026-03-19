@@ -1,0 +1,156 @@
+/* ANSI SGR terminal text attributes
+ * Maps classic ANSI escape codes to CSS classes.
+ * Composable: .sh-ansi-bold.sh-ansi-underline.sh-ansi-fg-red
+ *
+ * Color modes:
+ *   Default — ANSI colors mapped to superhot palette (three-color test compliant)
+ *   [data-sh-ansi-mode="full"] — standard CGA 16-color palette for log output
+ */
+
+@keyframes sh-ansi-blink-kf {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@layer superhot.effects {
+  /* ── Text Attributes (SGR 1-9) ── */
+  .sh-ansi-bold {
+    font-weight: bold;
+  }
+  .sh-ansi-dim {
+    color: var(--text-tertiary);
+  }
+  .sh-ansi-italic {
+    font-style: italic;
+  }
+  .sh-ansi-underline {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .sh-ansi-blink {
+    animation: sh-ansi-blink-kf 1s step-end infinite;
+  }
+  .sh-ansi-blink-fast {
+    animation: sh-ansi-blink-kf 0.3s step-end infinite;
+  }
+  .sh-ansi-reverse {
+    color: var(--bg-base);
+    background-color: var(--text-primary);
+  }
+  .sh-ansi-hidden {
+    color: transparent;
+  }
+  .sh-ansi-strike {
+    text-decoration: line-through;
+  }
+  .sh-ansi-reset {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none;
+    color: inherit;
+    background-color: transparent;
+    animation: none;
+    opacity: 1;
+  }
+
+  /* ── Foreground Colors (default — superhot palette mapping) ── */
+  .sh-ansi-fg-black {
+    color: var(--sh-void);
+  }
+  .sh-ansi-fg-red {
+    color: var(--sh-threat);
+  }
+  .sh-ansi-fg-green {
+    color: var(--sh-phosphor);
+  }
+  .sh-ansi-fg-yellow {
+    color: var(--status-warning);
+  }
+  .sh-ansi-fg-blue {
+    color: var(--sh-phosphor);
+  }
+  .sh-ansi-fg-magenta {
+    color: var(--sh-threat);
+  }
+  .sh-ansi-fg-cyan {
+    color: var(--sh-phosphor);
+  }
+  .sh-ansi-fg-white {
+    color: var(--sh-bright);
+  }
+
+  /* ── Background Colors ── */
+  .sh-ansi-bg-black {
+    background-color: var(--sh-void);
+  }
+  .sh-ansi-bg-red {
+    background-color: var(--sh-threat);
+  }
+  .sh-ansi-bg-green {
+    background-color: var(--sh-phosphor);
+  }
+  .sh-ansi-bg-yellow {
+    background-color: var(--status-warning);
+  }
+  .sh-ansi-bg-blue {
+    background-color: var(--sh-phosphor);
+  }
+  .sh-ansi-bg-magenta {
+    background-color: var(--sh-threat);
+  }
+  .sh-ansi-bg-cyan {
+    background-color: var(--sh-phosphor);
+  }
+  .sh-ansi-bg-white {
+    background-color: var(--sh-bright);
+  }
+
+  /* ── Full CGA mode (opt-in for log rendering) ── */
+  [data-sh-ansi-mode="full"] .sh-ansi-fg-green {
+    color: #00aa00;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-fg-yellow {
+    color: #aa5500;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-fg-blue {
+    color: #5555ff;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-fg-magenta {
+    color: #aa00aa;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-bg-green {
+    background-color: #00aa00;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-bg-yellow {
+    background-color: #aa5500;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-bg-blue {
+    background-color: #5555ff;
+  }
+  [data-sh-ansi-mode="full"] .sh-ansi-bg-magenta {
+    background-color: #aa00aa;
+  }
+
+  /* ── Reduced Motion ── */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-ansi-blink,
+    .sh-ansi-blink-fast {
+      animation: none !important;
+      background-color: var(--sh-threat);
+      color: var(--sh-bright);
+    }
+  }
+
+  /* ── Forced Colors ── */
+  @media (forced-colors: active) {
+    .sh-ansi-reverse {
+      forced-color-adjust: none;
+    }
+  }
+}
