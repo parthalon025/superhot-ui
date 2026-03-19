@@ -1,0 +1,56 @@
+/* Signal strength / connectivity bars
+ * Signal: "connection quality level"
+ * Used by: IoT (WiFi RSSI), DevOps (network quality)
+ */
+
+@layer superhot.effects {
+  .sh-signal-bars {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+  }
+
+  .sh-signal-bar {
+    width: 3px;
+    background: var(--border-subtle);
+    border-radius: 1px 1px 0 0;
+  }
+
+  .sh-signal-bar:nth-child(1) {
+    height: 4px;
+  }
+  .sh-signal-bar:nth-child(2) {
+    height: 7px;
+  }
+  .sh-signal-bar:nth-child(3) {
+    height: 10px;
+  }
+  .sh-signal-bar:nth-child(4) {
+    height: 13px;
+  }
+  .sh-signal-bar:nth-child(5) {
+    height: 16px;
+  }
+
+  /* Fill based on data-sh-signal level (1-5) */
+  [data-sh-signal="1"] .sh-signal-bar:nth-child(1) {
+    background: var(--sh-threat);
+  }
+
+  [data-sh-signal="2"] .sh-signal-bar:nth-child(-n + 2) {
+    background: var(--status-warning);
+  }
+
+  [data-sh-signal="3"] .sh-signal-bar:nth-child(-n + 3) {
+    background: var(--sh-phosphor);
+  }
+
+  [data-sh-signal="4"] .sh-signal-bar:nth-child(-n + 4) {
+    background: var(--sh-phosphor);
+  }
+
+  [data-sh-signal="5"] .sh-signal-bar {
+    background: var(--sh-phosphor);
+  }
+}

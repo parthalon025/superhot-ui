@@ -34,6 +34,8 @@
 @import "./components/corruption.css";
 @import "./components/event-timeline.css";
 @import "./components/progress-steps.css";
+@import "./components/filter-panel.css";
+@import "./components/signal-bars.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 

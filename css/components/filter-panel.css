@@ -1,0 +1,78 @@
+/* ShFilterPanel — faceted filtering sidebar
+ * Signal: "narrow the data view by these criteria"
+ */
+
+@layer superhot.effects {
+  .sh-filter-panel {
+    font-family: var(--font-mono);
+    padding: var(--space-4);
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  .sh-filter-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .sh-filter-group-label {
+    font-size: var(--type-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-2);
+  }
+
+  .sh-filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: var(--space-1) var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius);
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin: 0 var(--space-1) var(--space-1) 0;
+    transition:
+      border-color var(--duration-fast) var(--ease-default),
+      color var(--duration-fast) var(--ease-default);
+    user-select: none;
+  }
+
+  .sh-filter-chip:hover {
+    border-color: var(--sh-phosphor);
+    color: var(--text-primary);
+  }
+
+  .sh-filter-chip--active {
+    border-color: var(--sh-phosphor);
+    color: var(--sh-phosphor);
+    background: oklch(from var(--sh-phosphor) l c h / 0.08);
+  }
+
+  .sh-filter-chip-remove {
+    font-size: var(--type-nano);
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 0 2px;
+  }
+
+  .sh-filter-chip-remove:hover {
+    color: var(--sh-threat);
+  }
+
+  /* Active filter bar (shows applied filters above content) */
+  .sh-active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-4);
+  }
+
+  .sh-active-filters:empty {
+    display: none;
+  }
+}
