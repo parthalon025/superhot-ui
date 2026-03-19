@@ -121,6 +121,17 @@ language:javascript, framework:preact
 - Glitch `::before` pseudo-element reads `data-sh-glitch-text` — set via JS or manually
 - `prefers-reduced-motion` disables all animation; static indicators remain
 
+## Browser Support
+
+| Feature                  | Chrome | Firefox | Safari | Edge |
+| ------------------------ | ------ | ------- | ------ | ---- |
+| Full fidelity            | 123+   | 128+    | 17.4+  | 123+ |
+| With hex fallbacks       | 80+    | 75+     | 13+    | 80+  |
+| Animations               | 117+   | 129+    | 17.4+  | 117+ |
+| CSS-only (no animations) | 80+    | 75+     | 13+    | 80+  |
+
+Modern features used: `oklch()`, `light-dark()`, `color-mix()`, `@property`, `@layer`, `@starting-style`, `container` queries. Hex fallback colors declared before every modern CSS color — older browsers see correct colors without effects.
+
 ## Code Quality
 
 - Lint: `make lint`

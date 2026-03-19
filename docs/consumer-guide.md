@@ -255,6 +255,158 @@ playSfx("pause"); // daemon paused
 
 ---
 
+## Threshold Signaling
+
+```js
+import { computeThreshold, applyThreshold } from "superhot-ui";
+
+// Pure computation
+const level = computeThreshold(vramPct); // 'calm'|'ambient'|'standard'|'critical'
+
+// DOM application (auto-applies sh-glow-* class)
+applyThreshold(el, vramPct);
+applyThreshold(el, cpuPct, { ambient: 50, standard: 70, critical: 85 });
+```
+
+Progressive glow escalation based on metric percentage (atmosphere Rule 39).
+
+---
+
+## Polling Heartbeat
+
+```js
+import { heartbeat } from "superhot-ui";
+
+// Call on each successful poll response
+const data = await fetchStatus();
+heartbeat(lastUpdatedEl, data.timestamp);
+```
+
+Fires a glitch micro-burst + freshness re-evaluation on each poll (atmosphere Rule 32). The dashboard "breathes" — regular heartbeat = alive, no heartbeat = frozen.
+
+---
+
+## Failure Escalation
+
+```js
+import { EscalationTimer } from "superhot-ui";
+
+const esc = new EscalationTimer({
+  onEscalate: (level, name) => {
+    if (name === "section") applyMantra(sectionEl, "BACKEND OFFLINE");
+    if (name === "layout") applyMantra(layoutEl, "SYSTEM DEGRADED");
+  },
+  onReset: () => removeMantra(layoutEl),
+});
+
+// On failure detected:
+esc.start(); // begins 5s → 15s → 60s → 120s escalation
+
+// On recovery:
+esc.reset();
+```
+
+4-stage timeline: component → sidebar → section mantra → layout mantra (atmosphere Rule 12).
+
+---
+
+## Recovery Sequence
+
+```js
+import { recoverySequence } from "superhot-ui";
+
+await recoverySequence({
+  glitchFn: () => glitchText(el, { duration: 100, intensity: "low" }),
+  onBorderTransition: () => (el.style.borderColor = "var(--sh-phosphor)"),
+  onPulseStop: () => el.removeAttribute("data-sh-effect"),
+  onToast: () => addToast("info", "RESTORED"),
+});
+```
+
+5-step async recovery choreography: glitch → border → pulse stop → toast → calm (atmosphere Rule 37).
+
+---
+
+## Modal
+
+```jsx
+import { ShModal } from "superhot-ui/preact";
+
+<ShModal
+  open={confirmOpen}
+  title="CONFIRM: PURGE DLQ (3 ENTRIES)"
+  body="IRREVERSIBLE."
+  onConfirm={() => {
+    purge();
+    setConfirmOpen(false);
+  }}
+  onCancel={() => setConfirmOpen(false)}
+/>;
+```
+
+System interrupt — world pauses, piOS demands input (atmosphere Rule 29). Focus traps to confirm button, Escape key dismisses, overlay click cancels.
+
+---
+
+## ANSI Text Attributes
+
+```html
+<span class="sh-ansi-bold sh-ansi-fg-red">ERROR</span>
+<span class="sh-ansi-dim">background process</span>
+<span class="sh-ansi-blink sh-ansi-fg-cyan">ALERT</span>
+<span class="sh-ansi-reverse">SELECTED</span>
+<span class="sh-ansi-strike">deprecated</span>
+```
+
+Full CGA colors for log rendering:
+
+```html
+<div data-sh-ansi-mode="full">
+  <span class="sh-ansi-fg-green">success</span>
+  <span class="sh-ansi-fg-magenta">debug info</span>
+</div>
+```
+
+10 SGR text attributes + 16-color foreground/background palette. Default mode maps ANSI colors to the superhot palette; `data-sh-ansi-mode="full"` enables standard CGA colors.
+
+---
+
+## Utility Classes
+
+```html
+<!-- Spacing (Rule 33) -->
+<div class="sh-grid sh-grid-3 sh-gap-section">...</div>
+
+<!-- Typography -->
+<span class="sh-label">STATUS</span>
+<span class="sh-value">197</span>
+<span class="sh-status-code">running</span>
+
+<!-- Opacity (Rule 30) -->
+<div class="sh-opacity-secondary">supporting context</div>
+<div class="sh-opacity-historical">completed jobs</div>
+
+<!-- Terminal prompt -->
+<div class="sh-prompt">ls -la</div>
+<div class="sh-prompt-root">systemctl restart nginx</div>
+```
+
+---
+
+## Monitor Variants
+
+```html
+<!-- Amber phosphor (P3 monitor) -->
+<div data-sh-monitor="amber">...</div>
+
+<!-- Green phosphor (P1 monitor) -->
+<div data-sh-monitor="green">...</div>
+```
+
+Override `--sh-phosphor` for the entire subtree. Apply to layout root or individual sections.
+
+---
+
 ## Design Pipeline
 
 ```
