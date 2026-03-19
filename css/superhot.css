@@ -25,6 +25,8 @@
 @import "./components/pipeline.css";
 @import "./components/utilities.css";
 @import "./components/ansi.css";
+@import "./components/modal.css";
+@import "./components/terminal-chrome.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
