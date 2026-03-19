@@ -1,0 +1,73 @@
+/* ShProgressSteps — step-by-step progress indicator
+ * Signal: "current position in a multi-step process"
+ * Used by: DevOps (deploy), SOC (playbook), ML (training phases)
+ */
+
+@layer superhot.effects {
+  .sh-progress-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .sh-progress-step {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-tertiary);
+    padding: var(--space-1) var(--space-3);
+  }
+
+  .sh-progress-step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-full);
+    font-size: var(--type-nano);
+    font-weight: 700;
+  }
+
+  /* Connector between steps */
+  .sh-progress-step + .sh-progress-step::before {
+    content: ">";
+    color: var(--text-tertiary);
+    margin-right: var(--space-2);
+  }
+
+  /* Completed step */
+  .sh-progress-step--complete {
+    color: var(--text-secondary);
+  }
+  .sh-progress-step--complete .sh-progress-step-number {
+    border-color: var(--sh-phosphor);
+    color: var(--sh-phosphor);
+  }
+
+  /* Current step */
+  .sh-progress-step--current {
+    color: var(--text-primary);
+  }
+  .sh-progress-step--current .sh-progress-step-number {
+    border-color: var(--sh-phosphor);
+    background: var(--sh-phosphor);
+    color: var(--sh-void);
+    box-shadow: 0 0 4px var(--sh-phosphor-glow);
+  }
+
+  /* Error step */
+  .sh-progress-step--error {
+    color: var(--sh-threat);
+  }
+  .sh-progress-step--error .sh-progress-step-number {
+    border-color: var(--sh-threat);
+    background: var(--sh-threat);
+    color: var(--sh-bright);
+  }
+}

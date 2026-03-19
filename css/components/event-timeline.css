@@ -1,0 +1,89 @@
+/* ShEventTimeline — vertical event timeline
+ * Signal: "sequence of events over time"
+ * Used by: DevOps (deployments), SOC (incidents), ML (training steps)
+ */
+
+@layer superhot.effects {
+  .sh-event-timeline {
+    position: relative;
+    padding-left: var(--space-6);
+  }
+
+  /* Vertical connector line */
+  .sh-event-timeline::before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--border-subtle);
+  }
+
+  .sh-event-item {
+    position: relative;
+    padding-bottom: var(--space-4);
+    font-family: var(--font-mono);
+  }
+
+  /* Dot marker */
+  .sh-event-item::before {
+    content: "";
+    position: absolute;
+    left: calc(-1 * var(--space-6) + 5px);
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--border-primary);
+    border: 1px solid var(--bg-base);
+    z-index: 1;
+  }
+
+  /* Severity dot colors */
+  .sh-event-item--error::before {
+    background: var(--sh-threat);
+  }
+  .sh-event-item--warning::before {
+    background: var(--status-warning);
+  }
+  .sh-event-item--success::before {
+    background: var(--sh-phosphor);
+  }
+
+  .sh-event-item-time {
+    font-size: var(--type-micro);
+    color: var(--text-tertiary);
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .sh-event-item-label {
+    font-size: var(--type-label);
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .sh-event-item-detail {
+    font-size: var(--type-small);
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+  }
+
+  /* Entry animation */
+  .sh-event-item {
+    @starting-style {
+      opacity: 0;
+      transform: translateX(-8px);
+    }
+    transition:
+      opacity 200ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sh-event-item {
+      transition: none;
+    }
+  }
+}

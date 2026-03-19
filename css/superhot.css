@@ -32,6 +32,8 @@
 @import "./components/matrix-rain.css";
 @import "./components/incident-hud.css";
 @import "./components/corruption.css";
+@import "./components/event-timeline.css";
+@import "./components/progress-steps.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
