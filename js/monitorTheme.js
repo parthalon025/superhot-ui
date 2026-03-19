@@ -1,33 +1,33 @@
 /**
- * Set monitor phosphor theme and persist to localStorage.
- * @param {'cyan'|'amber'|'green'} theme
+ * Set phosphor monitor variant and persist to localStorage.
+ * @param {'cyan'|'amber'|'green'} variant — Monitor phosphor color mode
  */
-export function setMonitorTheme(theme) {
+export function setMonitorVariant(variant) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
-  if (theme === "cyan") {
+  if (variant === "cyan") {
     root.removeAttribute("data-sh-monitor");
   } else {
-    root.setAttribute("data-sh-monitor", theme);
+    root.setAttribute("data-sh-monitor", variant);
   }
   try {
-    localStorage.setItem("sh-monitor-theme", theme);
+    localStorage.setItem("sh-monitor-variant", variant);
   } catch (e) {
     // localStorage unavailable
   }
 }
 
 /**
- * Load monitor theme from localStorage and apply.
- * @returns {string} The applied theme
+ * Load monitor variant from localStorage and apply.
+ * @returns {string} The applied variant
  */
-export function loadMonitorTheme() {
-  let theme = "cyan";
+export function loadMonitorVariant() {
+  let variant = "cyan";
   try {
-    theme = localStorage.getItem("sh-monitor-theme") || "cyan";
+    variant = localStorage.getItem("sh-monitor-variant") || "cyan";
   } catch (e) {
     // localStorage unavailable
   }
-  setMonitorTheme(theme);
-  return theme;
+  setMonitorVariant(variant);
+  return variant;
 }

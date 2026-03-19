@@ -585,14 +585,14 @@ window.addEventListener("keydown", (e) => shortcuts.handleKeyDown(e));
 
 ---
 
-## setMonitorTheme / loadMonitorTheme
+## setMonitorVariant / loadMonitorVariant
 
 Switch between phosphor monitor color variants (green, amber) with localStorage persistence.
 
 ```js
-import { setMonitorTheme, loadMonitorTheme } from "superhot-ui";
-loadMonitorTheme(); // restore from localStorage on init
-setMonitorTheme("amber"); // switch to amber phosphor
+import { setMonitorVariant, loadMonitorVariant } from "superhot-ui";
+loadMonitorVariant(); // restore from localStorage on init
+setMonitorVariant("amber"); // switch to amber phosphor
 ```
 
 ---

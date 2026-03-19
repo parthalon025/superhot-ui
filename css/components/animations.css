@@ -286,6 +286,10 @@
   .sh-stagger-children > *:nth-child(10) {
     animation-delay: 0.5s;
   }
+  .sh-stagger-children > *:nth-child(n + 11) {
+    animation: none;
+    opacity: 1;
+  }
 
   /* Animation delay utilities */
   .sh-delay-100 {

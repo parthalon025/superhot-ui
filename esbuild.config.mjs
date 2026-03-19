@@ -34,7 +34,7 @@ const jsConfig = {
       "export { watchFreshness } from './js/watchFreshness.js';",
       "export { createToastManager } from './js/toastManager.js';",
       "export { createShortcutRegistry } from './js/shortcuts.js';",
-      "export { setMonitorTheme, loadMonitorTheme } from './js/monitorTheme.js';",
+      "export { setMonitorVariant, loadMonitorVariant } from './js/monitorTheme.js';",
       "export { scrollSpy } from './js/scrollSpy.js';",
       "export { formatTime } from './js/formatTime.js';",
     ].join("\n"),
