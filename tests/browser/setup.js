@@ -9,6 +9,10 @@ const effectsCss = readFileSync(resolve(__dirname, "../../dist/superhot.css"), "
   /@import\s+["'][^"']+["'];?\s*/g,
   "",
 );
+const animationsCss = readFileSync(
+  resolve(__dirname, "../../css/components/animations.css"),
+  "utf8",
+);
 
 export async function setup(page) {
   await page.setContent(`<!DOCTYPE html>
@@ -17,6 +21,7 @@ export async function setup(page) {
     <style>${tokensCss}</style>
     <style>${semanticCss}</style>
     <style>${effectsCss}</style>
+    <style>${animationsCss}</style>
   </head>
   <body></body>
 </html>`);
