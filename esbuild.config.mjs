@@ -41,6 +41,7 @@ const jsConfig = {
       "export { orchestrateEscalation } from './js/orchestrate.js';",
       "export { celebrationSequence } from './js/celebration.js';",
       "export { confirmAction } from './js/commandFeedback.js';",
+      "export { trackEffect, isOverBudget, activeEffectCount, resetEffects } from './js/atmosphere.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",
