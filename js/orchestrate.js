@@ -1,6 +1,6 @@
 import { EscalationTimer } from "./escalation.js";
 import { applyMantra, removeMantra } from "./mantra.js";
-import { playSfx } from "./audio.js";
+import { playSfx, setTensionDrone, stopTensionDrone } from "./audio.js";
 
 /**
  * Orchestrate escalation across multiple dashboard surfaces.
@@ -34,7 +34,10 @@ export function orchestrateEscalation(config) {
   const timer = new EscalationTimer({
     thresholds,
     onEscalate: (level, name) => {
-      if (sounds) playSfx(level >= 3 ? "error" : "warning");
+      if (sounds) {
+        setTensionDrone(level);
+        playSfx(level >= 3 ? "error" : "warning");
+      }
 
       // Level 1: threat-pulse on affected components
       if (level >= 1 && surfaces.component) {
@@ -71,6 +74,8 @@ export function orchestrateEscalation(config) {
       }
     },
     onReset: () => {
+      // Stop tension drone
+      if (sounds) stopTensionDrone();
       // Clear all effects
       if (surfaces.component) {
         for (const el of surfaces.component) {
