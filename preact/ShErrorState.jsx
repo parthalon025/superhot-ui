@@ -1,9 +1,14 @@
 /**
  * ShErrorState — terminal-styled error fallback.
  */
-export function ShErrorState({ title = "Error", message, onRetry }) {
+export function ShErrorState({ title = "Error", message, onRetry, class: className, ...rest }) {
   return (
-    <div class="sh-frame" role="alert" aria-live="assertive">
+    <div
+      class={`sh-frame${className ? ` ${className}` : ""}`}
+      role="alert"
+      aria-live="assertive"
+      {...rest}
+    >
       <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
         <span style="color: var(--status-error); font-family: var(--font-mono); font-weight: 700;">
           ✕ {title}

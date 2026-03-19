@@ -78,7 +78,7 @@ function layoutSep(offsetX) {
   return { pixels, endX: offsetX + 3 };
 }
 
-export function ShPageBanner({ namespace = "", page = "", separator, subtitle }) {
+export function ShPageBanner({ namespace = "", page = "", separator, subtitle, ...rest }) {
   const ns = layoutText(namespace);
   const sepStart = ns.endX + WORD_GAP;
   const sep = layoutSep(sepStart);
@@ -89,7 +89,7 @@ export function ShPageBanner({ namespace = "", page = "", separator, subtitle })
   const layout = { nsPixels: ns.pixels, sepPixels: sep.pixels, pgPixels, totalWidth };
 
   return (
-    <div class="sh-page-banner" style="margin-bottom: 1.5rem">
+    <div class="sh-page-banner" style="margin-bottom: 1.5rem" {...rest}>
       <svg
         viewBox={`0 0 ${layout.totalWidth} ${5 * UNIT}`}
         style="height: 2rem; max-width: 100%; width: auto; display: block;"
