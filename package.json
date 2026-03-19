@@ -1,6 +1,6 @@
 {
   "name": "superhot-ui",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "style": "css/superhot.css",
   "description": "SUPERHOT-inspired visual effects for dashboards — CSS-first with JS utilities and Preact components",
   "type": "module",
@@ -11,6 +11,7 @@
     "./preact": "./dist/superhot.preact.js"
   },
   "scripts": {
+    "prepublishOnly": "node esbuild.config.mjs",
     "build": "node esbuild.config.mjs",
     "build:css": "cp css/superhot.css dist/superhot.css",
     "test": "node --test tests/**/*.test.js",

@@ -79,7 +79,26 @@
   .sh-grid-4 {
     grid-template-columns: repeat(4, 1fr);
   }
+}
 
+/* ── Responsive Grid Breakpoints ──
+ * Grids collapse organically on smaller screens.
+ * Phone: 2-col max. Tablet: declared columns. Desktop: +1 column.
+ */
+@media (max-width: 480px) {
+  .sh-grid-3,
+  .sh-grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sh-grid-3 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@layer superhot.effects {
   /* ── Prompt (terminal prefix) ── */
   .sh-prompt::before {
     content: "$ ";
