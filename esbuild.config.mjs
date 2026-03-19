@@ -33,6 +33,8 @@ const jsConfig = {
       "export { heartbeat } from './js/heartbeat.js';",
       "export { EscalationTimer } from './js/escalation.js';",
       "export { recoverySequence } from './js/recovery.js';",
+      "export { bootSequence } from './js/boot.js';",
+      "export { detectCapability, applyCapability } from './js/hardware.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",

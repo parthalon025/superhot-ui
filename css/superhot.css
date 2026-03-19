@@ -28,6 +28,7 @@
 @import "./components/modal.css";
 @import "./components/terminal-chrome.css";
 @import "./components/advanced-effects.css";
+@import "./components/boot.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 
