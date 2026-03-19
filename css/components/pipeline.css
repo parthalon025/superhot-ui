@@ -1,3 +1,9 @@
+@keyframes sh-edge-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
 @keyframes sh-pipeline-pulse {
   0%,
   100% {
@@ -79,6 +85,8 @@
     fill: none;
     stroke: var(--border-subtle);
     stroke-width: 1.5;
+    stroke-dasharray: 8 4;
+    animation: sh-edge-flow 1.5s linear infinite;
   }
 
   .sh-pipeline-edge--ok {
@@ -114,11 +122,14 @@
     display: none;
   }
 
-  /* Reduced motion — disable pulse, keep static colors */
+  /* Reduced motion — disable pulse and edge flow, keep static colors */
   @media (prefers-reduced-motion: reduce) {
     .sh-pipeline-node--running rect {
       animation: none;
       opacity: 1;
+    }
+    .sh-pipeline-edge {
+      animation: none;
     }
   }
 

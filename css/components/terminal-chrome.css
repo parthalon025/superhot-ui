@@ -44,11 +44,18 @@
   }
 
   .sh-collapsible-content {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 200ms ease-out;
+    overflow: hidden;
+  }
+
+  .sh-collapsible-content > * {
+    overflow: hidden;
   }
 
   .sh-collapsible[data-sh-open="true"] .sh-collapsible-content {
-    display: block;
+    grid-template-rows: 1fr;
   }
 
   /* ── Rest-Frame Delay Utilities (Rule 7) ── */
