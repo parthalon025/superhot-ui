@@ -280,3 +280,77 @@ function _playRecovery(ctx, gainNode) {
   osc.start(now);
   osc.stop(now + 0.25);
 }
+
+let _droneCtx = null;
+let _droneGain = null;
+let _droneOscs = [];
+
+/**
+ * Start or update a tension drone that intensifies with escalation level.
+ * Level 0 = silence, Level 1 = subtle rumble, Level 4 = dissonant cluster.
+ * Only plays if ShAudio.enabled is true.
+ *
+ * @param {number} level — Escalation level (0-4)
+ */
+export function setTensionDrone(level) {
+  if (!ShAudio.enabled) return;
+  if (typeof window === "undefined") return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  // Stop existing drone
+  stopTensionDrone();
+
+  if (level <= 0) return;
+
+  _droneCtx = new (window.AudioContext || window.webkitAudioContext)();
+  _droneGain = _droneCtx.createGain();
+  _droneGain.connect(_droneCtx.destination);
+  _droneGain.gain.value = 0;
+
+  // Fade in over 500ms
+  _droneGain.gain.linearRampToValueAtTime(0.05 * level, _droneCtx.currentTime + 0.5);
+
+  const frequencies = [40, 60, 80, 110];
+  const count = Math.min(level, frequencies.length);
+
+  for (let i = 0; i < count; i++) {
+    const osc = _droneCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = frequencies[i];
+    // Add slight detuning for dissonance at higher levels
+    if (level >= 3) {
+      osc.detune.value = (i + 1) * 5 * (level - 2);
+    }
+    osc.connect(_droneGain);
+    osc.start();
+    _droneOscs.push(osc);
+  }
+}
+
+/**
+ * Stop the tension drone with a fade-out.
+ */
+export function stopTensionDrone() {
+  if (_droneCtx && _droneGain) {
+    try {
+      _droneGain.gain.linearRampToValueAtTime(0, _droneCtx.currentTime + 0.3);
+      const ctx = _droneCtx;
+      const oscs = _droneOscs;
+      setTimeout(() => {
+        for (const osc of oscs) {
+          try {
+            osc.stop();
+          } catch (e) {
+            /* already stopped */
+          }
+        }
+        ctx.close();
+      }, 350);
+    } catch (e) {
+      // Context already closed
+    }
+  }
+  _droneCtx = null;
+  _droneGain = null;
+  _droneOscs = [];
+}
