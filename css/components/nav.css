@@ -80,6 +80,11 @@
     white-space: nowrap;
   }
 
+  .sh-nav-item:focus-visible {
+    outline: 2px solid var(--sh-threat);
+    outline-offset: 2px;
+  }
+
   .sh-nav-item:hover {
     background: var(--bg-surface-raised);
     color: var(--text-primary);

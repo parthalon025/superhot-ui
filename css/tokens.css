@@ -11,7 +11,7 @@
 @property --sh-threat {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(52% 0.22 25);
+  initial-value: oklch(68% 0.22 25);
 }
 
 @property --sh-phosphor {
@@ -93,7 +93,7 @@
 
   /* Threat (crystalline red — pure hue, no orange drift) */
   --sh-threat: #dc2626;
-  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(62% 0.22 25));
+  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(68% 0.22 25));
 
   /* Phosphor (CRT cyan — glow color, distinct from threat red) */
   --sh-phosphor: #00d4ff;
