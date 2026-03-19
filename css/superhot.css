@@ -225,6 +225,17 @@
     }
   }
 
+  /* Freshness state label — opt-in via data-sh-show-state */
+  [data-sh-state][data-sh-show-state]::after {
+    content: attr(data-sh-state);
+    font-family: var(--font-mono);
+    font-size: var(--type-micro);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--text-tertiary);
+    margin-left: var(--space-2);
+  }
+
   /* Data arrival entrance — components materialize, not appear */
   .sh-stat-card,
   .sh-hero-card,

@@ -68,6 +68,16 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
   }
+  .sh-ghost-row {
+    animation: sh-ghost-fade 500ms ease-out forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sh-ghost-row {
+      animation: none;
+      display: none;
+    }
+  }
+
   @media (max-width: 639px) {
     .sh-data-table td,
     .sh-data-table th {
@@ -75,3 +85,7 @@
     }
   }
 }
+
+@keyframes sh-ghost-fade {
+  from { opacity: 1; }
+  to { opacity: 0; height: 0; padding: 0; overflow: hidden; }
