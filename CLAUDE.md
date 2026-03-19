@@ -82,31 +82,50 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | Matrix Rain        | `.sh-matrix-rain`                                               | —                                        | `<ShMatrixRain>`     |
 | Incident HUD       | `.sh-incident-hud`                                              | —                                        | `<ShIncidentHUD>`    |
 | Hardware           | `data-sh-capability`                                            | `detectCapability()`                     | —                    |
+| Orchestration      | —                                                               | `orchestrateEscalation(config)`          | —                    |
+| Celebration        | —                                                               | `celebrationSequence(container, opts)`   | —                    |
+| System Corruption  | `.sh-system-corrupted`                                          | —                                        | —                    |
+| Tension Drone      | —                                                               | `setTensionDrone(level)`                 | —                    |
+| Action Feedback    | —                                                               | `confirmAction(el, opts)`                | —                    |
+| Event Timeline     | `.sh-event-timeline`                                            | —                                        | —                    |
+| Progress Steps     | `.sh-progress-steps`                                            | —                                        | —                    |
+| Filter Panel       | `.sh-filter-panel`, `.sh-filter-chip`                           | —                                        | —                    |
+| Signal Bars        | `.sh-signal-bars`                                               | —                                        | —                    |
+| Form Elements      | `.sh-input`, `.sh-select`, `.sh-toggle`, `.sh-tabs`             | —                                        | —                    |
 
 ## File Layout
 
-| Path                  | Purpose                                                    |
-| --------------------- | ---------------------------------------------------------- |
-| `css/tokens.css`      | CSS custom properties (`--sh-*`) with dark mode            |
-| `css/superhot.css`    | All effects (imports tokens.css)                           |
-| `js/freshness.js`     | Timestamp to freshness state                               |
-| `js/shatter.js`       | Fragment + drift + fade animation                          |
-| `js/glitch.js`        | Chromatic aberration burst                                 |
-| `js/mantra.js`        | Repeating text watermark                                   |
-| `js/audio.js`         | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`)    |
-| `js/crt.js`           | CRT CSS property writer (`setCrtMode`)                     |
-| `js/atmosphere.js`    | Effect density tracker (`trackEffect`, `isOverBudget`)     |
-| `js/threshold.js`     | Threshold signaling (`computeThreshold`, `applyThreshold`) |
-| `js/heartbeat.js`     | Polling heartbeat (glitch burst + freshness on poll)       |
-| `js/escalation.js`    | Failure escalation timer (4-stage cadence)                 |
-| `js/recovery.js`      | Recovery sequence choreography (5-step async)              |
-| `js/boot.js`          | Boot sequence typewriter reveal                            |
-| `js/hardware.js`      | Hardware capability detection + CSS tier                   |
-| `js/revealLabel.js`   | Character-scramble entrance (`revealLabel`)                |
-| `js/scrambleLabel.js` | State-change label scramble (`scrambleLabel`)              |
-| `preact/Sh*.jsx`      | Preact wrapper components (incl. ShModal)                  |
-| `dist/`               | Built outputs (gitignored)                                 |
-| `examples/demo.html`  | Standalone demo (no build step)                            |
+| Path                    | Purpose                                                    |
+| ----------------------- | ---------------------------------------------------------- |
+| `css/tokens.css`        | CSS custom properties (`--sh-*`) with dark mode            |
+| `css/superhot.css`      | All effects (imports tokens.css)                           |
+| `js/freshness.js`       | Timestamp to freshness state                               |
+| `js/shatter.js`         | Fragment + drift + fade animation                          |
+| `js/glitch.js`          | Chromatic aberration burst                                 |
+| `js/mantra.js`          | Repeating text watermark                                   |
+| `js/audio.js`           | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`)    |
+| `js/crt.js`             | CRT CSS property writer (`setCrtMode`)                     |
+| `js/atmosphere.js`      | Effect density tracker (`trackEffect`, `isOverBudget`)     |
+| `js/threshold.js`       | Threshold signaling (`computeThreshold`, `applyThreshold`) |
+| `js/heartbeat.js`       | Polling heartbeat (glitch burst + freshness on poll)       |
+| `js/escalation.js`      | Failure escalation timer (4-stage cadence)                 |
+| `js/recovery.js`        | Recovery sequence choreography (5-step async)              |
+| `js/boot.js`            | Boot sequence typewriter reveal                            |
+| `js/hardware.js`        | Hardware capability detection + CSS tier                   |
+| `js/orchestrate.js`     | Multi-surface escalation coordinator                       |
+| `js/celebration.js`     | Catharsis cascade (mantra + shatter + recovery)            |
+| `js/commandFeedback.js` | Action feedback utility (`confirmAction`)                  |
+| `js/toastManager.js`    | Toast queue and lifecycle management                       |
+| `js/shortcuts.js`       | Keyboard shortcut bindings                                 |
+| `js/monitorTheme.js`    | Monitor variant theme application                          |
+| `js/scrollSpy.js`       | Scroll-based section tracking                              |
+| `js/formatTime.js`      | Relative and absolute time formatting                      |
+| `js/watchFreshness.js`  | Auto-polling freshness watcher                             |
+| `js/revealLabel.js`     | Character-scramble entrance (`revealLabel`)                |
+| `js/scrambleLabel.js`   | State-change label scramble (`scrambleLabel`)              |
+| `preact/Sh*.jsx`        | Preact wrapper components (incl. ShModal)                  |
+| `dist/`                 | Built outputs (gitignored)                                 |
+| `examples/demo.html`    | Standalone demo (no build step)                            |
 
 ## Customization
 

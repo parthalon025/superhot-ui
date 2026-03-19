@@ -13,6 +13,30 @@
 - Incident HUD component (ShIncidentHUD) — fixed top banner for system-wide incidents
 - 4 new audio SFX: boot, static, warning, recovery
 - Hardware auto-downgrade (detectCapability, applyCapability) — CSS tier response
+- Escalation orchestrator (orchestrateEscalation) — multi-surface crisis coordination
+- Celebration sequence (celebrationSequence) — catharsis cascade with mantra + shatter
+- System corruption mode (.sh-system-corrupted) — piOS glitch effect
+- Tension drone audio (setTensionDrone/stopTensionDrone) — ambient escalation sound
+- Action feedback utility (confirmAction) — execute node of emotional loop
+- Escalation pause/resume methods on EscalationTimer
+- Event timeline component (.sh-event-timeline)
+- Progress steps component (.sh-progress-steps)
+- Filter panel + chips (.sh-filter-panel, .sh-filter-chip)
+- Signal bars (.sh-signal-bars)
+- Form elements (.sh-input, .sh-select, .sh-toggle, .sh-kbd, .sh-tabs)
+- Terminal chrome (log viewer, code block, tooltip, breadcrumb)
+- Data visualization (delta indicators, progress bar, badge count)
+- Utility effects (divider, loading dots, copy feedback, ghost row, void gradient)
+- Alive-pulse breathing animation on fresh data
+- Freeze-snap animation on data entering frozen state
+- Mantra escalation opacity levels
+- Shatter sound timing at mid-scatter
+- Tension drone wired into orchestrateEscalation
+- Emotional loop completion (pause beat, plan drama, execute feedback)
+- WCAG fixes: threat red contrast 68%, focus-visible on all interactive elements, ARIA labels
+- Photosensitivity fix: blink-fast slowed to 1.5s
+- CSP fix: SVG data URI replaced with CSS-only noise
+- Preflight validation script
 - Production sourcemaps enabled
 
 ## [0.2.0] — 2026-03-18
