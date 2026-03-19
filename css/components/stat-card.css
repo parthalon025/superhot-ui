@@ -112,6 +112,40 @@ a.sh-stat-card:hover {
   }
 }
 
+/* ── Delta indicators ── */
+.sh-delta {
+  font-family: var(--font-mono);
+  font-size: var(--type-micro);
+  letter-spacing: var(--tracking-wide);
+}
+.sh-delta--up {
+  color: var(--sh-phosphor);
+}
+.sh-delta--up::before {
+  content: "[+";
+}
+.sh-delta--up::after {
+  content: "]";
+}
+.sh-delta--down {
+  color: var(--sh-threat);
+}
+.sh-delta--down::before {
+  content: "[-";
+}
+.sh-delta--down::after {
+  content: "]";
+}
+.sh-delta--flat {
+  color: var(--text-tertiary);
+}
+.sh-delta--flat::before {
+  content: "[";
+}
+.sh-delta--flat::after {
+  content: "]";
+}
+
 @keyframes sh-value-bump {
   0% {
     transform: scale(1);

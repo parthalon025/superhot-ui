@@ -89,4 +89,21 @@
     content: "# ";
     color: var(--sh-threat);
   }
+
+  /* ── Progress bar ── */
+  .sh-progress {
+    font-family: var(--font-mono);
+    font-size: var(--type-small);
+    color: var(--sh-phosphor);
+    letter-spacing: 0;
+    white-space: pre;
+  }
+  .sh-progress::before {
+    content: "[";
+    color: var(--text-tertiary);
+  }
+  .sh-progress::after {
+    content: "]";
+    color: var(--text-tertiary);
+  }
 }
