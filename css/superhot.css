@@ -97,10 +97,10 @@
 
 @keyframes sh-crt-scan {
   0% {
-    top: -10%;
+    transform: translateY(-100%);
   }
   100% {
-    top: 110%;
+    transform: translateY(1200%);
   }
 }
 
@@ -133,6 +133,22 @@
   }
   50% {
     box-shadow: 0 0 4px 0 var(--sh-phosphor-glow, rgba(0, 212, 255, 0.1));
+  }
+}
+
+@keyframes sh-freeze-snap {
+  0% {
+    filter: none;
+    opacity: 1;
+    transform: scale(1.01);
+  }
+  50% {
+    filter: hue-rotate(90deg) grayscale(0.5);
+  }
+  100% {
+    filter: grayscale(0.8) saturate(0.2);
+    opacity: 0.6;
+    transform: scale(1);
   }
 }
 
@@ -181,6 +197,10 @@
     filter: grayscale(0.8) saturate(0.2);
     opacity: 0.6;
     border-color: var(--sh-frozen) !important;
+    animation:
+      sh-freeze-snap 300ms ease-out forwards,
+      sh-alive-pulse 0s paused;
+    animation-composition: replace;
 
     @starting-style {
       filter: none;
@@ -399,6 +419,17 @@
     }
   }
 
+  /* MANTRA ESCALATION — brightens watermark as situation worsens */
+  [data-sh-mantra][data-sh-escalation="2"]::before {
+    opacity: 0.1;
+  }
+  [data-sh-mantra][data-sh-escalation="3"]::before {
+    opacity: 0.15;
+  }
+  [data-sh-mantra][data-sh-escalation="4"]::before {
+    opacity: 0.25;
+  }
+
   /* SHATTER (CSS portion — JS creates fragments) */
   .sh-fragment {
     position: absolute;
@@ -466,6 +497,7 @@
       display: var(--sh-crt-scanline, none);
       content: "";
       position: absolute;
+      top: 0;
       left: 0;
       right: 0;
       height: 8%;
@@ -476,6 +508,7 @@
         transparent
       );
       animation: sh-crt-scan 3s linear infinite;
+      will-change: transform;
       pointer-events: none;
       z-index: 11;
     }

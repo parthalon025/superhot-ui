@@ -38,6 +38,9 @@ test.describe("Freshness state CSS effects", () => {
 
   test("frozen state — grayscale + opacity reduced", async ({ page }) => {
     await appendState(page, "frozen");
+    // sh-freeze-snap animation (300ms forwards) with animation-composition: replace
+    // settles to opacity: 0.6 from the final keyframe
+    await page.waitForTimeout(400);
     const styles = await page.evaluate(() => {
       const cs = getComputedStyle(document.getElementById("el"));
       return { filter: cs.filter, opacity: cs.opacity };

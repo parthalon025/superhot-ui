@@ -88,7 +88,7 @@ export function shatterElement(element, opts = {}) {
     fragmentEls.push(frag);
   }
 
-  playSfx("complete");
+  setTimeout(() => playSfx("complete"), durationMs * 0.5);
 
   const effectiveDuration = reducedMotion ? 0 : durationMs;
   const timer = setTimeout(() => {
