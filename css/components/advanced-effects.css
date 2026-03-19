@@ -143,6 +143,12 @@
     & .sh-signal-degraded::after {
       display: none;
     }
+
+    /* Disable alive-pulse on freshness states */
+    & [data-sh-state="fresh"],
+    & [data-sh-state="cooling"] {
+      animation: none !important;
+    }
   }
 
   /* ── HARDWARE CAPABILITY: MINIMAL ── */
@@ -161,6 +167,12 @@
     & .sh-signal-degraded::after,
     & [data-sh-burn-in]::before {
       display: none;
+    }
+
+    /* Disable alive-pulse on freshness states */
+    & [data-sh-state="fresh"],
+    & [data-sh-state="cooling"] {
+      animation: none !important;
     }
   }
 

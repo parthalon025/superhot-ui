@@ -126,6 +126,16 @@
   }
 }
 
+@keyframes sh-alive-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    box-shadow: 0 0 4px 0 var(--sh-phosphor-glow, rgba(0, 212, 255, 0.1));
+  }
+}
+
 /* ═══════════════════════════════════════
    BASE LAYER — freshness states
    ═══════════════════════════════════════ */
@@ -141,10 +151,26 @@
   [data-sh-state="fresh"] {
     filter: none;
     opacity: 1;
+    /* Alive indicator — subtle phosphor border pulse */
+    box-shadow: 0 0 0 0 var(--sh-phosphor-glow);
+    animation: sh-alive-pulse 4s ease-in-out infinite;
+  }
+
+  /* Stagger pulse across siblings to prevent sync */
+  [data-sh-state="fresh"]:nth-child(2n) {
+    animation-delay: 1s;
+  }
+  [data-sh-state="fresh"]:nth-child(3n) {
+    animation-delay: 2s;
+  }
+  [data-sh-state="fresh"]:nth-child(5n) {
+    animation-delay: 3s;
   }
 
   [data-sh-state="cooling"] {
     filter: saturate(0.7);
+    /* Slower alive-pulse — life is fading */
+    animation: sh-alive-pulse 6s ease-in-out infinite;
 
     @starting-style {
       filter: none;
@@ -199,9 +225,29 @@
     }
   }
 
+  /* Data arrival entrance — components materialize, not appear */
+  .sh-stat-card,
+  .sh-hero-card,
+  .sh-frame {
+    @starting-style {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    transition:
+      opacity 200ms ease-out,
+      transform 200ms ease-out;
+  }
+
   /* Reduced motion: disable all animation, keep static indicators */
   @media (prefers-reduced-motion: reduce) {
     [data-sh-state] {
+      transition: none !important;
+      animation: none !important;
+    }
+
+    .sh-stat-card,
+    .sh-hero-card,
+    .sh-frame {
       transition: none !important;
     }
   }

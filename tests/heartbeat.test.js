@@ -3,15 +3,15 @@ import assert from "node:assert/strict";
 import { heartbeat } from "../js/heartbeat.js";
 
 describe("heartbeat", () => {
-  it("calls glitchFn with low intensity", () => {
+  it("calls glitchFn with medium intensity", () => {
     const glitchMock = mock.fn();
     const freshnessMock = mock.fn();
     const el = { setAttribute: mock.fn() };
     heartbeat(el, Date.now(), { glitchFn: glitchMock, freshnessFn: freshnessMock });
     assert.strictEqual(glitchMock.mock.calls.length, 1);
     assert.deepStrictEqual(glitchMock.mock.calls[0].arguments[1], {
-      duration: 100,
-      intensity: "low",
+      duration: 150,
+      intensity: "medium",
     });
   });
   it("calls freshnessFn with element and timestamp", () => {

@@ -16,6 +16,6 @@ import { applyFreshness } from "./freshness.js";
 export function heartbeat(el, timestamp, opts = {}) {
   if (!el) return;
   const { glitchFn = glitchText, freshnessFn = applyFreshness, thresholds } = opts;
-  glitchFn(el, { duration: 100, intensity: "low" });
+  glitchFn(el, { duration: 150, intensity: "medium" });
   freshnessFn(el, timestamp, thresholds);
 }
