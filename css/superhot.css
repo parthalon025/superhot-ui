@@ -433,3 +433,46 @@
     }
   }
 }
+
+/* ═══════════════════════════════════════
+   GLOBAL A11Y — focus, selection, print
+   Unlayered so they always apply.
+   ═══════════════════════════════════════ */
+
+/* Focus Is Targeting — atmosphere-guide.md Rule 22 */
+:focus-visible {
+  outline: 2px solid var(--sh-threat);
+  outline-offset: 2px;
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+/* Reverse-video selection — terminal convention */
+::selection {
+  background-color: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+/* Print: strip decorative overlays */
+@media print {
+  .sh-crt::before,
+  .sh-crt::after,
+  .sh-crt-flicker-on {
+    display: none !important;
+  }
+  [data-sh-mantra]::before,
+  [data-sh-state="stale"]::after {
+    display: none !important;
+  }
+  [data-sh-effect="threat-pulse"] {
+    animation: none !important;
+    border-color: var(--sh-threat);
+  }
+  [data-sh-effect="glitch"] {
+    animation: none !important;
+  }
+}
