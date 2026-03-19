@@ -1,13 +1,9 @@
 import { build, context } from "esbuild";
-import { copyFileSync, mkdirSync } from "fs";
+import { mkdirSync } from "fs";
 
 const isWatch = process.argv.includes("--watch");
 
 mkdirSync("dist", { recursive: true });
-
-// Copy CSS (no processing needed)
-copyFileSync("css/superhot.css", "dist/superhot.css");
-console.log("  dist/superhot.css");
 
 // Shared esbuild options
 const shared = {
@@ -80,12 +76,27 @@ const preactConfig = {
   jsxImportSource: "preact",
 };
 
+// CSS bundle (resolves @import into single flat file)
+const cssConfig = {
+  entryPoints: ["css/superhot.css"],
+  outfile: "dist/superhot.css",
+  bundle: true,
+  minify: !isWatch,
+  sourcemap: true,
+  loader: { ".css": "css" },
+};
+
 if (isWatch) {
-  const [jsCtx, preactCtx] = await Promise.all([context(jsConfig), context(preactConfig)]);
-  await Promise.all([jsCtx.watch(), preactCtx.watch()]);
+  const [jsCtx, preactCtx, cssCtx] = await Promise.all([
+    context(jsConfig),
+    context(preactConfig),
+    context(cssConfig),
+  ]);
+  await Promise.all([jsCtx.watch(), preactCtx.watch(), cssCtx.watch()]);
   console.log("Watching for changes...");
 } else {
-  await Promise.all([build(jsConfig), build(preactConfig)]);
+  await Promise.all([build(jsConfig), build(preactConfig), build(cssConfig)]);
+  console.log("  dist/superhot.css");
   console.log("  dist/superhot.js");
   console.log("  dist/superhot.preact.js");
   console.log("Build complete.");
