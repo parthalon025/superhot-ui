@@ -61,10 +61,10 @@
 
 @keyframes sh-antline-flow {
   0% {
-    left: -6px;
+    transform: translateX(-6px);
   }
   100% {
-    left: 100%;
+    transform: translateX(calc(100cqi));
   }
 }
 
@@ -88,10 +88,10 @@
 
 @keyframes sh-antline-flow-v {
   0% {
-    top: -6px;
+    transform: translateY(-6px);
   }
   100% {
-    top: 100%;
+    transform: translateY(calc(100cqi));
   }
 }
 
