@@ -32,6 +32,7 @@ import {
   removeMantra,
   playSfx,
   ShAudio,
+  setFacilityState,
 } from "superhot-ui";
 
 // Preact components
@@ -252,18 +253,21 @@ const escalation = new EscalationTimer({
     }
     if (name === "section") {
       sectionMantraActive.value = true;
+      setFacilityState("alert");
     }
     if (name === "layout") {
       incidentActive.value = true;
       incidentSeverity.value = "critical";
       incidentMessage.value = "SYSTEM DEGRADED";
       incidentStart.value = Date.now();
+      setFacilityState("breach");
     }
   },
   onReset: () => {
     sidebarAlert.value = false;
     sectionMantraActive.value = false;
     incidentActive.value = false;
+    setFacilityState("normal");
   },
 });
 ```
@@ -303,6 +307,9 @@ When a failed service comes back, run the 5-step choreography (atmosphere Rule 3
 
 ```js
 async function handleRecovery(el) {
+  // Reset facility atmosphere first
+  setFacilityState("normal");
+
   // Stop escalation
   escalation.reset();
 
@@ -603,10 +610,11 @@ Fault detected
         |
         +-- 5s:  stage 1 (component) -- ShThreatPulse + ShGlitch on card
         +-- 10s: stage 2 (sidebar) -- nav item highlight
-        +-- 45s: stage 3 (section) -- ShMantra watermark: "BACKEND OFFLINE"
-        +-- 60s: stage 4 (layout) -- ShIncidentHUD: "SYSTEM DEGRADED"
+        +-- 45s: stage 3 (section) -- setFacilityState('alert') + ShMantra
+        +-- 60s: stage 4 (layout) -- setFacilityState('breach') + ShIncidentHUD
 
 Service recovers
+  |-> setFacilityState('normal')
   |-> playSfx("complete")
   |-> escalation.reset()
   |-> recoverySequence()

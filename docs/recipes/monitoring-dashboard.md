@@ -58,6 +58,10 @@ import {
   setCrtMode,
   detectCapability,
   applyCapability,
+  setFacilityState,
+  narrate,
+  ShNarrator,
+  ShAudio,
 } from "superhot-ui";
 
 // Preact components
@@ -171,6 +175,16 @@ async function pollStatus() {
 }
 ```
 
+Set personality and facility state at app init (before first render):
+
+```js
+// Set personality at app init (before first render)
+ShNarrator.personality = "glados";
+ShAudio.narratorPersonality = "glados";
+ShAudio.enabled = localStorage.getItem("sfx-enabled") === "true";
+setFacilityState("normal");
+```
+
 Start polling on mount:
 
 ```js
@@ -197,16 +211,19 @@ const escalation = new EscalationTimer({
   onEscalate: (level, name) => {
     if (name === "section") {
       sectionMantraActive.value = true;
+      setFacilityState("alert");
     }
     if (name === "layout") {
       incidentActive.value = true;
       incidentStart.value = Date.now();
       incidentMessage.value = "SYSTEM DEGRADED";
+      setFacilityState("breach");
     }
   },
   onReset: () => {
     sectionMantraActive.value = false;
     incidentActive.value = false;
+    setFacilityState("normal");
   },
 });
 ```
@@ -235,6 +252,7 @@ function addToast(type, message) {
 }
 
 async function handleRecovery(el) {
+  setFacilityState("normal");
   escalation.reset();
 
   await recoverySequence({
@@ -434,9 +452,11 @@ The escalation stages:
 | Stage         | Delay | Effect                                    |
 | ------------- | ----- | ----------------------------------------- |
 | 1 — component | 5s    | Individual card pulse                     |
-| 2 — sidebar   | 15s   | Nav item highlights                       |
-| 3 — section   | 60s   | `ShMantra` watermark: "DEGRADED"          |
-| 4 — layout    | 120s  | `ShIncidentHUD` banner: "SYSTEM DEGRADED" |
+| 2 — sidebar   | 10s   | Nav item highlights                       |
+| 3 — section   | 45s   | `setFacilityState('alert')` + mantra      |
+| 4 — layout    | 60s   | `setFacilityState('breach')` + HUD banner |
+
+On recovery, `setFacilityState('normal')` resets the global atmosphere before the recovery sequence runs. The CSS token shift is instant — the visual drama follows via `recoverySequence()`.
 
 CRT preferences persist across sessions via localStorage. The `ShCrtToggle` in the nav footer gives users control. Stripe-only is the recommended default -- full aesthetic, zero cost.
 
