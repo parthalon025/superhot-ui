@@ -36,18 +36,20 @@ The effect reads as system output — it would make sense in the SUPERHOT game w
 | Mantra watermark: "system is broadcasting a status" | Gradient background for aesthetics |
 | Glitch on error: "this thing is broken/corrupted"   | Loading spinner                    |
 
-### 3. Three-Color Palette
+### 3. Six-Color Palette
 
-Components use only the four established signal colors. No additional hues.
+Components use only the six established signal colors. No additional hues.
 
-| Color | Token           | Signal                   |
-| ----- | --------------- | ------------------------ |
-| White | `--sh-bright`   | Environment / background |
-| Black | `--sh-void`     | Interactive / utility    |
-| Red   | `--sh-threat`   | Threat / urgency / error |
-| Cyan  | `--sh-phosphor` | Health / success / data  |
+| Color  | Token                | Signal                         | Origin   |
+| ------ | -------------------- | ------------------------------ | -------- |
+| White  | `--sh-bright`        | Environment / background       | SUPERHOT |
+| Black  | `--sh-void`          | Interactive / utility          | SUPERHOT |
+| Red    | `--sh-threat`        | Threat / urgency / error       | SUPERHOT |
+| Cyan   | `--sh-phosphor`      | Health / success / data        | SUPERHOT |
+| Blue   | `--sh-portal-blue`   | Connection / inactive flow     | Portal   |
+| Orange | `--sh-portal-orange` | Active flow / state transition | Portal   |
 
-Amber, green, blue, purple — none of these. If you need a new signal, map it to one of the four.
+The four SUPERHOT colors are the backbone. Portal blue and orange add warmth and connection on top. In `breach` mode, facility state collapses Portal tokens into `--sh-threat` — the six reduce to four. Additional hues (amber, green, purple) are still forbidden.
 
 ### 4. Emotional Loop Fit
 
@@ -67,6 +69,11 @@ Tension → Pause → Plan → Execute → Catharsis
 | ShStatusBadge (entity state)    | All                 |
 | ShToast (event notification)    | Execute → Catharsis |
 | ShShatter (dismissal)           | Catharsis           |
+| ShAnnouncement (system speaks)  | All                 |
+| ShAntline (connection)          | Tension → Pause     |
+| ShTestChamber (assembly)        | Tension → Pause     |
+| Facility State (atmosphere)     | All                 |
+| Narrator (personality text)     | All                 |
 
 ---
 
@@ -99,8 +106,27 @@ All text effects, watermarks, and system messages should read like terminal outp
 - **Layout components** — grids, sidebars, navigation — those live in the consuming project
 - **Data fetching** — components accept data as props, never fetch
 - **App-specific patterns** — if it only makes sense for ollama-queue, build it in ollama-queue
-- **Colors beyond the four** — if you need amber for warnings, use `--status-warning` (maps to phosphor-adjacent, not orange)
+- **Colors beyond the six** — if you need amber for warnings, use `--status-warning` (maps to phosphor-adjacent, not a new hue)
 - **Decorative animation** — hover bounce, idle wiggle, entrance flip — none of these
+
+---
+
+## The Portal Fusion
+
+superhot-ui fuses two aesthetic layers into one atmosphere:
+
+- **SUPERHOT** is the experiment — the infrastructure being monitored. Visual effects (shatter, glitch, mantra, threat-pulse, freeze) are the experiment's physical state.
+- **Portal** adds personality and connection — GLaDOS narrates, antlines connect, test chambers assemble, the facility has a state.
+
+The two are not separate themes. They are emotional poles of one experience:
+
+| Facility State | Aesthetic                                 | User's Role                        |
+| -------------- | ----------------------------------------- | ---------------------------------- |
+| `normal`       | Portal calm — blue, clinical, witty       | Test subject (observed)            |
+| `alert`        | The Third Thing — cracking, gallows humor | Operator (relied upon)             |
+| `breach`       | SUPERHOT rage — red, commanding, minimal  | The experiment (identity collapse) |
+
+The `alert` state is not a blend — it has its own unique aesthetic: gallows humor, visual degradation, stuttering motion, trailing typography. Protect it as the most valuable experience.
 
 ---
 
@@ -110,7 +136,7 @@ Checklist before writing any code:
 
 - [ ] Can I name the single signal this communicates?
 - [ ] Is it diegetic (would it make sense in the SUPERHOT world)?
-- [ ] Does it use only the four palette colors?
+- [ ] Does it use only the six palette colors? Does it respond to facility state?
 - [ ] Which emotional loop node does it belong to?
 - [ ] Does it follow the three-layer pattern (CSS → JS → Preact)?
 - [ ] Is it reusable across projects (not just ollama-queue)?

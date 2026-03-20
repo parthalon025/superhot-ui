@@ -1,5 +1,35 @@
 # Changelog
 
+## [0.4.0] — 2026-03-20
+
+### Added — Portal Phase 2
+
+- Facility state system (`setFacilityState`, `getFacilityState`) — atmosphere master switch. Three states: `normal` (Portal calm), `alert` (red bleeds into blue), `breach` (full SUPERHOT). Sets `data-sh-facility` on `<html>`, CSS descendant selectors shift all Portal tokens simultaneously.
+- Narrator system (`narrate`, `ShNarrator`) — personality-driven phrase engine. 5 personalities (GLaDOS, Cave Johnson, Wheatley, Turret, SUPERHOT) × 12 categories. Template interpolation, anti-repeat, context-aware.
+- Narrator corpus (`js/narrator-corpus.js`) — 330-line phrase bank with personality-appropriate text for every UI context.
+- ShAnnouncement component — narrative banner with typing effect, personality styling, `prefers-reduced-motion` support, `aria-live="polite"`.
+- ShAntline component — Portal-inspired animated connecting line. Active (orange) vs inactive (blue). Colors respond to facility state.
+- ShTestChamber component — panel assembly container with staggered slide animation. Chamber number badge, direction control, compromised state.
+- Portal SFX: `portal-chime` (ascending arpeggio), `portal-fail` (descending), `turret-deploy` (formant activation), `turret-shutdown` (formant deactivation), `facility-hum` (60Hz ambient), `panel-slide` (filtered noise burst).
+- Personality-aware audio remapping — `ShAudio.narratorPersonality` auto-remaps generic SFX to personality variants (e.g., `complete` → `portal-chime` for GLaDOS).
+- Facility CSS (`css/components/facility.css`) — token shifts for alert and breach states, including Cave's terminal-amber tokens.
+- Atmosphere reviewer agent (`.claude/agents/atmosphere-reviewer.md`) — opus-model cohesion reviewer with recursive loop model, three-experience framework, 11-check review process, severity levels, consumer context detection.
+
+### Fixed
+
+- CSS bundle: 23 missing component CSS imports added to `superhot.css`. Consumers using `@import 'superhot-ui/css'` now get all 33 component files.
+- JS bundle: 16 missing module exports added to esbuild barrel. Consumers can now import `EscalationTimer`, `orchestrateEscalation`, `recoverySequence`, `heartbeat`, `bootSequence`, `computeThreshold`, `watchFreshness`, `celebrationSequence`, `confirmAction`, `detectCapability`, `applyCapability`, `createToastManager`, `createShortcutRegistry`, `setMonitorVariant`, `loadMonitorVariant`, `scrollSpy`, `formatTime`.
+- Cave's `--sh-terminal-amber` and `--sh-terminal-bg` tokens now remap to threat in breach state (previously orphaned).
+- EscalationTimer threshold documentation corrected: 5s/10s/45s/60s (was incorrectly documented as 5s/15s/60s/120s).
+- `facility.js` JSDoc corrected — documents CSS-only scope, removes aspirational narrator coupling claim.
+
+### Changed
+
+- Consumer guide restructured: App Initialization section, Facility State promoted to top, Audio consolidated, Failure & Recovery merged, Portal components integrated (not appended).
+- Consumer CLAUDE.md template updated: 6-color palette, facility state rules, emotional arc with Portal, companion role guidance, Portal gotchas.
+- Design philosophy updated for 6-color palette and Portal fusion.
+- Experience design updated with facility state, narrator, and companion roles.
+
 ## [0.3.0] — 2026-03-18
 
 ### Added

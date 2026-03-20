@@ -64,6 +64,13 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | `js/narrator.js`        | Personality phrase engine (`narrate`, `ShNarrator`)            |
 | `js/narrator-corpus.js` | Phrase bank (GLaDOS, Cave, Wheatley, Turret, SUPERHOT)         |
 | `js/facility.js`        | Facility state system (`setFacilityState`, `getFacilityState`) |
+| `js/escalation.js`      | Failure escalation timer (4-stage progressive drama)           |
+| `js/orchestrate.js`     | Multi-surface crisis orchestration (batteries-included)        |
+| `js/recovery.js`        | 5-step async recovery choreography                             |
+| `js/boot.js`            | Progressive typewriter boot sequence                           |
+| `js/threshold.js`       | Metric threshold computation + DOM glow application            |
+| `js/heartbeat.js`       | Polling heartbeat (glitch burst + freshness re-evaluation)     |
+| `.claude/agents/`       | Atmosphere reviewer agent                                      |
 | `preact/Sh*.jsx`        | Preact wrapper components                                      |
 | `dist/`                 | Built outputs (gitignored)                                     |
 | `examples/demo.html`    | Standalone demo (no build step)                                |
@@ -78,6 +85,18 @@ Override any `--sh-*` token in your CSS:
   --sh-shatter-duration: 400ms;
 }
 ```
+
+## Atmosphere System
+
+Three coordinated systems govern the dashboard experience:
+
+1. **Facility State** (`setFacilityState`) — CSS atmosphere master switch. Sets `data-sh-facility` on `<html>`, shifting all Portal tokens globally. Three states: `normal` (Portal calm), `alert` (red bleeds into blue), `breach` (full SUPERHOT — all Portal tokens become threat).
+
+2. **Narrator** (`narrate`, `ShNarrator`) — Personality-driven phrase engine. Five personalities (GLaDOS, Cave, Wheatley, Turret, SUPERHOT) across 12 categories. Does NOT auto-change with facility state — set explicitly.
+
+3. **Audio** (`playSfx`, `ShAudio`) — Procedural SFX. Original (complete, error, dlq, pause) + Portal (portal-chime, portal-fail, turret-deploy, turret-shutdown, facility-hum, panel-slide) + tension drone. Personality-aware remapping when `ShAudio.narratorPersonality` is set.
+
+**Atmosphere Reviewer:** `.claude/agents/atmosphere-reviewer.md` — opus-model agent that reviews cohesion between SUPERHOT and Portal aesthetic layers. Runs proactive light pass on atmosphere file changes, full 11-check pass on demand.
 
 ## Scope Tags
 

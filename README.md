@@ -5,11 +5,11 @@
 ![SUPERHOT UI — Freshness States, Threat Pulse, Glitch, Mantra](screenshots/demo-hero.png)
 
 SUPERHOT-inspired visual effects system for operational dashboards.
-CSS-first. Framework-agnostic. Diegetic-only.
+CSS-first. Framework-agnostic. Diegetic-only. Portal × SUPERHOT fusion.
 
 Every effect communicates exactly one signal. No decoration. No noise.
 
-**v0.3.0** | [Consumer Guide](docs/consumer-guide.md) | [CSS Reference](docs/css-classes.md) | [Demo](examples/demo.html) | MIT
+**v0.4.0** | [Consumer Guide](docs/consumer-guide.md) | [CSS Reference](docs/css-classes.md) | [Demo](examples/demo.html) | MIT
 
 ---
 
@@ -24,8 +24,14 @@ npm install file:../superhot-ui
 ```
 
 ```js
-import { applyFreshness, heartbeat, orchestrateEscalation } from "superhot-ui";
-import { ShFrozen, ShToast, ShIncidentHUD } from "superhot-ui/preact";
+import {
+  applyFreshness,
+  heartbeat,
+  orchestrateEscalation,
+  setFacilityState,
+  narrate,
+} from "superhot-ui";
+import { ShFrozen, ShToast, ShIncidentHUD, ShAnnouncement, ShAntline } from "superhot-ui/preact";
 ```
 
 SYSTEM READY.
@@ -119,9 +125,20 @@ Then it starts again.
 | Recovery      | `recoverySequence(opts)`  | SYSTEM RESTORED |
 | Boot Sequence | `bootSequence(el, lines)` | REBORN          |
 
+### ATMOSPHERE
+
+| Effect         | Trigger                                     | Signal                    |
+| -------------- | ------------------------------------------- | ------------------------- |
+| Facility State | `setFacilityState('normal\|alert\|breach')` | ATMOSPHERE SHIFT          |
+| Narrator       | `narrate(category, context)`                | PERSONALITY SPEAKS        |
+| Announcement   | `<ShAnnouncement>`                          | SYSTEM ADDRESSES OPERATOR |
+| Antline        | `<ShAntline active>`                        | CONNECTION FLOW           |
+| Test Chamber   | `<ShTestChamber>`                           | PANELS ASSEMBLE           |
+| Portal Audio   | `playSfx('portal-chime')`                   | MELODIC RESOLUTION        |
+
 ---
 
-## 24 COMPONENTS
+## 27 COMPONENTS
 
 ```
 PageBanner    HeroCard      StatsGrid     DataTable
@@ -130,6 +147,7 @@ ErrorState    Modal         IncidentHUD   MatrixRain
 StatCard      StatusBadge   Toast         CommandPalette
 EmptyState    CrtToggle     Skeleton      EventTimeline
 ProgressSteps FilterPanel   SignalBars    Frozen
+Announcement  Antline       TestChamber
 ```
 
 Form elements: `.sh-input` `.sh-select` `.sh-toggle` `.sh-tabs` `.sh-kbd`
@@ -150,7 +168,7 @@ JS   ──→  vanilla ESM utilities that set those attributes
 JSX  ──→  Preact wrappers with ARIA + lifecycle
 ```
 
-24 Preact components. 29 CSS component files. 21 JS utilities.
+27 Preact components. 33 CSS component files. 25 JS utilities.
 
 ---
 
@@ -205,6 +223,8 @@ CRT intensity: stripe, scanline, flicker — each independently toggled.
 3. CSS first. JS when behavior requires it. Preact when lifecycle demands it
 4. `prefers-reduced-motion` is law
 5. The operator's attention is sacred. Never waste it
+6. Facility state is the atmosphere master switch — one call shifts everything
+7. The operator is test subject, operator, and experiment simultaneously
 
 ---
 
@@ -217,6 +237,7 @@ CRT intensity: stripe, scanline, flicker — each independently toggled.
 | [Atmosphere Guide](docs/atmosphere-guide.md)   | 40 rules for consumer dashboards         |
 | [Design Philosophy](docs/design-philosophy.md) | The four tests every component must pass |
 | [Anti-Patterns](docs/anti-patterns.md)         | What NOT to do                           |
+| [Experience Design](docs/experience-design.md) | Interface orchestration + emotional arc  |
 | [Recipes](docs/recipes/)                       | 5 complete integration tutorials         |
 | [Component Docs](docs/components/)             | Props, usage, ARIA for all 24 components |
 | [Demo](examples/demo.html)                     | Interactive showcase — no build step     |

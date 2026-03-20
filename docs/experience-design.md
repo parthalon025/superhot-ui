@@ -29,6 +29,14 @@ not a menu hierarchy.
 The dashboard operates in one of three modes. Each has a distinct visual signature applied
 **across every surface simultaneously** — not just the affected component.
 
+Facility state governs the atmosphere shift. `setFacilityState()` sets `data-sh-facility` on `<html>`, and CSS descendant selectors shift all Portal tokens simultaneously. The three health states map to facility states:
+
+| Health State | Facility State | CSS Effect                         |
+| ------------ | -------------- | ---------------------------------- |
+| Operational  | `normal`       | Portal blue/orange unchanged       |
+| Degraded     | `alert`        | `--sh-portal-blue` → `--sh-threat` |
+| Critical     | `breach`       | All Portal tokens → threat red     |
+
 ### Operational (all healthy)
 
 - Phosphor calm — `--sh-phosphor` glow on active elements, quiet
@@ -76,6 +84,9 @@ Tension → Pause → Plan → Execute → Catharsis
 | User navigates to fix the issue  | Execute         | Route transition with `@starting-style` entrance                 |
 | Service recovers                 | Catharsis       | ShGlitch burst on recovery, then phosphor calm returns           |
 | Job completes (queue)            | Catharsis       | `playSfx('complete')` if audio enabled                           |
+| Page load, panels assembling     | Tension → Pause | `ShTestChamber` panels slide in + `ShAnnouncement` greeting      |
+| Facility state shifts            | Tension         | `setFacilityState('alert')` — red bleeds through blue            |
+| Recovery with personality        | Catharsis       | `setFacilityState('normal')` + narrator success phrase           |
 
 ---
 
@@ -146,6 +157,7 @@ No hover tooltips. The label is the tooltip. If a label needs a tooltip, it's to
 
 When a service or component fails, the response is **coordinated across surfaces**:
 
+0. **Facility state** — `setFacilityState('alert'|'breach')` shifts all Portal colors globally (the umbrella over all other surfaces)
 1. **Graph node** — `ShThreatPulse persistent`, color shifts to `--sh-threat`
 2. **Stat card** — `status="error"`, border and glow shift, `ShThreatPulse` activates
 3. **Sidebar** — indicator dot on the affected route pulses threat red
@@ -213,3 +225,21 @@ Every user action gets a response from the system. No silent actions.
 | Data refreshed             | `ShGlitch` micro-burst on the "last updated" timestamp   |
 
 Silence is reserved for steady-state operation. Any change in the system gets a signal.
+
+---
+
+## Narrator & Companions
+
+The narrator system adds personality to system communication. Five personalities, each with a specific relationship to the operator:
+
+| Personality  | Role                        | When to use                        |
+| ------------ | --------------------------- | ---------------------------------- |
+| GLaDOS       | Overseer — observes, grades | Main monitoring voice              |
+| Cave Johnson | Founder — inspires          | Onboarding, setup, about pages     |
+| Wheatley     | Companion — mirrors stress  | User-facing error recovery         |
+| Turret       | Sentinel — terse sensor     | Alert banners, notification badges |
+| SUPERHOT     | The experiment              | Breach mantras, raw system voice   |
+
+Narrator personality does not auto-change with facility state. Set it explicitly via `ShNarrator.personality`. Keep `ShAudio.narratorPersonality` in sync for personality-aware SFX remapping.
+
+During `alert`, GLaDOS gets shorter and more pointed. Wheatley accelerates. Turret reports steadily. Cave goes quiet. In `breach`, only GLaDOS (at her coldest), Turret, and SUPERHOT are appropriate.
