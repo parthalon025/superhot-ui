@@ -47,13 +47,98 @@ silent render failures.
 @import 'superhot-ui/tokens';
 
 // JS utilities (vanilla)
-import { applyFreshness, shatterElement, glitchText, applyMantra, removeMantra, playSfx, setCrtMode } from 'superhot-ui';
+import {
+  // Core effects
+  applyFreshness, shatterElement, glitchText, applyMantra, removeMantra,
+  // Audio (all SFX — original + Portal)
+  playSfx, ShAudio, setTensionDrone, stopTensionDrone,
+  // CRT
+  setCrtMode,
+  // Atmosphere
+  trackEffect, isOverBudget,
+  // Narrator
+  narrate, ShNarrator,
+  // Facility state
+  setFacilityState, getFacilityState,
+} from 'superhot-ui';
 
 // Preact components
-import { ShFrozen, ShShatter, ShGlitch, ShMantra, ShThreatPulse,
-         ShSkeleton, ShToast, ShStatusBadge, ShStatCard,
-         ShCommandPalette, ShCrtToggle } from 'superhot-ui/preact';
+import {
+  // Effects
+  ShFrozen, ShShatter, ShGlitch, ShMantra, ShThreatPulse,
+  // Layout & data display
+  ShSkeleton, ShToast, ShStatusBadge, ShStatCard, ShStatsGrid,
+  ShDataTable, ShNav, ShTimeChart, ShPipeline,
+  ShPageBanner, ShHeroCard, ShCollapsible, ShEmptyState, ShErrorState,
+  // Interactive
+  ShCommandPalette, ShCrtToggle, ShModal,
+  // Ambient
+  ShMatrixRain, ShIncidentHUD,
+  // Portal
+  ShAnnouncement, ShAntline, ShTestChamber,
+} from 'superhot-ui/preact';
 ```
+
+---
+
+## App Initialization
+
+Set up the atmosphere systems once at app startup. These three configs work together:
+
+```js
+import { setFacilityState, ShNarrator, ShAudio } from "superhot-ui";
+import { detectCapability, applyCapability } from "superhot-ui";
+
+// 1. Hardware capability tier (disables effects on weak devices)
+applyCapability(detectCapability());
+
+// 2. Facility state — atmosphere baseline
+setFacilityState("normal");
+
+// 3. Personality — keep narrator + audio in sync
+const personality = localStorage.getItem("personality") ?? "glados";
+ShNarrator.personality = personality;
+ShAudio.narratorPersonality = personality;
+
+// 4. Audio — always opt-in from user preference
+ShAudio.enabled = localStorage.getItem("sfx-enabled") === "true";
+```
+
+After this, facility state governs the global CSS atmosphere, the narrator generates personality-appropriate phrases, and audio plays personality-matched SFX.
+
+---
+
+## Facility State
+
+Unified atmosphere control — one call shifts the entire UI simultaneously. Sets `data-sh-facility` on `<html>`, and CSS descendant selectors shift token values for every component underneath.
+
+```js
+import { setFacilityState, getFacilityState } from "superhot-ui";
+
+setFacilityState("normal"); // Portal blue antlines, standard palette
+setFacilityState("alert"); // SUPERHOT red bleeds into Portal blue
+setFacilityState("breach"); // Full SUPERHOT mode — all Portal colors become threat
+```
+
+Three states:
+
+| State    | CSS Effect                          | When to use                    |
+| -------- | ----------------------------------- | ------------------------------ |
+| `normal` | Portal blue/orange tokens unchanged | All systems healthy            |
+| `alert`  | `--sh-portal-blue` → `--sh-threat`  | Degraded — partial failure     |
+| `breach` | All Portal tokens → threat red/glow | Critical — system-wide failure |
+
+Wire to your health detection:
+
+```js
+if (criticalCount > 0) setFacilityState("breach");
+else if (warningCount > 0) setFacilityState("alert");
+else setFacilityState("normal");
+```
+
+**Relationship to escalation:** Facility state is the CSS atmosphere layer — it shifts colors globally. The escalation APIs (`EscalationTimer`, `orchestrateEscalation`) are the JS choreography layer — they animate specific surfaces over time. Use both: facility state for the instant atmosphere shift, escalation for the progressive visual drama.
+
+**SSR safe:** `setFacilityState()` checks `typeof document` before touching the DOM — call it unconditionally.
 
 ---
 
@@ -132,6 +217,141 @@ Effects compose via `animation-composition: accumulate` — stack as many as nee
   </ShGlitch>
 </ShShatter>
 ```
+
+---
+
+## Narrator
+
+Personality-driven phrase engine for UI text. Returns a context-appropriate phrase from the corpus, avoiding repeats.
+
+```js
+import { narrate, ShNarrator } from "superhot-ui";
+
+// Personality is set at init (see App Initialization)
+const msg = narrate("error"); // random personality error phrase
+const msg = narrate("error", { errorCount: 5 }); // with template context
+const msg = narrate("loading"); // loading state text
+const msg = narrate("empty"); // empty state text
+```
+
+Categories: `toast`, `error`, `loading`, `status`, `empty`, `greeting`, `farewell`, `countdown`, `warning`, `destructive`, `success`, `search`.
+
+Five personalities: `glados`, `cave`, `wheatley`, `turret`, `superhot`.
+
+Some phrases are template functions that accept context: `{ errorCount, label, value, action, remaining }`.
+
+**Note:** The narrator does not automatically change tone based on facility state. Personality is set globally via `ShNarrator.personality`. If you want terse phrases during `breach`, switch to the `superhot` personality explicitly.
+
+### Personality Roles
+
+Each personality has a specific relationship to the operator — choose based on context, not preference:
+
+| Personality | Role                                | Best for                                         | Facility state fit                           |
+| ----------- | ----------------------------------- | ------------------------------------------------ | -------------------------------------------- |
+| `glados`    | Overseer — observes, grades         | Main monitoring voice, status, errors            | All states (stays cool in breach)            |
+| `cave`      | Founder — inspires, contextualizes  | Onboarding, setup, about pages, release notes    | `normal` only (not operational)              |
+| `wheatley`  | Companion — mirrors operator stress | User-facing error recovery, unexpected states    | `normal` and `alert` (overwhelmed in breach) |
+| `turret`    | Sentinel — terse sensor reports     | Alert banners, notification badges, terse status | All states (consistent observer)             |
+| `superhot`  | The experiment itself               | Breach mantras, raw system voice                 | `breach` primarily                           |
+
+During `alert`, GLaDOS gets shorter and more pointed. Wheatley accelerates. Turret reports steadily. Cave goes quiet. In `breach`, only GLaDOS (at her coldest), Turret, and SUPERHOT are appropriate — the situation is too severe for Wheatley's panic or Cave's pep talks.
+
+---
+
+## Announcement
+
+Personality-driven narrative banner with typing effect. The system "speaks" to the user.
+
+```jsx
+import { ShAnnouncement } from "superhot-ui/preact";
+import { narrate } from "superhot-ui";
+
+<ShAnnouncement
+  message={narrate("greeting")}
+  personality="glados"
+  typeSpeed={30}
+  source="ENRICHMENT CENTER"
+/>;
+```
+
+Props:
+
+| Prop          | Type                                                 | Default    | Description                                      |
+| ------------- | ---------------------------------------------------- | ---------- | ------------------------------------------------ |
+| `message`     | `string`                                             | —          | Text to type out character by character          |
+| `personality` | `'glados'\|'cave'\|'wheatley'\|'turret'\|'superhot'` | `'glados'` | Visual variant (border color, source style)      |
+| `typeSpeed`   | `number`                                             | `30`       | Milliseconds per character                       |
+| `showCursor`  | `boolean`                                            | `true`     | Blinking cursor during typing                    |
+| `source`      | `string`                                             | —          | Optional source label (e.g. "ENRICHMENT CENTER") |
+
+Respects `prefers-reduced-motion` — shows full text immediately when enabled. Uses `role="status"` + `aria-live="polite"` for screen readers.
+
+---
+
+## Antline
+
+Portal-inspired animated connecting line between elements. Signals relationship or data flow.
+
+```jsx
+import { ShAntline } from "superhot-ui/preact";
+
+{
+  /* Horizontal (default) */
+}
+<ShAntline active={isConnected} />;
+
+{
+  /* Vertical */
+}
+<ShAntline active={isFlowing} vertical />;
+
+{
+  /* With content between endpoints */
+}
+<ShAntline active={pipelineHealthy}>
+  <span>PIPELINE</span>
+</ShAntline>;
+```
+
+Props:
+
+| Prop       | Type      | Default | Description                        |
+| ---------- | --------- | ------- | ---------------------------------- |
+| `active`   | `boolean` | `false` | Active (orange) vs inactive (blue) |
+| `vertical` | `boolean` | `false` | Vertical orientation               |
+
+Renders as `aria-hidden="true"` — purely decorative. Colors respond to facility state (blue becomes red in `alert`/`breach`).
+
+---
+
+## Test Chamber
+
+Panel assembly container — children with class `sh-panel` animate in with staggered slide, like Portal test chamber panels assembling around the player.
+
+```jsx
+import { ShTestChamber } from "superhot-ui/preact";
+
+<ShTestChamber chamber={1} direction="bottom">
+  <div class="sh-panel">
+    <h3>QUEUE STATUS</h3>
+    <p>All systems nominal</p>
+  </div>
+  <div class="sh-panel">
+    <h3>BACKEND HEALTH</h3>
+    <p>3/3 online</p>
+  </div>
+</ShTestChamber>;
+```
+
+Props:
+
+| Prop          | Type                        | Default    | Description                                  |
+| ------------- | --------------------------- | ---------- | -------------------------------------------- |
+| `chamber`     | `number`                    | —          | Optional chamber number badge ("CHAMBER 01") |
+| `direction`   | `'bottom'\|'left'\|'right'` | `'bottom'` | Panel slide direction                        |
+| `compromised` | `boolean`                   | `false`    | Compromised state (panels shift apart)       |
+
+Plays `panel-slide` SFX on mount (if audio enabled). Use `compromised={true}` when the section enters a failure state.
 
 ---
 
@@ -238,20 +458,60 @@ const addToast = (type, message, duration = 3000) => {
 
 ---
 
-## Audio (opt-in)
+## Audio
+
+All SFX are procedural (Web Audio API) — no audio files needed. Audio is always opt-in.
+
+### Original SFX
 
 ```js
-import { playSfx } from "superhot-ui";
+import { playSfx, ShAudio } from "superhot-ui";
 
-// Enable from user preference (default: off)
-import { ShAudio } from "superhot-ui";
 ShAudio.enabled = localStorage.getItem("sfx-enabled") === "true";
 
-// Play on events
 playSfx("complete"); // job finished
 playSfx("error"); // job failed / DLQ
+playSfx("dlq"); // dead letter queue entry
 playSfx("pause"); // daemon paused
 ```
+
+### Portal SFX
+
+```js
+playSfx("portal-chime"); // Ascending arpeggio (Still Alive motif)
+playSfx("portal-fail"); // Descending arpeggio (failure variant)
+playSfx("turret-deploy"); // Formant-filtered robotic activation
+playSfx("turret-shutdown"); // Descending formant shutdown
+playSfx("facility-hum"); // Low 60Hz ambient hum
+playSfx("panel-slide"); // Filtered noise burst (mechanical servo)
+```
+
+### Personality-Aware Remapping
+
+When `ShAudio.narratorPersonality` is set, generic sounds auto-remap:
+
+| Generic    | GLaDOS / Cave / Wheatley | Turret            | SUPERHOT    |
+| ---------- | ------------------------ | ----------------- | ----------- |
+| `complete` | `portal-chime`           | `turret-deploy`   | (unchanged) |
+| `error`    | `portal-fail`            | `turret-shutdown` | (unchanged) |
+
+```js
+ShAudio.narratorPersonality = "glados";
+playSfx("complete"); // plays portal-chime instead
+playSfx("error"); // plays portal-fail instead
+```
+
+### Tension Drone
+
+```js
+import { setTensionDrone, stopTensionDrone } from "superhot-ui";
+
+setTensionDrone(1); // subtle 40Hz rumble
+setTensionDrone(3); // dissonant 3-oscillator cluster
+stopTensionDrone(); // fade out over 300ms
+```
+
+Automatically wired into `orchestrateEscalation` — manual use only needed for custom escalation patterns.
 
 ---
 
@@ -286,7 +546,11 @@ Fires a glitch micro-burst + freshness re-evaluation on each poll (atmosphere Ru
 
 ---
 
-## Failure Escalation
+## Failure & Recovery
+
+Three layers handle failure, from simple to orchestrated:
+
+### EscalationTimer (manual wiring)
 
 ```js
 import { EscalationTimer } from "superhot-ui";
@@ -299,18 +563,36 @@ const esc = new EscalationTimer({
   onReset: () => removeMantra(layoutEl),
 });
 
-// On failure detected:
-esc.start(); // begins 5s → 15s → 60s → 120s escalation
-
-// On recovery:
-esc.reset();
+esc.start(); // begins 5s → 10s → 45s → 60s escalation
+esc.reset(); // on recovery
 ```
 
 4-stage timeline: component → sidebar → section mantra → layout mantra (atmosphere Rule 12).
 
----
+### orchestrateEscalation (batteries-included)
 
-## Recovery Sequence
+```js
+import { orchestrateEscalation } from "superhot-ui";
+
+const esc = orchestrateEscalation({
+  surfaces: {
+    component: [failedCardEl],
+    sidebar: [navIndicatorEl],
+    section: sectionEl,
+    layout: layoutEl,
+  },
+  sectionMantra: "BACKEND OFFLINE",
+  layoutMantra: "SYSTEM CRITICAL",
+  sounds: true,
+  dimOthers: true,
+  dimContainer: gridEl,
+});
+
+esc.start(); // begin escalation (auto-wires tension drone)
+esc.reset(); // on recovery — clears all effects + stops drone
+```
+
+### Recovery Sequence
 
 ```js
 import { recoverySequence } from "superhot-ui";
@@ -324,6 +606,45 @@ await recoverySequence({
 ```
 
 5-step async recovery choreography: glitch → border → pulse stop → toast → calm (atmosphere Rule 37).
+
+### Putting it together
+
+A typical failure flow:
+
+1. Health check fails → `setFacilityState('alert')` (CSS atmosphere shifts)
+2. `esc.start()` begins progressive visual drama on specific surfaces
+3. If critical → `setFacilityState('breach')` (full SUPERHOT mode)
+4. Recovery detected → `esc.reset()`, then `recoverySequence()`, then `setFacilityState('normal')`
+
+Facility state is the instant global atmosphere. Escalation is the progressive local drama. They complement each other.
+
+---
+
+## Celebration Sequence
+
+```js
+import { celebrationSequence } from "superhot-ui";
+
+// Trigger after crisis resolves
+celebrationSequence(containerEl, {
+  text: "RESTORED",
+  duration: 3000,
+  shatter: true,
+  sound: true,
+  onComplete: () => console.log("calm restored"),
+});
+```
+
+---
+
+## Action Feedback
+
+```js
+import { confirmAction } from "superhot-ui";
+
+// After command palette selection or button action
+confirmAction(targetCardEl, { sound: "complete", intensity: "medium" });
+```
 
 ---
 
@@ -505,6 +826,15 @@ Call once at app init. CSS rules in `advanced-effects.css` and `matrix-rain.css`
 
 ---
 
+## System Corruption
+
+```html
+<!-- Apply to layout root during critical system failure -->
+<div class="sh-system-corrupted">...entire dashboard...</div>
+```
+
+---
+
 ## Threshold Bar
 
 ```html
@@ -626,82 +956,6 @@ formatTime(90000, "duration"); // "1m 30s"
 
 ---
 
-## Escalation Orchestration
-
-```js
-import { orchestrateEscalation } from "superhot-ui";
-
-const esc = orchestrateEscalation({
-  surfaces: {
-    component: [failedCardEl],
-    sidebar: [navIndicatorEl],
-    section: sectionEl,
-    layout: layoutEl,
-  },
-  sectionMantra: "BACKEND OFFLINE",
-  layoutMantra: "SYSTEM CRITICAL",
-  sounds: true,
-  dimOthers: true,
-  dimContainer: gridEl,
-});
-
-esc.start(); // begin escalation
-esc.reset(); // on recovery — clears all effects + stops drone
-```
-
----
-
-## Celebration Sequence
-
-```js
-import { celebrationSequence } from "superhot-ui";
-
-// Trigger after crisis resolves
-celebrationSequence(containerEl, {
-  text: "RESTORED",
-  duration: 3000,
-  shatter: true,
-  sound: true,
-  onComplete: () => console.log("calm restored"),
-});
-```
-
----
-
-## Action Feedback
-
-```js
-import { confirmAction } from "superhot-ui";
-
-// After command palette selection or button action
-confirmAction(targetCardEl, { sound: "complete", intensity: "medium" });
-```
-
----
-
-## Tension Drone
-
-```js
-import { setTensionDrone, stopTensionDrone } from "superhot-ui";
-
-setTensionDrone(1); // subtle 40Hz rumble
-setTensionDrone(3); // dissonant 3-oscillator cluster
-stopTensionDrone(); // fade out over 300ms
-```
-
-Note: Automatically wired into `orchestrateEscalation` — manual use only needed for custom escalation patterns.
-
----
-
-## System Corruption
-
-```html
-<!-- Apply to layout root during critical system failure -->
-<div class="sh-system-corrupted">...entire dashboard...</div>
-```
-
----
-
 ## Event Timeline
 
 ```html
@@ -764,7 +1018,7 @@ Note: Automatically wired into `orchestrateEscalation` — manual use only neede
 ```
 ui-template (base tokens)
     ↓
-superhot-ui (SUPERHOT theme + effects + components)
+superhot-ui (SUPERHOT + Portal theme, effects, components)
     ↓
 project dashboards (ollama-queue, ha-aria, project-hub)
 ```
