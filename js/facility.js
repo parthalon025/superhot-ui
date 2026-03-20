@@ -1,10 +1,14 @@
 /**
  * Facility State System — unified atmosphere control.
  *
- * Three states shift EVERYTHING simultaneously:
- * - `normal` — Portal blue antlines, calm narrator, standard audio
- * - `alert`  — SUPERHOT red bleeds in, narrator becomes terse, threat tones
- * - `breach` — Full SUPERHOT mode, everything threat-pulsing, cult-command narrator
+ * Three states shift CSS tokens simultaneously:
+ * - `normal` — Portal blue/orange tokens unchanged
+ * - `alert`  — SUPERHOT red bleeds into Portal blue (`--sh-portal-blue` → `--sh-threat`)
+ * - `breach` — All Portal tokens become threat red/glow
+ *
+ * Note: Facility state controls CSS only. Narrator personality and audio
+ * remapping are independent — set them explicitly via ShNarrator.personality
+ * and ShAudio.narratorPersonality.
  *
  * Sets `data-sh-facility` on documentElement. CSS descendant selectors shift tokens.
  *
