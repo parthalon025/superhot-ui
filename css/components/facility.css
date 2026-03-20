@@ -16,5 +16,7 @@
     --sh-portal-blue: var(--sh-threat);
     --sh-portal-blue-glow: var(--sh-threat-glow);
     --sh-portal-orange-glow: var(--sh-threat-glow);
+    --sh-terminal-amber: var(--sh-threat);
+    --sh-terminal-bg: color-mix(in oklch, var(--sh-threat) 8%, var(--sh-void));
   }
 }
