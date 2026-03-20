@@ -46,6 +46,7 @@ export function playSfx(type) {
 
   switch (resolvedType) {
     // ── Original SUPERHOT SFX ──
+    case "success":
     case "complete":
       _playTone(ctx, 440, 0.15, "sine");
       _playTone(ctx, 880, 0.15, "sine", 0.15);

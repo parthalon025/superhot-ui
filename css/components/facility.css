@@ -25,6 +25,7 @@
     /* Breach: all motion stops or becomes violent */
     --sh-antline-duration: 0s; /* antlines freeze */
     --sh-panel-slide-duration: 150ms; /* panels snap — violent assembly */
+    --sh-frost-shimmer-duration: 0s; /* shimmer frozen — time stopped */
   }
 }
 

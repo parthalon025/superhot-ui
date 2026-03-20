@@ -495,10 +495,15 @@ import { playSfx, ShAudio } from "superhot-ui";
 
 ShAudio.enabled = localStorage.getItem("sfx-enabled") === "true";
 
-playSfx("complete"); // job finished
-playSfx("error"); // job failed / DLQ
+playSfx("complete"); // job finished (ascending two-tone)
+playSfx("success"); // alias for complete
+playSfx("error"); // job failed / DLQ (descending buzz)
 playSfx("dlq"); // dead letter queue entry
 playSfx("pause"); // daemon paused
+playSfx("boot"); // system initialization tone
+playSfx("static"); // noise burst — signal loss
+playSfx("warning"); // staccato square wave — caution
+playSfx("recovery"); // descending sine sweep — all clear
 ```
 
 ### Portal SFX
@@ -519,6 +524,7 @@ When `ShAudio.narratorPersonality` is set, generic sounds auto-remap:
 | Generic    | GLaDOS / Cave / Wheatley | Turret            | SUPERHOT    |
 | ---------- | ------------------------ | ----------------- | ----------- |
 | `complete` | `portal-chime`           | `turret-deploy`   | (unchanged) |
+| `success`  | `portal-chime`           | `turret-deploy`   | (unchanged) |
 | `error`    | `portal-fail`            | `turret-shutdown` | (unchanged) |
 
 ```js

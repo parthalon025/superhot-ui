@@ -15,8 +15,8 @@ import { playSfx, setTensionDrone, stopTensionDrone } from "./audio.js";
  * @param {string} [config.sectionMantra="DEGRADED"] — Mantra text for level 3
  * @param {string} [config.layoutMantra="SYSTEM CRITICAL"] — Mantra text for level 4
  * @param {boolean} [config.sounds=true] — Play SFX at transitions
- * @param {boolean} [config.dimOthers=false] — Dim non-critical elements at level 2+
- * @param {Element} [config.dimContainer] — Container whose children get dimmed
+ * @param {boolean} [config.dimOthers=false] — Dim non-critical elements at level 2+ (sets opacity 0.3 — ensure dimmed elements do not contain interactive controls)
+ * @param {Element} [config.dimContainer] — Container whose children get dimmed (only non-interactive children should be inside)
  * @param {number[]} [config.thresholds] — Custom escalation timing
  * @returns {{ start(): void, stop(): void, reset(): void, timer: EscalationTimer }}
  */

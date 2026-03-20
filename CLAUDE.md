@@ -27,27 +27,27 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 
 ## Effects Reference
 
-| Effect          | CSS Attribute                                   | JS Function                              | Preact Component     |
-| --------------- | ----------------------------------------------- | ---------------------------------------- | -------------------- |
-| Freshness       | `data-sh-state="fresh\|cooling\|frozen\|stale"` | `applyFreshness(el, timestamp)`          | `<ShFrozen>`         |
-| Shatter         | `.sh-fragment` (JS-created)                     | `shatterElement(el, opts)`               | `<ShShatter>`        |
-| Glitch          | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`                   | `<ShGlitch>`         |
-| Mantra          | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`                  | `<ShMantra>`         |
-| Threat Pulse    | `data-sh-effect="threat-pulse"`                 | —                                        | `<ShThreatPulse>`    |
-| CRT Toggle      | —                                               | `setCrtMode({stripe,scanline,flicker})`  | `<ShCrtToggle>`      |
-| Skeleton        | `.sh-skeleton`                                  | —                                        | `<ShSkeleton>`       |
-| Toast           | `.sh-toast` + `data-sh-toast-type`              | —                                        | `<ShToast>`          |
-| Stat Card       | `.sh-stat-card` + `data-sh-status`              | —                                        | `<ShStatCard>`       |
-| Status Badge    | `.sh-status-badge` + `data-sh-status`           | —                                        | `<ShStatusBadge>`    |
-| VRAM Bar        | `.sh-vram-bar` + `--sh-fill: <0-100>`           | —                                        | —                    |
-| Command Palette | `.sh-command-palette-overlay`                   | —                                        | `<ShCommandPalette>` |
-| Audio           | —                                               | `playSfx('complete\|error\|dlq\|pause')` | —                    |
-| Narrator        | —                                               | `narrate(category, context)`             | —                    |
-| Antline         | `.sh-antline` + `data-sh-antline-active`        | —                                        | `<ShAntline>`        |
-| Test Chamber    | `.sh-test-chamber` + `.sh-panel`                | —                                        | `<ShTestChamber>`    |
-| Announcement    | `.sh-announcement` + `data-sh-personality`      | —                                        | `<ShAnnouncement>`   |
-| Portal Audio    | —                                               | `playSfx('portal-chime\|turret-deploy')` | —                    |
-| Facility State  | `data-sh-facility="normal\|alert\|breach"`      | `setFacilityState(state)`                | —                    |
+| Effect          | CSS Attribute                                   | JS Function                                                       | Preact Component     |
+| --------------- | ----------------------------------------------- | ----------------------------------------------------------------- | -------------------- |
+| Freshness       | `data-sh-state="fresh\|cooling\|frozen\|stale"` | `applyFreshness(el, timestamp)`                                   | `<ShFrozen>`         |
+| Shatter         | `.sh-fragment` (JS-created)                     | `shatterElement(el, opts)`                                        | `<ShShatter>`        |
+| Glitch          | `data-sh-effect="glitch"`                       | `glitchText(el, opts)`                                            | `<ShGlitch>`         |
+| Mantra          | `data-sh-mantra="TEXT"`                         | `applyMantra(el, text)`                                           | `<ShMantra>`         |
+| Threat Pulse    | `data-sh-effect="threat-pulse"`                 | —                                                                 | `<ShThreatPulse>`    |
+| CRT Toggle      | —                                               | `setCrtMode({stripe,scanline,flicker})`                           | `<ShCrtToggle>`      |
+| Skeleton        | `.sh-skeleton`                                  | —                                                                 | `<ShSkeleton>`       |
+| Toast           | `.sh-toast` + `data-sh-toast-type`              | —                                                                 | `<ShToast>`          |
+| Stat Card       | `.sh-stat-card` + `data-sh-status`              | —                                                                 | `<ShStatCard>`       |
+| Status Badge    | `.sh-status-badge` + `data-sh-status`           | —                                                                 | `<ShStatusBadge>`    |
+| VRAM Bar        | `.sh-vram-bar` + `--sh-fill: <0-100>`           | —                                                                 | —                    |
+| Command Palette | `.sh-command-palette-overlay`                   | —                                                                 | `<ShCommandPalette>` |
+| Audio           | —                                               | `playSfx('complete\|error\|dlq\|pause\|boot\|warning\|recovery')` | —                    |
+| Narrator        | —                                               | `narrate(category, context)`                                      | —                    |
+| Antline         | `.sh-antline` + `data-sh-antline-active`        | —                                                                 | `<ShAntline>`        |
+| Test Chamber    | `.sh-test-chamber` + `.sh-panel`                | —                                                                 | `<ShTestChamber>`    |
+| Announcement    | `.sh-announcement` + `data-sh-personality`      | —                                                                 | `<ShAnnouncement>`   |
+| Portal Audio    | —                                               | `playSfx('portal-chime\|turret-deploy')`                          | —                    |
+| Facility State  | `data-sh-facility="normal\|alert\|breach"`      | `setFacilityState(state)`                                         | —                    |
 
 ## File Layout
 
