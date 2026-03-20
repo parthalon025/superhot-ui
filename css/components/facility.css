@@ -8,6 +8,10 @@
   /* Alert: SUPERHOT red bleeds into Portal blue */
   [data-sh-facility="alert"] {
     --sh-portal-blue: var(--sh-threat);
+    /* Alert atmosphere — the facility is stressed */
+    --sh-antline-duration: 2.5s; /* slower antlines — sluggish, stuttering */
+    --sh-panel-slide-duration: 800ms; /* panels assemble slower — interrupted */
+    --sh-frost-shimmer-duration: 1.5s; /* faster shimmer — restless */
   }
 
   /* Breach: full SUPERHOT mode — all Portal colors become threat */
@@ -18,5 +22,21 @@
     --sh-portal-orange-glow: var(--sh-threat-glow);
     --sh-terminal-amber: var(--sh-threat);
     --sh-terminal-bg: color-mix(in oklch, var(--sh-threat) 8%, var(--sh-void));
+    /* Breach: all motion stops or becomes violent */
+    --sh-antline-duration: 0s; /* antlines freeze */
+    --sh-panel-slide-duration: 150ms; /* panels snap — violent assembly */
+  }
+}
+
+/* Forced colors: facility state must remain distinguishable without custom colors */
+@media (forced-colors: active) {
+  [data-sh-facility="alert"] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+
+  [data-sh-facility="breach"] {
+    outline: 3px double Highlight;
+    outline-offset: -3px;
   }
 }
