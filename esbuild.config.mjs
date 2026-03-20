@@ -23,15 +23,43 @@ const jsConfig = {
   ...shared,
   stdin: {
     contents: [
-      "export { applyFreshness } from './js/freshness.js';",
+      // Core effects
+      "export { applyFreshness, computeFreshness } from './js/freshness.js';",
       "export { shatterElement } from './js/shatter.js';",
       "export { glitchText } from './js/glitch.js';",
       "export { applyMantra, removeMantra } from './js/mantra.js';",
+      // Audio (all SFX — original + Portal + tension drone)
       "export { ShAudio, playSfx, setTensionDrone, stopTensionDrone } from './js/audio.js';",
-      "export { trackEffect, isOverBudget, activeEffectCount, resetEffects } from './js/atmosphere.js';",
+      // Atmosphere budget
+      "export { trackEffect, isOverBudget, activeEffectCount, resetEffects, MAX_EFFECTS } from './js/atmosphere.js';",
+      // CRT
       "export { setCrtMode } from './js/crt.js';",
+      // Narrator + Facility
       "export { narrate, ShNarrator } from './js/narrator.js';",
+      "export { corpus } from './js/narrator-corpus.js';",
       "export { setFacilityState, getFacilityState } from './js/facility.js';",
+      // Threshold
+      "export { computeThreshold, applyThreshold } from './js/threshold.js';",
+      // Heartbeat + Freshness watcher
+      "export { heartbeat } from './js/heartbeat.js';",
+      "export { watchFreshness } from './js/watchFreshness.js';",
+      // Escalation + Orchestration + Recovery
+      "export { EscalationTimer } from './js/escalation.js';",
+      "export { orchestrateEscalation } from './js/orchestrate.js';",
+      "export { recoverySequence } from './js/recovery.js';",
+      // Celebration + Action feedback
+      "export { celebrationSequence } from './js/celebration.js';",
+      "export { confirmAction } from './js/commandFeedback.js';",
+      // Boot
+      "export { bootSequence } from './js/boot.js';",
+      // Hardware detection
+      "export { detectCapability, applyCapability } from './js/hardware.js';",
+      // Utilities
+      "export { createToastManager } from './js/toastManager.js';",
+      "export { createShortcutRegistry } from './js/shortcuts.js';",
+      "export { setMonitorVariant, loadMonitorVariant } from './js/monitorTheme.js';",
+      "export { scrollSpy } from './js/scrollSpy.js';",
+      "export { formatTime } from './js/formatTime.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",
