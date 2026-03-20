@@ -102,3 +102,20 @@
     display: none;
   }
 }
+
+/* High contrast */
+@media (forced-colors: active) {
+  .sh-antline-node {
+    border-color: CanvasText;
+  }
+  .sh-antline-node[data-sh-antline-active="true"] {
+    border-color: Highlight;
+    background: Highlight;
+  }
+  .sh-antline-line {
+    background: GrayText;
+  }
+  .sh-antline-line[data-sh-antline-active="true"] {
+    background: Highlight;
+  }
+}

@@ -67,7 +67,7 @@ export function ShAnnouncement({
       data-sh-personality={personality}
       role="status"
       aria-live="polite"
-      aria-label={message}
+      aria-label={source ? `${source}: ${message}` : message}
       {...rest}
     >
       {source && <span class="sh-announcement-source">{source}</span>}

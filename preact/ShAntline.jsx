@@ -23,7 +23,7 @@ export function ShAntline({
     .join(" ");
 
   return (
-    <div class={cls} {...rest}>
+    <div class={cls} role="presentation" aria-hidden="true" {...rest}>
       <div class="sh-antline-node" data-sh-antline-active={activeStr} />
       <div class="sh-antline-line" data-sh-antline-active={activeStr} />
       {children}
