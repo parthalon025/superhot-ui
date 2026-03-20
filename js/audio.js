@@ -13,7 +13,7 @@
  *   playSfx('turret-deploy');  // Formant-filtered robotic tone
  */
 
-export const ShAudio = { enabled: false };
+export const ShAudio = { enabled: false, narratorPersonality: null };
 
 /** @type {AudioContext|null} Shared context — lazily created, reused. */
 let _ctx = null;
@@ -40,7 +40,11 @@ export function playSfx(type) {
   const ctx = _getCtx();
   if (!ctx) return;
 
-  switch (type) {
+  // Narrator-aware routing (recommendation B):
+  // When a personality is active, map generic SFX to personality-appropriate sounds
+  const resolvedType = _resolveNarratorSfx(type);
+
+  switch (resolvedType) {
     // ── Original SUPERHOT SFX ──
     case "complete":
       _playTone(ctx, 440, 0.15, "sine");
@@ -58,6 +62,23 @@ export function playSfx(type) {
 
     case "pause":
       _playTone(ctx, 880, 0.05, "sine");
+      break;
+
+    // ── Foundation SFX (v0.3.0) ──
+    case "boot":
+      _playBoot(ctx);
+      break;
+
+    case "static":
+      _playStatic(ctx);
+      break;
+
+    case "warning":
+      _playWarning(ctx);
+      break;
+
+    case "recovery":
+      _playRecovery(ctx);
       break;
 
     // ── Portal-inspired SFX ──
@@ -134,6 +155,31 @@ export function playSfx(type) {
     default:
       return;
   }
+}
+
+/**
+ * Resolve SFX type based on active narrator personality.
+ * Maps generic types to personality-appropriate sounds.
+ */
+function _resolveNarratorSfx(type) {
+  const personality = ShAudio.narratorPersonality;
+  if (!personality) return type;
+
+  // Only remap generic types that have personality-specific variants
+  if (type === "success" || type === "complete") {
+    if (personality === "glados" || personality === "cave" || personality === "wheatley")
+      return "portal-chime";
+    if (personality === "turret") return "turret-deploy";
+    // superhot personality → keep original "complete"
+  }
+
+  if (type === "error") {
+    if (personality === "glados" || personality === "cave" || personality === "wheatley")
+      return "portal-fail";
+    if (personality === "turret") return "turret-shutdown";
+  }
+
+  return type;
 }
 
 /**
@@ -243,4 +289,112 @@ function _makeDistortionCurve(amount) {
     curve[i] = ((Math.PI + amount) * x) / (Math.PI + amount * Math.abs(x));
   }
   return curve;
+}
+
+// ── Foundation SFX implementations (v0.3.0) ──
+
+function _playBoot(ctx) {
+  const now = ctx.currentTime;
+  _playTone(ctx, 200, 0.1, "sine");
+  _playTone(ctx, 600, 0.1, "sine", 0.1);
+}
+
+function _playStatic(ctx) {
+  _playNoiseBurst(ctx, 0.15);
+}
+
+function _playWarning(ctx) {
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "square";
+  osc.frequency.value = 440;
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.setValueAtTime(0, now + 0.05);
+  gain.gain.setValueAtTime(0.3, now + 0.1);
+  gain.gain.linearRampToValueAtTime(0, now + 0.15);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.15);
+}
+
+function _playRecovery(ctx) {
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = "sine";
+  osc.frequency.setValueAtTime(800, now);
+  osc.frequency.linearRampToValueAtTime(400, now + 0.25);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.linearRampToValueAtTime(0, now + 0.25);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.25);
+}
+
+// ── Tension Drone (v0.3.0) ──
+
+let _droneCtx = null;
+let _droneGain = null;
+let _droneOscs = [];
+
+/**
+ * Start or update a tension drone that intensifies with escalation level.
+ * @param {number} level — Escalation level (0-4)
+ */
+export function setTensionDrone(level) {
+  if (!ShAudio.enabled) return;
+  if (typeof window === "undefined") return;
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  stopTensionDrone();
+  if (level <= 0) return;
+
+  _droneCtx = new (window.AudioContext || window.webkitAudioContext)();
+  _droneGain = _droneCtx.createGain();
+  _droneGain.connect(_droneCtx.destination);
+  _droneGain.gain.value = 0;
+  _droneGain.gain.linearRampToValueAtTime(0.05 * level, _droneCtx.currentTime + 0.5);
+
+  const frequencies = [40, 60, 80, 110];
+  const count = Math.min(level, frequencies.length);
+  for (let i = 0; i < count; i++) {
+    const osc = _droneCtx.createOscillator();
+    osc.type = "sine";
+    osc.frequency.value = frequencies[i];
+    if (level >= 3) osc.detune.value = (i + 1) * 5 * (level - 2);
+    osc.connect(_droneGain);
+    osc.start();
+    _droneOscs.push(osc);
+  }
+}
+
+/**
+ * Stop the tension drone with a fade-out.
+ */
+export function stopTensionDrone() {
+  if (_droneCtx && _droneGain) {
+    try {
+      _droneGain.gain.linearRampToValueAtTime(0, _droneCtx.currentTime + 0.3);
+      const ctx = _droneCtx;
+      const oscs = _droneOscs;
+      setTimeout(() => {
+        for (const osc of oscs) {
+          try {
+            osc.stop();
+          } catch (e) {
+            /* already stopped */
+          }
+        }
+        ctx.close();
+      }, 350);
+    } catch (e) {
+      /* context already closed */
+    }
+  }
+  _droneCtx = null;
+  _droneGain = null;
+  _droneOscs = [];
 }

@@ -130,8 +130,8 @@
   /* ── Portal-inspired tokens ── */
   --sh-portal-orange: #ff9a00;
   --sh-portal-blue: #27a7d8;
-  --sh-terminal-amber: #a66900;
-  --sh-terminal-bg: #6f3d00;
+  --sh-terminal-amber: #d4a020;
+  --sh-terminal-bg: #3a1f00;
   --sh-portal-orange-glow: color-mix(in oklch, var(--sh-portal-orange) 20%, transparent);
   --sh-portal-blue-glow: color-mix(in oklch, var(--sh-portal-blue) 20%, transparent);
 

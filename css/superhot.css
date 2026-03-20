@@ -17,6 +17,7 @@
 @import "./components/antline.css";
 @import "./components/announcement.css";
 @import "./components/test-chamber.css";
+@import "./components/facility.css";
 
 @layer superhot.base, superhot.effects, superhot.crt;
 

@@ -47,24 +47,26 @@ Or just link the CSS directly: `<link rel="stylesheet" href="../superhot-ui/css/
 | Test Chamber    | `.sh-test-chamber` + `.sh-panel`                | —                                        | `<ShTestChamber>`    |
 | Announcement    | `.sh-announcement` + `data-sh-personality`      | —                                        | `<ShAnnouncement>`   |
 | Portal Audio    | —                                               | `playSfx('portal-chime\|turret-deploy')` | —                    |
+| Facility State  | `data-sh-facility="normal\|alert\|breach"`      | `setFacilityState(state)`                | —                    |
 
 ## File Layout
 
-| Path                    | Purpose                                                 |
-| ----------------------- | ------------------------------------------------------- |
-| `css/tokens.css`        | CSS custom properties (`--sh-*`) with dark mode         |
-| `css/superhot.css`      | All effects (imports tokens.css)                        |
-| `js/freshness.js`       | Timestamp to freshness state                            |
-| `js/shatter.js`         | Fragment + drift + fade animation                       |
-| `js/glitch.js`          | Chromatic aberration burst                              |
-| `js/mantra.js`          | Repeating text watermark                                |
-| `js/audio.js`           | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`) |
-| `js/crt.js`             | CRT CSS property writer (`setCrtMode`)                  |
-| `js/narrator.js`        | Personality phrase engine (`narrate`, `ShNarrator`)     |
-| `js/narrator-corpus.js` | Phrase bank (GLaDOS, Cave, Wheatley, Turret, SUPERHOT)  |
-| `preact/Sh*.jsx`        | Preact wrapper components                               |
-| `dist/`                 | Built outputs (gitignored)                              |
-| `examples/demo.html`    | Standalone demo (no build step)                         |
+| Path                    | Purpose                                                        |
+| ----------------------- | -------------------------------------------------------------- |
+| `css/tokens.css`        | CSS custom properties (`--sh-*`) with dark mode                |
+| `css/superhot.css`      | All effects (imports tokens.css)                               |
+| `js/freshness.js`       | Timestamp to freshness state                                   |
+| `js/shatter.js`         | Fragment + drift + fade animation                              |
+| `js/glitch.js`          | Chromatic aberration burst                                     |
+| `js/mantra.js`          | Repeating text watermark                                       |
+| `js/audio.js`           | Procedural SFX via Web Audio API (`ShAudio`, `playSfx`)        |
+| `js/crt.js`             | CRT CSS property writer (`setCrtMode`)                         |
+| `js/narrator.js`        | Personality phrase engine (`narrate`, `ShNarrator`)            |
+| `js/narrator-corpus.js` | Phrase bank (GLaDOS, Cave, Wheatley, Turret, SUPERHOT)         |
+| `js/facility.js`        | Facility state system (`setFacilityState`, `getFacilityState`) |
+| `preact/Sh*.jsx`        | Preact wrapper components                                      |
+| `dist/`                 | Built outputs (gitignored)                                     |
+| `examples/demo.html`    | Standalone demo (no build step)                                |
 
 ## Customization
 

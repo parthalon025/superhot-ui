@@ -1,0 +1,20 @@
+/* ═══════════════════════════════════════
+   FACILITY STATE — atmosphere-wide token shifts.
+   Three states: normal, alert, breach.
+   Set via: document.documentElement.setAttribute('data-sh-facility', state)
+   ═══════════════════════════════════════ */
+
+@layer superhot.effects {
+  /* Alert: SUPERHOT red bleeds into Portal blue */
+  [data-sh-facility="alert"] {
+    --sh-portal-blue: var(--sh-threat);
+  }
+
+  /* Breach: full SUPERHOT mode — all Portal colors become threat */
+  [data-sh-facility="breach"] {
+    --sh-portal-orange: var(--sh-threat);
+    --sh-portal-blue: var(--sh-threat);
+    --sh-portal-blue-glow: var(--sh-threat-glow);
+    --sh-portal-orange-glow: var(--sh-threat-glow);
+  }
+}

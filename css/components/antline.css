@@ -1,121 +1,156 @@
 /* ═══════════════════════════════════════
    ANTLINE — Portal-inspired connecting lines between elements.
    Animated dots flow along the line to show active/inactive state.
+   SUPERHOT rule: dot is FROZEN by default. Motion only when active.
    ═══════════════════════════════════════ */
 
-.sh-antline {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.sh-antline-line {
-  flex: 1;
-  height: 2px;
-  position: relative;
-  overflow: hidden;
-  background: color-mix(in oklch, var(--sh-portal-blue) 30%, transparent);
-  transition: background var(--sh-panel-slide-duration) ease;
-}
-
-.sh-antline-line[data-sh-antline-active="true"] {
-  background: color-mix(in oklch, var(--sh-portal-orange) 40%, transparent);
-}
-
-/* Animated dot traveling along the line */
-.sh-antline-line::after {
-  content: "";
-  position: absolute;
-  top: -2px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--sh-portal-blue);
-  box-shadow: 0 0 6px var(--sh-portal-blue-glow);
-  animation: sh-antline-flow var(--sh-antline-duration) linear infinite;
-}
-
-.sh-antline-line[data-sh-antline-active="true"]::after {
-  background: var(--sh-portal-orange);
-  box-shadow: 0 0 6px var(--sh-portal-orange-glow);
-}
-
-/* Endpoint indicators */
-.sh-antline-node {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-  border: 1px solid var(--sh-portal-blue);
-  background: transparent;
-  transition:
-    border-color var(--sh-panel-slide-duration) ease,
-    background var(--sh-panel-slide-duration) ease;
-}
-
-.sh-antline-node[data-sh-antline-active="true"] {
-  border-color: var(--sh-portal-orange);
-  background: var(--sh-portal-orange);
-  box-shadow: 0 0 4px var(--sh-portal-orange-glow);
-}
-
-@keyframes sh-antline-flow {
-  0% {
-    transform: translateX(-6px);
+@layer superhot.effects {
+  .sh-antline {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0;
   }
-  100% {
-    transform: translateX(calc(100cqi));
-  }
-}
 
-/* Vertical variant */
-.sh-antline--vertical {
-  flex-direction: column;
-}
-
-.sh-antline--vertical .sh-antline-line {
-  width: 2px;
-  height: auto;
-  flex: 1;
-  min-height: 20px;
-}
-
-.sh-antline--vertical .sh-antline-line::after {
-  left: -2px;
-  top: -6px;
-  animation: sh-antline-flow-v var(--sh-antline-duration) linear infinite;
-}
-
-@keyframes sh-antline-flow-v {
-  0% {
-    transform: translateY(-6px);
-  }
-  100% {
-    transform: translateY(calc(100cqi));
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .sh-antline-line::after {
-    animation: none !important;
-    display: none;
-  }
-}
-
-/* High contrast */
-@media (forced-colors: active) {
-  .sh-antline-node {
-    border-color: CanvasText;
-  }
-  .sh-antline-node[data-sh-antline-active="true"] {
-    border-color: Highlight;
-    background: Highlight;
-  }
   .sh-antline-line {
-    background: GrayText;
+    flex: 1;
+    height: 2px;
+    position: relative;
+    overflow: hidden;
+    background: color-mix(in oklch, var(--sh-portal-blue) 30%, transparent);
+    transition: background var(--sh-panel-slide-duration) ease;
   }
+
   .sh-antline-line[data-sh-antline-active="true"] {
-    background: Highlight;
+    background: color-mix(in oklch, var(--sh-portal-orange) 40%, transparent);
+  }
+
+  /* Animated dot — FROZEN by default (SUPERHOT: time moves only when you move) */
+  .sh-antline-line::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sh-portal-blue);
+    box-shadow: 0 0 6px var(--sh-portal-blue-glow);
+    animation: sh-antline-flow var(--sh-antline-duration) linear infinite;
+    animation-play-state: paused;
+  }
+
+  /* Animate ONLY when active — activity = motion */
+  .sh-antline-line[data-sh-antline-active="true"]::after {
+    background: var(--sh-portal-orange);
+    box-shadow: 0 0 6px var(--sh-portal-orange-glow);
+    animation-play-state: running;
+  }
+
+  /* ── Freshness coupling (recommendation C) ──
+     Antline dot speed/state responds to ancestor freshness */
+
+  /* Frozen ancestor → dot pauses */
+  [data-sh-state="frozen"] .sh-antline-line::after {
+    animation-play-state: paused !important;
+  }
+
+  /* Stale ancestor → dot stops, color shifts to frozen */
+  [data-sh-state="stale"] .sh-antline-line::after {
+    animation-play-state: paused !important;
+    background: var(--sh-frozen);
+    box-shadow: none;
+  }
+
+  [data-sh-state="stale"] .sh-antline-line {
+    background: color-mix(in oklch, var(--sh-frozen) 30%, transparent);
+  }
+
+  /* Cooling ancestor → dot slows down */
+  [data-sh-state="cooling"] .sh-antline-line::after {
+    animation-duration: calc(var(--sh-antline-duration) * 2);
+  }
+
+  /* Endpoint indicators */
+  .sh-antline-node {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    border: 1px solid var(--sh-portal-blue);
+    background: transparent;
+    transition:
+      border-color var(--sh-panel-slide-duration) ease,
+      background var(--sh-panel-slide-duration) ease;
+  }
+
+  .sh-antline-node[data-sh-antline-active="true"] {
+    border-color: var(--sh-portal-orange);
+    background: var(--sh-portal-orange);
+    box-shadow: 0 0 4px var(--sh-portal-orange-glow);
+  }
+
+  @keyframes sh-antline-flow {
+    0% {
+      transform: translateX(-6px);
+    }
+    100% {
+      transform: translateX(calc(100cqi));
+    }
+  }
+
+  /* Vertical variant */
+  .sh-antline--vertical {
+    flex-direction: column;
+  }
+
+  .sh-antline--vertical .sh-antline-line {
+    width: 2px;
+    height: auto;
+    flex: 1;
+    min-height: 20px;
+  }
+
+  .sh-antline--vertical .sh-antline-line::after {
+    left: -2px;
+    top: -6px;
+    animation: sh-antline-flow-v var(--sh-antline-duration) linear infinite;
+    animation-play-state: paused;
+  }
+
+  .sh-antline--vertical .sh-antline-line[data-sh-antline-active="true"]::after {
+    animation-play-state: running;
+  }
+
+  @keyframes sh-antline-flow-v {
+    0% {
+      transform: translateY(-6px);
+    }
+    100% {
+      transform: translateY(calc(100cqi));
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .sh-antline-line::after {
+      animation: none !important;
+      display: none;
+    }
+  }
+
+  /* High contrast */
+  @media (forced-colors: active) {
+    .sh-antline-node {
+      border-color: CanvasText;
+    }
+    .sh-antline-node[data-sh-antline-active="true"] {
+      border-color: Highlight;
+      background: Highlight;
+    }
+    .sh-antline-line {
+      background: GrayText;
+    }
+    .sh-antline-line[data-sh-antline-active="true"] {
+      background: Highlight;
+    }
   }
 }
