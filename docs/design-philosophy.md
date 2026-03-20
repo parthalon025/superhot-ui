@@ -106,7 +106,7 @@ All text effects, watermarks, and system messages should read like terminal outp
 - **Layout components** — grids, sidebars, navigation — those live in the consuming project
 - **Data fetching** — components accept data as props, never fetch
 - **App-specific patterns** — if it only makes sense for ollama-queue, build it in ollama-queue
-- **Colors beyond the six** — if you need amber for warnings, use `--status-warning` (maps to phosphor-adjacent, not a new hue)
+- **Colors beyond the six** — if you need amber for warnings, use `--status-warning` (distinct amber for the warning tier between phosphor-healthy and threat-critical — not a seventh palette color)
 - **Decorative animation** — hover bounce, idle wiggle, entrance flip — none of these
 
 ---

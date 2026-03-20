@@ -106,6 +106,32 @@ ShAudio.enabled = localStorage.getItem("sfx-enabled") === "true";
 
 After this, facility state governs the global CSS atmosphere, the narrator generates personality-appropriate phrases, and audio plays personality-matched SFX.
 
+### Session Lifecycle
+
+Close the recursive loop — the system greets the operator on arrival and farewells on exit:
+
+```js
+import { narrate } from "superhot-ui";
+
+// Greeting — fire once at app mount
+const greeting = narrate("greeting"); // "Oh. It's you."
+// Display via ShAnnouncement or console
+
+// Farewell — fire on session end
+window.addEventListener("beforeunload", () => {
+  const farewell = narrate("farewell"); // "The experiment is nearing its conclusion."
+  // Log, display, or send to analytics
+});
+
+// Idle detection — freeze the experiment when the operator stops looking
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    // The operator stopped moving — time freezes
+    // ShFrozen handles this automatically via timestamp aging
+  }
+});
+```
+
 ---
 
 ## Facility State

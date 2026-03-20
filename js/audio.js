@@ -30,7 +30,7 @@ function _getCtx() {
 /**
  * Play a sound effect procedurally via Web Audio API.
  *
- * @param {'complete'|'error'|'dlq'|'pause'|'portal-chime'|'portal-fail'|'turret-deploy'|'turret-shutdown'|'facility-hum'|'panel-slide'} type
+ * @param {'complete'|'error'|'dlq'|'pause'|'success'|'portal-chime'|'portal-fail'|'turret-deploy'|'turret-shutdown'|'facility-hum'|'panel-slide'|'boot'|'static'|'warning'|'recovery'} type
  */
 export function playSfx(type) {
   if (!ShAudio.enabled) return;
