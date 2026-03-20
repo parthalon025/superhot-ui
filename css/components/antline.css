@@ -1,0 +1,104 @@
+/* ═══════════════════════════════════════
+   ANTLINE — Portal-inspired connecting lines between elements.
+   Animated dots flow along the line to show active/inactive state.
+   ═══════════════════════════════════════ */
+
+.sh-antline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.sh-antline-line {
+  flex: 1;
+  height: 2px;
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklch, var(--sh-portal-blue) 30%, transparent);
+  transition: background var(--sh-panel-slide-duration) ease;
+}
+
+.sh-antline-line[data-sh-antline-active="true"] {
+  background: color-mix(in oklch, var(--sh-portal-orange) 40%, transparent);
+}
+
+/* Animated dot traveling along the line */
+.sh-antline-line::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sh-portal-blue);
+  box-shadow: 0 0 6px var(--sh-portal-blue-glow);
+  animation: sh-antline-flow var(--sh-antline-duration) linear infinite;
+}
+
+.sh-antline-line[data-sh-antline-active="true"]::after {
+  background: var(--sh-portal-orange);
+  box-shadow: 0 0 6px var(--sh-portal-orange-glow);
+}
+
+/* Endpoint indicators */
+.sh-antline-node {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  border: 1px solid var(--sh-portal-blue);
+  background: transparent;
+  transition:
+    border-color var(--sh-panel-slide-duration) ease,
+    background var(--sh-panel-slide-duration) ease;
+}
+
+.sh-antline-node[data-sh-antline-active="true"] {
+  border-color: var(--sh-portal-orange);
+  background: var(--sh-portal-orange);
+  box-shadow: 0 0 4px var(--sh-portal-orange-glow);
+}
+
+@keyframes sh-antline-flow {
+  0% {
+    left: -6px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Vertical variant */
+.sh-antline--vertical {
+  flex-direction: column;
+}
+
+.sh-antline--vertical .sh-antline-line {
+  width: 2px;
+  height: auto;
+  flex: 1;
+  min-height: 20px;
+}
+
+.sh-antline--vertical .sh-antline-line::after {
+  left: -2px;
+  top: -6px;
+  animation: sh-antline-flow-v var(--sh-antline-duration) linear infinite;
+}
+
+@keyframes sh-antline-flow-v {
+  0% {
+    top: -6px;
+  }
+  100% {
+    top: 100%;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sh-antline-line::after {
+    animation: none !important;
+    display: none;
+  }
+}

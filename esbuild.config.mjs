@@ -1,9 +1,13 @@
 import { build, context } from "esbuild";
-import { mkdirSync } from "fs";
+import { copyFileSync, mkdirSync } from "fs";
 
 const isWatch = process.argv.includes("--watch");
 
 mkdirSync("dist", { recursive: true });
+
+// Copy CSS (no processing needed)
+copyFileSync("css/superhot.css", "dist/superhot.css");
+console.log("  dist/superhot.css");
 
 // Shared esbuild options
 const shared = {
@@ -11,7 +15,7 @@ const shared = {
   format: "esm",
   target: "es2020",
   minify: !isWatch,
-  sourcemap: true,
+  sourcemap: isWatch,
 };
 
 // JS utilities bundle (barrel via stdin)
@@ -24,24 +28,8 @@ const jsConfig = {
       "export { glitchText } from './js/glitch.js';",
       "export { applyMantra, removeMantra } from './js/mantra.js';",
       "export { ShAudio, playSfx } from './js/audio.js';",
-      "export { setTensionDrone, stopTensionDrone } from './js/audio.js';",
       "export { setCrtMode } from './js/crt.js';",
-      "export { computeThreshold, applyThreshold } from './js/threshold.js';",
-      "export { heartbeat } from './js/heartbeat.js';",
-      "export { EscalationTimer } from './js/escalation.js';",
-      "export { recoverySequence } from './js/recovery.js';",
-      "export { bootSequence } from './js/boot.js';",
-      "export { detectCapability, applyCapability } from './js/hardware.js';",
-      "export { watchFreshness } from './js/watchFreshness.js';",
-      "export { createToastManager } from './js/toastManager.js';",
-      "export { createShortcutRegistry } from './js/shortcuts.js';",
-      "export { setMonitorVariant, loadMonitorVariant } from './js/monitorTheme.js';",
-      "export { scrollSpy } from './js/scrollSpy.js';",
-      "export { formatTime } from './js/formatTime.js';",
-      "export { orchestrateEscalation } from './js/orchestrate.js';",
-      "export { celebrationSequence } from './js/celebration.js';",
-      "export { confirmAction } from './js/commandFeedback.js';",
-      "export { trackEffect, isOverBudget, activeEffectCount, resetEffects } from './js/atmosphere.js';",
+      "export { narrate, ShNarrator } from './js/narrator.js';",
     ].join("\n"),
     resolveDir: ".",
     loader: "js",
@@ -65,19 +53,9 @@ const preactConfig = {
       "export { ShCommandPalette } from './preact/ShCommandPalette.jsx';",
       "export { ShCrtToggle } from './preact/ShCrtToggle.jsx';",
       "export { ShStatCard } from './preact/ShStatCard.jsx';",
-      "export { ShPageBanner } from './preact/ShPageBanner.jsx';",
-      "export { ShHeroCard } from './preact/ShHeroCard.jsx';",
-      "export { ShCollapsible } from './preact/ShCollapsible.jsx';",
-      "export { ShEmptyState } from './preact/ShEmptyState.jsx';",
-      "export { ShErrorState } from './preact/ShErrorState.jsx';",
-      "export { ShStatsGrid } from './preact/ShStatsGrid.jsx';",
-      "export { ShDataTable } from './preact/ShDataTable.jsx';",
-      "export { ShNav } from './preact/ShNav.jsx';",
-      "export { ShTimeChart } from './preact/ShTimeChart.jsx';",
-      "export { ShPipeline } from './preact/ShPipeline.jsx';",
-      "export { ShModal } from './preact/ShModal.jsx';",
-      "export { ShMatrixRain } from './preact/ShMatrixRain.jsx';",
-      "export { ShIncidentHUD } from './preact/ShIncidentHUD.jsx';",
+      "export { ShAntline } from './preact/ShAntline.jsx';",
+      "export { ShTestChamber } from './preact/ShTestChamber.jsx';",
+      "export { ShAnnouncement } from './preact/ShAnnouncement.jsx';",
     ].join("\n"),
     resolveDir: ".",
     loader: "jsx",
@@ -88,27 +66,12 @@ const preactConfig = {
   jsxImportSource: "preact",
 };
 
-// CSS bundle (resolves @import into single flat file)
-const cssConfig = {
-  entryPoints: ["css/superhot.css"],
-  outfile: "dist/superhot.css",
-  bundle: true,
-  minify: !isWatch,
-  sourcemap: true,
-  loader: { ".css": "css" },
-};
-
 if (isWatch) {
-  const [jsCtx, preactCtx, cssCtx] = await Promise.all([
-    context(jsConfig),
-    context(preactConfig),
-    context(cssConfig),
-  ]);
-  await Promise.all([jsCtx.watch(), preactCtx.watch(), cssCtx.watch()]);
+  const [jsCtx, preactCtx] = await Promise.all([context(jsConfig), context(preactConfig)]);
+  await Promise.all([jsCtx.watch(), preactCtx.watch()]);
   console.log("Watching for changes...");
 } else {
-  await Promise.all([build(jsConfig), build(preactConfig), build(cssConfig)]);
-  console.log("  dist/superhot.css");
+  await Promise.all([build(jsConfig), build(preactConfig)]);
   console.log("  dist/superhot.js");
   console.log("  dist/superhot.preact.js");
   console.log("Build complete.");

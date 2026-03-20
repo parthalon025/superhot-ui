@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════
+   TEST CHAMBER — Panel assembly container.
+   Children slide into position with mechanical animation.
+   ═══════════════════════════════════════ */
+
+.sh-test-chamber {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Panel children animate in with slide */
+.sh-test-chamber > .sh-panel {
+  animation: sh-panel-enter var(--sh-panel-slide-duration) ease-out both;
+}
+
+/* Stagger children */
+.sh-test-chamber > .sh-panel:nth-child(1) {
+  animation-delay: 0ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(2) {
+  animation-delay: 80ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(3) {
+  animation-delay: 160ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(4) {
+  animation-delay: 240ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(5) {
+  animation-delay: 320ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(6) {
+  animation-delay: 400ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(7) {
+  animation-delay: 480ms;
+}
+.sh-test-chamber > .sh-panel:nth-child(8) {
+  animation-delay: 560ms;
+}
+
+/* Default: slide from bottom */
+@keyframes sh-panel-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Variant: slide from left */
+.sh-test-chamber--from-left > .sh-panel {
+  animation-name: sh-panel-enter-left;
+}
+
+@keyframes sh-panel-enter-left {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Variant: slide from right */
+.sh-test-chamber--from-right > .sh-panel {
+  animation-name: sh-panel-enter-right;
+}
+
+@keyframes sh-panel-enter-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Chamber number badge — top-right, like Portal test chamber signs */
+.sh-test-chamber-number {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font-family: var(--sh-font);
+  font-size: 0.7rem;
+  color: var(--sh-dim);
+  border: 1px solid var(--sh-dim);
+  padding: 0.15rem 0.4rem;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sh-test-chamber > .sh-panel {
+    animation: none !important;
+  }
+}

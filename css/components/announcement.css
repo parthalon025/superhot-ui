@@ -1,0 +1,98 @@
+/* ═══════════════════════════════════════
+   ANNOUNCEMENT — GLaDOS/Cave full-width narrative banner.
+   Terminal-style auto-typing text with personality.
+   ═══════════════════════════════════════ */
+
+.sh-announcement {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: var(--sh-font);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--sh-dim);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Personality variants */
+.sh-announcement[data-sh-personality="glados"] {
+  border-color: var(--sh-portal-orange);
+  color: var(--sh-bright);
+  background: color-mix(in oklch, var(--sh-portal-orange) 5%, var(--sh-void));
+}
+
+.sh-announcement[data-sh-personality="cave"] {
+  border-color: var(--sh-terminal-amber);
+  color: var(--sh-terminal-amber);
+  background: var(--sh-terminal-bg);
+}
+
+.sh-announcement[data-sh-personality="wheatley"] {
+  border-color: var(--sh-portal-blue);
+  color: var(--sh-bright);
+  background: color-mix(in oklch, var(--sh-portal-blue) 5%, var(--sh-void));
+}
+
+.sh-announcement[data-sh-personality="turret"] {
+  border-color: var(--sh-threat);
+  color: var(--sh-bright);
+  background: color-mix(in oklch, var(--sh-threat) 5%, var(--sh-void));
+}
+
+.sh-announcement[data-sh-personality="superhot"] {
+  border-color: var(--sh-threat);
+  color: var(--sh-threat);
+  background: var(--sh-void);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+/* Typing cursor */
+.sh-announcement-cursor {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  background: currentColor;
+  vertical-align: text-bottom;
+  animation: sh-cursor-blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes sh-cursor-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Source label */
+.sh-announcement-source {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+/* Reduced motion: no cursor blink */
+@media (prefers-reduced-motion: reduce) {
+  .sh-announcement-cursor {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+/* High contrast */
+@media (forced-colors: active) {
+  .sh-announcement {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+  }
+}

@@ -21,8 +21,15 @@ describe("playSfx", () => {
       AudioContext: class MockAudioContext {
         constructor() {
           audioCtxCreated = true;
+          this.state = "running";
+          this.sampleRate = 44100;
         }
-        close() {}
+        close() {
+          this.state = "closed";
+        }
+        resume() {
+          return Promise.resolve();
+        }
         createOscillator() {
           return {
             type: "sine",
@@ -34,11 +41,46 @@ describe("playSfx", () => {
         }
         createGain() {
           return {
-            gain: { setValueAtTime() {}, linearRampToValueAtTime() {} },
+            gain: { value: 0.3, setValueAtTime() {}, linearRampToValueAtTime() {} },
             connect() {},
           };
         }
-        get currentTime() { return 0; }
+        createBiquadFilter() {
+          return {
+            type: "bandpass",
+            frequency: { value: 0 },
+            Q: { value: 0 },
+            connect() {},
+          };
+        }
+        createWaveShaper() {
+          return {
+            curve: null,
+            oversample: "none",
+            connect() {},
+          };
+        }
+        createBuffer(channels, length, sampleRate) {
+          return {
+            getChannelData() {
+              return new Float32Array(length);
+            },
+          };
+        }
+        createBufferSource() {
+          return {
+            buffer: null,
+            connect() {},
+            start() {},
+            stop() {},
+          };
+        }
+        get currentTime() {
+          return 0;
+        }
+        get destination() {
+          return {};
+        }
       },
       matchMedia: () => ({ matches: false }),
     };

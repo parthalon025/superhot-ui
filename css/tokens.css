@@ -11,7 +11,7 @@
 @property --sh-threat {
   syntax: "<color>";
   inherits: true;
-  initial-value: oklch(68% 0.22 25);
+  initial-value: oklch(52% 0.22 25);
 }
 
 @property --sh-phosphor {
@@ -89,26 +89,20 @@
 :root {
   color-scheme: light dark;
 
-  /* Hex fallbacks for browsers without oklch/light-dark support */
-
   /* Threat (crystalline red — pure hue, no orange drift) */
-  --sh-threat: #dc2626;
-  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(68% 0.22 25));
+  --sh-threat: light-dark(oklch(52% 0.22 25), oklch(62% 0.22 25));
+
+  /* Threat glow — derived, stays in sync when --sh-threat overridden */
+  --sh-threat-glow: color-mix(in oklch, var(--sh-threat) 15%, transparent);
 
   /* Phosphor (CRT cyan — glow color, distinct from threat red) */
-  --sh-phosphor: #00d4ff;
   --sh-phosphor: light-dark(oklch(55% 0.18 195), oklch(85% 0.18 195));
-
-  /* Glow tokens — hex fallbacks (color-mix overrides in @supports below) */
-  --sh-threat-glow: rgba(220, 38, 38, 0.15);
-  --sh-phosphor-glow: rgba(0, 212, 255, 0.2);
+  --sh-phosphor-glow: color-mix(in oklch, var(--sh-phosphor) 20%, transparent);
 
   /* Frozen (desaturated slate) */
-  --sh-frozen: #6b7280;
   --sh-frozen: light-dark(oklch(55% 0.04 240), oklch(40% 0.04 240));
 
   /* Glass (red-tinted crystalline fragments — not white) */
-  --sh-glass: #f0a0a0;
   --sh-glass: color-mix(in oklch, var(--sh-threat) 25%, white);
 
   /* Void (pure black for watermark backgrounds) */
@@ -116,9 +110,7 @@
 
   /* piOS text hierarchy */
   --sh-bright: #ffffff;
-  --sh-middle: #d3d3d3;
   --sh-middle: light-dark(#696969, #d3d3d3);
-  --sh-dim: #808080;
   --sh-dim: light-dark(#a9a9a9, #808080);
 
   /* piOS terminal font stack */
@@ -134,17 +126,17 @@
   --sh-crt-stripe: block; /* static scanline stripes (cheap) */
   --sh-crt-scanline: none; /* moving scan beam (performance-intensive) */
   --sh-crt-flicker: none; /* phosphor flicker (a11y: photosensitivity risk) */
-}
 
-/* ═══════════════════════════════════════
-   COLOR-MIX OVERRIDES
-   Browsers that support color-mix() get derived glow tokens.
-   Others keep the rgba fallbacks declared in :root above.
-   ═══════════════════════════════════════ */
+  /* ── Portal-inspired tokens ── */
+  --sh-portal-orange: #ff9a00;
+  --sh-portal-blue: #27a7d8;
+  --sh-terminal-amber: #a66900;
+  --sh-terminal-bg: #6f3d00;
+  --sh-portal-orange-glow: color-mix(in oklch, var(--sh-portal-orange) 20%, transparent);
+  --sh-portal-blue-glow: color-mix(in oklch, var(--sh-portal-blue) 20%, transparent);
 
-@supports (color: color-mix(in oklch, red, blue)) {
-  :root {
-    --sh-threat-glow: color-mix(in oklch, var(--sh-threat) 15%, transparent);
-    --sh-phosphor-glow: color-mix(in oklch, var(--sh-phosphor) 20%, transparent);
-  }
+  /* Antline animation duration */
+  --sh-antline-duration: 1.5s;
+  /* Panel slide transition duration */
+  --sh-panel-slide-duration: 400ms;
 }
