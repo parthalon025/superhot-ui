@@ -94,7 +94,7 @@ const checks = [
             for (const rule of sheet.cssRules) {
               if (rule.selectorText && rule.selectorText.includes(":focus-visible")) return true;
             }
-          } catch (e) {
+          } catch (_e) {
             /* cross-origin */
           }
         }
@@ -114,7 +114,7 @@ const checks = [
               if (rule.conditionText && rule.conditionText.includes("prefers-reduced-motion"))
                 return true;
             }
-          } catch (e) {
+          } catch (_e) {
             /* cross-origin */
           }
         }

@@ -31,6 +31,10 @@ export default [
     languageOptions: {
       globals: { ...globals.node, ...globals.browser },
     },
+    rules: {
+      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+      "prefer-const": "error",
+    },
   },
   {
     files: ["tests/**/*.js"],
