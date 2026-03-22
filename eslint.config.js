@@ -27,9 +27,15 @@ export default [
     },
   },
   {
-    files: ["esbuild.config.mjs", "scripts/**/*.js", "tests/**/*.js"],
+    files: ["esbuild.config.mjs", "scripts/**/*.js"],
     languageOptions: {
-      globals: { ...globals.node },
+      globals: { ...globals.node, ...globals.browser },
+    },
+  },
+  {
+    files: ["tests/**/*.js"],
+    languageOptions: {
+      globals: { ...globals.node, ...globals.browser },
     },
     rules: {
       "no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
