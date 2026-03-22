@@ -37,6 +37,6 @@ export default [
     },
   },
   {
-    ignores: ["node_modules/", "dist/", "examples/"],
+    ignores: ["node_modules/", "dist/", "examples/", ".worktrees/"],
   },
 ];
